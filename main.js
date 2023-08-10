@@ -3,25 +3,10 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import maplibregl from 'maplibre-gl' // or "const maplibregl = require('maplibre-gl');"
 import * as pmtiles from 'pmtiles'
 
-import basemap from './white.json'
-
-console.log('basemap', basemap)
+import basemap from './map_styles/white.json'
 
 let protocol = new pmtiles.Protocol()
 maplibregl.addProtocol('pmtiles', protocol.tile)
-
-const PMTILES_URL = '/colorado_contours_50m_drop.pmtiles'
-const p = new pmtiles.PMTiles(PMTILES_URL)
-
-// this is so we share one instance across the JS code and the map renderer
-protocol.add(p)
-
-// protocol.add(new pmtiles.PMTiles("/summits_list_w0c.pmtiles"));
-
-// we first fetch the header so we can get the center lon, lat of the map.
-p.getHeader().then(h => {
-  console.log(h)
-})
 
 const map = new maplibregl.Map({
   container: 'map',
@@ -37,37 +22,65 @@ const map = new maplibregl.Map({
       },
       summits: {
         type: 'geojson',
-        data: '/summitslistw0c.geojson'
+        data: '/tiles/summitslistw0c.geojson'
       },
       colorado_hillshade: {
         type: 'raster',
-        tiles: ['/hillshade_tiles/{z}/{x}/{y}.avif'],
-        tileSize: 256,
+        url: 'pmtiles:///tiles/colorado_hillshade.pmtiles',
         bounds: [-110, 37, -100, 42],
         minzoom: 5,
         maxzoom: 16
       },
       colorado_contours: {
         type: 'vector',
-        url: 'pmtiles://' + PMTILES_URL,
-        attribution: '© Tim Zwolak'
+        url: 'pmtiles:///tiles/colorado_contours.pmtiles'
       },
-      // "w0c_summits": {
-      //   type: "geojson",
-      //   data: "/summitslistw0c.json"
-      // },
       states: {
         type: 'vector',
-        url: 'pmtiles://states.pmtiles',
+        url: 'pmtiles:///tiles/states.pmtiles',
         attribution: 'Natural Earth'
       },
       countries: {
         type: 'vector',
-        url: 'pmtiles://countries.pmtiles',
+        url: 'pmtiles:///tiles/countries.pmtiles',
         attribution: 'Natural Earth'
+      },
+      BLM_CO_Surface_Management_Agency: {
+        type: 'vector',
+        url: 'pmtiles:///tiles/co_sma.pmtiles'
       }
     },
     layers: [
+      {
+        id: 'blm-management',
+        source: 'BLM_CO_Surface_Management_Agency',
+        'source-layer': 'co_sma',
+        filter: ["==", "adm_code", "BLM"],
+        type: 'fill',
+        paint: {
+          'fill-color': "hsla(36, 55%, 54%, 0.66)"
+        }
+      },
+      {
+        id: 'usfs-management',
+        source: 'BLM_CO_Surface_Management_Agency',
+        'source-layer': 'co_sma',
+        filter: ["==", "adm_code", "USFS"],
+        type: 'fill',
+        paint: {
+          'fill-color': 'hsla(122, 55%, 33%, 0.66)'
+        }
+      },
+      {
+        id: 'nps-management',
+        source: 'BLM_CO_Surface_Management_Agency',
+        'source-layer': 'co_sma',
+        filter: ["==", "adm_code", "NPS"],
+        type: 'fill',
+        paint: {
+          'fill-color': 'hsla(121, 66%, 16%, 0.66)'
+        }
+      },
       ...basemap.layers.map(layer =>
         layer.source ? { ...layer, source: 'osm' } : layer
       ),
@@ -81,17 +94,17 @@ const map = new maplibregl.Map({
             'match',
             ['get', 'Points'],
             [1],
-            'rgba(77, 122, 32, 0.5)',
+            'rgba(77, 122, 32, 1)',
             [2],
-            'rgba(109, 165, 54, 0.5)',
+            'rgba(109, 165, 54, 1)',
             [4],
-            'rgba(174, 167, 39, 0.5)',
+            'rgba(174, 167, 39, 1)',
             [6],
-            'rgba(239, 168, 24, 0.5)',
+            'rgba(239, 168, 24, 1)',
             [8],
-            'rgba(220, 93, 4, 0.5)',
+            'rgba(220, 93, 4, 1)',
             [10],
-            'rgba(200, 16, 30, 0.5)',
+            'rgba(200, 16, 30, 1)',
             '#000'
           ],
           'circle-stroke-width': {
@@ -104,7 +117,7 @@ const map = new maplibregl.Map({
             stops: [
               [0, 0.05],
               [10, 8],
-              [22, 100]
+              [22, 40]
             ]
           }
         }
@@ -113,6 +126,7 @@ const map = new maplibregl.Map({
         id: 'summits-names',
         type: 'symbol',
         source: 'summits',
+        minzoom: 9,
         layout: {
           visibility: 'visible',
           'text-field': '{SummitName}\n{SummitCode}\n{AltFt} ft',
@@ -157,7 +171,7 @@ const map = new maplibregl.Map({
         id: 'colorado_hillshade',
         type: 'raster',
         source: 'colorado_hillshade',
-        minzoom: 5,
+        minzoom: 10,
         maxzoom: 20,
         paint: {
           'raster-opacity': 0.2
@@ -190,7 +204,7 @@ const map = new maplibregl.Map({
         paint: {
           'line-color': 'black'
         }
-      }
+      },
     ]
   }
 })
