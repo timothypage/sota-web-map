@@ -3,6 +3,10 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import maplibregl from 'maplibre-gl' // or "const maplibregl = require('maplibre-gl');"
 import * as pmtiles from 'pmtiles'
 
+import basemap from './white.json'
+
+console.log('basemap', basemap)
+
 let protocol = new pmtiles.Protocol()
 maplibregl.addProtocol('pmtiles', protocol.tile)
 
@@ -25,13 +29,19 @@ const map = new maplibregl.Map({
   center: [-106, 39], // starting position [lng, lat]
   zoom: 6, // starting zoom
   style: {
-    // "sprite": "https://sotl.as/sprites",
     glyphs: '/fonts/{fontstack}/{range}.pbf',
     version: 8,
     sources: {
+      osm: {
+        ...basemap.sources.protomaps
+      },
+      summits: {
+        type: 'geojson',
+        data: '/summitslistw0c.geojson'
+      },
       colorado_hillshade: {
         type: 'raster',
-        tiles: ['/hillshade_tiles/{z}/{x}/{y}.png'],
+        tiles: ['/hillshade_tiles/{z}/{x}/{y}.avif'],
         tileSize: 256,
         bounds: [-110, 37, -100, 42],
         minzoom: 5,
@@ -58,66 +68,13 @@ const map = new maplibregl.Map({
       }
     },
     layers: [
+      ...basemap.layers.map(layer =>
+        layer.source ? { ...layer, source: 'osm' } : layer
+      ),
       {
-        id: 'colorado_hillshade',
-        type: 'raster',
-        source: 'colorado_hillshade',
-        minzoom: 5,
-        maxzoom: 20,
-        paint: {
-          'raster-opacity': 0.4
-        }
-      },
-      {
-        id: 'contours',
-        source: 'colorado_contours',
-        'source-layer': 'colorado_contours',
-        type: 'line',
-        minzoom: 11,
-        paint: {
-          'line-color': 'hsla(26, 55%, 54%, 0.7)'
-        }
-      },
-      {
-        id: 'states',
-        source: 'states',
-        'source-layer': 'states',
-        type: 'line',
-        paint: {
-          'line-color': 'brown'
-        }
-      },
-      {
-        id: 'countries',
-        source: 'countries',
-        'source-layer': 'countries',
-        type: 'line',
-        paint: {
-          'line-color': 'black'
-        }
-      }
-    ]
-  }
-})
-
-map.on('load', () => {
-  // Add an image to use as a custom marker
-  map.loadImage(
-    'https://maplibre.org/maplibre-gl-js/docs/assets/osgeo-logo.png',
-    (error, image) => {
-      if (error) throw error
-      map.addImage('custom-marker', image)
-      // Add a GeoJSON source with 15 points
-      map.addSource('conferences', {
-        type: 'geojson',
-        data: '/summitslistw0c.geojson'
-      })
-
-      // Add a symbol layer
-      map.addLayer({
-        id: 'conferences',
+        id: 'summits-circle',
         type: 'circle',
-        source: 'conferences',
+        source: 'summits',
         paint: {
           'circle-stroke-color': 'rgba(255, 255, 255, 1)',
           'circle-color': [
@@ -151,15 +108,14 @@ map.on('load', () => {
             ]
           }
         }
-      })
-
-      map.addLayer({
-        id: 'summits_names',
+      },
+      {
+        id: 'summits-names',
         type: 'symbol',
-        source: 'conferences',
+        source: 'summits',
         layout: {
           visibility: 'visible',
-          'text-field': '{SummitName}\n{SummitCode}',
+          'text-field': '{SummitName}\n{SummitCode}\n{AltFt} ft',
           'text-size': {
             stops: [
               [10, 10],
@@ -196,9 +152,47 @@ map.on('load', () => {
           'text-halo-width': 1,
           'text-halo-blur': 1
         }
-      })
-    }
-  )
+      },
+      {
+        id: 'colorado_hillshade',
+        type: 'raster',
+        source: 'colorado_hillshade',
+        minzoom: 5,
+        maxzoom: 20,
+        paint: {
+          'raster-opacity': 0.2
+        }
+      },
+      {
+        id: 'contours',
+        source: 'colorado_contours',
+        'source-layer': 'colorado_contours',
+        type: 'line',
+        minzoom: 11,
+        paint: {
+          'line-color': 'hsla(26, 55%, 54%, 0.7)'
+        }
+      },
+      {
+        id: 'states',
+        source: 'states',
+        'source-layer': 'states',
+        type: 'line',
+        paint: {
+          'line-color': 'brown'
+        }
+      },
+      {
+        id: 'countries',
+        source: 'countries',
+        'source-layer': 'countries',
+        type: 'line',
+        paint: {
+          'line-color': 'black'
+        }
+      }
+    ]
+  }
 })
 
 map.addControl(
