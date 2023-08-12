@@ -10,11 +10,13 @@ maplibregl.addProtocol('pmtiles', protocol.tile)
 
 const map = new maplibregl.Map({
   container: 'map',
+  hash: true,
   // style: 'https://demotiles.maplibre.org/style.json', // stylesheet location
   center: [-106, 39], // starting position [lng, lat]
   zoom: 6, // starting zoom
   style: {
     glyphs: '/fonts/{fontstack}/{range}.pbf',
+    // sprite: 'http://localhost:5173/map_styles/sprite',
     version: 8,
     sources: {
       osm: {
@@ -55,17 +57,17 @@ const map = new maplibregl.Map({
         id: 'blm-management',
         source: 'BLM_CO_Surface_Management_Agency',
         'source-layer': 'co_sma',
-        filter: ["==", "adm_code", "BLM"],
+        filter: ['==', 'adm_code', 'BLM'],
         type: 'fill',
         paint: {
-          'fill-color': "hsla(36, 55%, 54%, 0.66)"
+          'fill-color': 'hsla(36, 55%, 54%, 0.66)'
         }
       },
       {
         id: 'usfs-management',
         source: 'BLM_CO_Surface_Management_Agency',
         'source-layer': 'co_sma',
-        filter: ["==", "adm_code", "USFS"],
+        filter: ['==', 'adm_code', 'USFS'],
         type: 'fill',
         paint: {
           'fill-color': 'hsla(122, 55%, 33%, 0.66)'
@@ -75,15 +77,95 @@ const map = new maplibregl.Map({
         id: 'nps-management',
         source: 'BLM_CO_Surface_Management_Agency',
         'source-layer': 'co_sma',
-        filter: ["==", "adm_code", "NPS"],
+        filter: ['==', 'adm_code', 'NPS'],
         type: 'fill',
         paint: {
           'fill-color': 'hsla(121, 66%, 16%, 0.66)'
         }
       },
+      {
+        id: 'state-management',
+        source: 'BLM_CO_Surface_Management_Agency',
+        'source-layer': 'co_sma',
+        filter: ['==', 'adm_code', 'STA'],
+        type: 'fill',
+        paint: {
+          'fill-color': 'hsla(196, 100%, 35%, 0.65)'
+        }
+      },
+      {
+        id: 'dod-management',
+        source: 'BLM_CO_Surface_Management_Agency',
+        'source-layer': 'co_sma',
+        filter: ['==', 'adm_code', 'DOD'],
+        type: 'fill',
+        paint: {
+          'fill-color': 'hsla(0, 100%, 35%, 0.65)'
+        }
+      },
+
       ...basemap.layers.map(layer =>
         layer.source ? { ...layer, source: 'osm' } : layer
       ),
+
+      {
+        id: 'colorado_hillshade',
+        type: 'raster',
+        source: 'colorado_hillshade',
+        minzoom: 10,
+        maxzoom: 20,
+        paint: {
+          'raster-opacity': 0.2
+        }
+      },
+
+      {
+        id: 'contours',
+        source: 'colorado_contours',
+        'source-layer': 'colorado_contours',
+        type: 'line',
+        minzoom: 11,
+        paint: {
+          'line-color': 'hsla(26, 30%, 40%, 0.7)'
+        }
+      },
+      {
+        id: 'contour-text',
+        type: 'symbol',
+        source: 'colorado_contours',
+        'source-layer': 'colorado_contours',
+        paint: {
+          'text-halo-color': 'white',
+          'text-halo-width': 1
+        },
+        layout: {
+          'symbol-placement': 'line',
+          'text-size': 10,
+          'text-field': ['concat', ['number-format', ['get', 'ELEV'], {}], 'm'],
+          'text-font': ['NotoSans-Regular']
+        }
+      },
+
+      {
+        id: 'states',
+        source: 'states',
+        'source-layer': 'states',
+        type: 'line',
+        paint: {
+          'line-color': 'brown'
+        }
+      },
+
+      {
+        id: 'countries',
+        source: 'countries',
+        'source-layer': 'countries',
+        type: 'line',
+        paint: {
+          'line-color': 'black'
+        }
+      },
+
       {
         id: 'summits-circle',
         type: 'circle',
@@ -116,8 +198,8 @@ const map = new maplibregl.Map({
           'circle-radius': {
             stops: [
               [0, 0.05],
-              [10, 8],
-              [22, 40]
+              [10, 5],
+              [22, 20]
             ]
           }
         }
@@ -166,45 +248,7 @@ const map = new maplibregl.Map({
           'text-halo-width': 1,
           'text-halo-blur': 1
         }
-      },
-      {
-        id: 'colorado_hillshade',
-        type: 'raster',
-        source: 'colorado_hillshade',
-        minzoom: 10,
-        maxzoom: 20,
-        paint: {
-          'raster-opacity': 0.2
-        }
-      },
-      {
-        id: 'contours',
-        source: 'colorado_contours',
-        'source-layer': 'colorado_contours',
-        type: 'line',
-        minzoom: 11,
-        paint: {
-          'line-color': 'hsla(26, 55%, 54%, 0.7)'
-        }
-      },
-      {
-        id: 'states',
-        source: 'states',
-        'source-layer': 'states',
-        type: 'line',
-        paint: {
-          'line-color': 'brown'
-        }
-      },
-      {
-        id: 'countries',
-        source: 'countries',
-        'source-layer': 'countries',
-        type: 'line',
-        paint: {
-          'line-color': 'black'
-        }
-      },
+      }
     ]
   }
 })

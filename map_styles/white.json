@@ -329,18 +329,22 @@
       "type": "line",
       "source": "protomaps",
       "source-layer": "roads",
+      "minzoom": 5,
+      "maxzoom": 22,
       "filter": ["all", ["==", "pmap:level", 0], ["==", "pmap:kind", "other"]],
       "paint": {
-        "line-color": "#c8c8c8",
+        "line-color": "hsla(26, 30%, 25%, 1)",
         "line-dasharray": [2, 1],
         "line-width": [
           "interpolate",
           ["exponential", 1.6],
           ["zoom"],
-          14,
+          10,
           0,
+          11,
+          1,
           14.5,
-          0.5,
+          3,
           20,
           12
         ]

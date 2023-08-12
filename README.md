@@ -59,6 +59,11 @@ from openstreetmap
 
 Download from here https://download.geofabrik.de/north-america/us/colorado.html
 
+I used this https://github.com/protomaps/basemaps but it has it's own naming for roads to simplify things over openstreetmap
+this can be problematic when trying to use maplibre styles for openstreetmaps
+
+Try and use this https://github.com/onthegomap/planetiler, it can output pmtiles now
+
 
 ### ULS
 
