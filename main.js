@@ -152,6 +152,7 @@ const map = new maplibregl.Map({
         source: 'cpw_public_access_properties',
         'source-layer': 'cpw_public_access_properties',
         type: 'fill',
+        minzoom: 8,
         paint: {
           'fill-color': 'hsla(196, 100%, 35%, 0.65)'
         }
