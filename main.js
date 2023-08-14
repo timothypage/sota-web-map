@@ -55,6 +55,23 @@ const map = new maplibregl.Map({
         type: 'vector',
         url: 'pmtiles:///tiles/co_sma.pmtiles',
         minzoom: 8
+      },
+      denver_mountain_parks: {
+        type: 'vector',
+        url: 'pmtiles:///tiles/denver_mountain_parks.pmtiles'
+      },
+      cpw_public_access_properties: {
+        type: 'vector',
+        url: 'pmtiles:///tiles/cpw_public_access_properties.pmtiles'
+      },
+      cotrex_trailheads: {
+        type: 'vector',
+        url: 'pmtiles:///tiles/cotrex_trailheads.pmtiles'
+      },
+      padus_co_wilderness_areas: {
+        type: 'vector',
+        url: 'pmtiles:///tiles/padus_co_wilderness_areas.pmtiles',
+        minzoom: 8
       }
     },
     layers: [
@@ -78,6 +95,17 @@ const map = new maplibregl.Map({
           'fill-color': 'hsla(122, 55%, 33%, 0.66)'
         }
       },
+
+      {
+        id: 'padus-co-wilderness-areas',
+        source: 'padus_co_wilderness_areas',
+        'source-layer': 'padus_co_wilderness_areas',
+        type: 'fill',
+        paint: {
+          'fill-color': 'hsla(122, 55%, 33%, 0.66)'
+        }
+      },
+
       {
         id: 'nps-management',
         source: 'BLM_CO_Surface_Management_Agency',
@@ -106,6 +134,26 @@ const map = new maplibregl.Map({
         type: 'fill',
         paint: {
           'fill-color': 'hsla(0, 100%, 35%, 0.65)'
+        }
+      },
+
+      {
+        id: 'denver-mountain-parks',
+        source: 'denver_mountain_parks',
+        'source-layer': 'mountain_parks',
+        type: 'fill',
+        paint: {
+          'fill-color': 'hsla(230, 100%, 50%, 0.65)'
+        }
+      },
+
+      {
+        id: 'cpw-public-access-properties',
+        source: 'cpw_public_access_properties',
+        'source-layer': 'cpw_public_access_properties',
+        type: 'fill',
+        paint: {
+          'fill-color': 'hsla(196, 100%, 35%, 0.65)'
         }
       },
 
@@ -169,6 +217,53 @@ const map = new maplibregl.Map({
         type: 'line',
         paint: {
           'line-color': 'black'
+        }
+      },
+
+      {
+        id: 'cotrex-trailheads',
+        source: 'cotrex_trailheads',
+        'source-layer': 'cotrex_trailheads',
+        type: 'symbol',
+        minzoom: 12,
+        layout: {
+          visibility: 'visible',
+          'text-field': '{name}',
+          'text-size': {
+            stops: [
+              [12, 12],
+              [20, 24]
+            ]
+          },
+          'text-font': ['Open Sans Regular'],
+          'text-anchor': 'bottom',
+                    'text-offset': {
+            stops: [
+              [10, [0, -1]],
+              [20, [0, -2]]
+            ]
+          },
+          'icon-size': 1,
+          'symbol-spacing': 250,
+          'symbol-avoid-edges': false,
+          'text-keep-upright': true,
+          'text-transform': 'none',
+          'text-optional': false,
+          'text-allow-overlap': {
+            stops: [
+              [18, false],
+              [19, true]
+            ]
+          },
+          'text-ignore-placement': false,
+          'text-justify': 'center',
+          'text-rotate': 0
+        },
+        paint: {
+          'text-color': 'rgba(51, 51, 51, 1)',
+          'text-halo-color': 'rgba(255, 255, 255, 1)',
+          'text-halo-width': 1,
+          'text-halo-blur': 1
         }
       },
 
