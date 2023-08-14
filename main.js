@@ -287,7 +287,7 @@ map.addControl(
 map.on('load', () => {
   // Create an instance of the default class
   const directions = new MapLibreGlDirections(map, {
-    api: 'http://192.168.1.112:5000/route/v1',
+    api: 'https://nuc.tail54c6a.ts.net/route/v1',
     requestOptions: { steps: true, overview: 'full' },
     layers: [
       {
@@ -393,12 +393,61 @@ map.on('load', () => {
   // Enable interactivity (if needed)
   // directions.interactive = true;
 
+  let contentElem = null;
+
+  directions.on("fetchroutesend", e => {
+    console.log('fetchroutesend event', e)
+
+    if (e.data.code === "Ok") {
+      const distance = `${Math.trunc(e.data.routes[0].distance / 1000)} km`;
+
+      const disp = document.querySelector('#directions-overlay .directions-overlay-content')
+
+      contentElem.innerHTML = distance;
+
+      console.log(
+        `${Math.trunc(e.data.routes[0].distance / 1000)} km`
+      )
+    }
+  });
+
   // Optionally add the standard loading-indicator control
   map.addControl(new LoadingIndicatorControl(directions))
 
   // Set the waypoints programmatically
-  directions.setWaypoints([
-    [-105.01632, 39.59428],
-    [-105.52064, 39.68238]
-  ])
+  // directions.setWaypoints([
+  //   [-105.01632, 39.59428],
+  //   [-105.52064, 39.68238]
+  // ])
+
+  const home = [-105.01632, 39.59428];
+
+
+  map.on('mousedown', e => {
+
+    // console.log('mousedown event', e);
+
+    if (e.originalEvent.which !== 3) return;
+
+    let div = document.createElement('div');
+    div.innerHTML = "Navigate Here"
+    div.addEventListener('click', clickEvent => {
+      console.log('clicked!')
+
+      directions.setWaypoints([
+        home,
+        [e.lngLat.lng, e.lngLat.lat]
+      ])
+    })
+
+    let popup = new maplibregl.Popup()
+      .setLngLat(e.lngLat)
+      .setHTML("<div class='customRoute'></div>")
+      .addTo(map);
+
+      contentElem = popup.getElement().querySelector('.customRoute');
+      contentElem.appendChild(div);
+
+
+  })
 })

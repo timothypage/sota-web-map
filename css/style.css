@@ -6,3 +6,18 @@ body {
 #map {
   height: 100dvh;
 }
+
+#directions-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.directions-overlay-content {
+  padding: 20px;
+  /* background: white; */
+}
+
+.customRoute {
+  cursor: pointer;
+}
