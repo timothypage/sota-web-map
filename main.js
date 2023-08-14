@@ -3,6 +3,10 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import maplibregl from 'maplibre-gl' // or "const maplibregl = require('maplibre-gl');"
 import * as pmtiles from 'pmtiles'
 
+import MapLibreGlDirections, {
+  LoadingIndicatorControl
+} from '@maplibre/maplibre-gl-directions'
+
 import basemap from './map_styles/white.json'
 
 let protocol = new pmtiles.Protocol()
@@ -24,7 +28,7 @@ const map = new maplibregl.Map({
       },
       summits: {
         type: 'geojson',
-        data: '/tiles/summitslistw0c.geojson'
+        data: '/tiles/summitslistw0c-active.geojson'
       },
       colorado_hillshade: {
         type: 'raster',
@@ -49,7 +53,8 @@ const map = new maplibregl.Map({
       },
       BLM_CO_Surface_Management_Agency: {
         type: 'vector',
-        url: 'pmtiles:///tiles/co_sma.pmtiles'
+        url: 'pmtiles:///tiles/co_sma.pmtiles',
+        minzoom: 8
       }
     },
     layers: [
@@ -104,27 +109,27 @@ const map = new maplibregl.Map({
         }
       },
 
-      ...basemap.layers.map(layer =>
-        layer.source ? { ...layer, source: 'osm' } : layer
-      ),
-
       {
         id: 'colorado_hillshade',
         type: 'raster',
         source: 'colorado_hillshade',
-        minzoom: 10,
+        minzoom: 11,
         maxzoom: 20,
         paint: {
           'raster-opacity': 0.2
         }
       },
 
+      ...basemap.layers.map(layer =>
+        layer.source ? { ...layer, source: 'osm' } : layer
+      ),
+
       {
         id: 'contours',
         source: 'colorado_contours',
         'source-layer': 'colorado_contours',
         type: 'line',
-        minzoom: 11,
+        minzoom: 13,
         paint: {
           'line-color': 'hsla(26, 30%, 40%, 0.7)'
         }
@@ -134,6 +139,7 @@ const map = new maplibregl.Map({
         type: 'symbol',
         source: 'colorado_contours',
         'source-layer': 'colorado_contours',
+        minzoom: 13,
         paint: {
           'text-halo-color': 'white',
           'text-halo-width': 1
@@ -214,11 +220,11 @@ const map = new maplibregl.Map({
           'text-field': '{SummitName}\n{SummitCode}\n{AltFt} ft',
           'text-size': {
             stops: [
-              [10, 10],
+              [10, 12],
               [20, 40]
             ]
           },
-          'text-font': ['Open Sans Regular'],
+          'text-font': ['Open Sans Bold'],
           'text-anchor': 'bottom',
           'text-offset': {
             stops: [
@@ -248,6 +254,24 @@ const map = new maplibregl.Map({
           'text-halo-width': 1,
           'text-halo-blur': 1
         }
+      },
+      {
+        id: 'summits_activations',
+        type: 'symbol',
+        source: 'summits',
+        minzoom: 10,
+        maxzoom: 24,
+        layout: {
+          'text-field': '{ActivationCount}',
+          'text-font': ['Open Sans Bold'],
+          'text-size': {
+            stops: [
+              [10, 8],
+              [20, 22]
+            ]
+          }
+        },
+        paint: { 'text-color': 'rgba(255, 255, 255, 1)' }
       }
     ]
   }
@@ -259,3 +283,122 @@ map.addControl(
     showCompass: true
   })
 )
+
+map.on('load', () => {
+  // Create an instance of the default class
+  const directions = new MapLibreGlDirections(map, {
+    api: 'http://192.168.1.112:5000/route/v1',
+    requestOptions: { steps: true, overview: 'full' },
+    layers: [
+      {
+        id: 'maplibre-gl-directions-snapline',
+        type: 'line',
+        source: 'maplibre-gl-directions',
+        layout: {
+          'line-cap': 'round',
+          'line-join': 'round'
+        },
+        paint: {
+          'line-color': 'red',
+          'line-opacity': 0.65,
+          'line-width': 2
+        },
+        filter: ['==', ['get', 'type'], 'SNAPLINE']
+      },
+
+      {
+        id: 'maplibre-gl-directions-alt-routeline',
+        type: 'line',
+        source: 'maplibre-gl-directions',
+        layout: {
+          'line-cap': 'butt',
+          'line-join': 'round'
+        },
+        paint: {
+          'line-color': 'gray',
+          'line-opacity': 0.65,
+          'line-width': 2
+        },
+        filter: ['==', ['get', 'route'], 'ALT']
+      },
+
+      {
+        id: 'maplibre-gl-directions-routeline',
+        type: 'line',
+        source: 'maplibre-gl-directions',
+        layout: {
+          'line-cap': 'butt',
+          'line-join': 'round'
+        },
+        paint: {
+          'line-color': 'blue',
+          'line-opacity': 1,
+          'line-width': 6
+        },
+        filter: ['==', ['get', 'route'], 'SELECTED']
+      },
+
+      {
+        id: 'maplibre-gl-directions-hoverpoint',
+        type: 'circle',
+        source: 'maplibre-gl-directions',
+        paint: {
+          'circle-stroke-color': 'rgba(255, 255, 255, 1)',
+          'circle-color': 'orangered'
+        },
+        filter: ['==', ['get', 'type'], 'HOVERPOINT']
+      },
+
+      {
+        id: 'maplibre-gl-directions-snappoint',
+        type: 'circle',
+        source: 'maplibre-gl-directions',
+        paint: {
+          'circle-stroke-color': 'rgba(255, 255, 255, 1)',
+          'circle-color': 'steelblue'
+        },
+        filter: ['==', ['get', 'type'], 'SNAPPOINT']
+      },
+
+      {
+        id: 'maplibre-gl-directions-waypoint',
+        type: 'circle',
+        source: 'maplibre-gl-directions',
+        paint: {
+          'circle-stroke-color': 'rgba(255, 255, 255, 1)',
+          'circle-color': 'green',
+          'circle-stroke-width': {
+            stops: [
+              [4, 1],
+              [15, 3]
+            ]
+          },
+          'circle-radius': {
+            stops: [
+              [0, 0.05],
+              [10, 10],
+              [22, 25]
+            ]
+          }
+        },
+        filter: ['==', ['get', 'type'], 'WAYPOINT']
+      }
+    ],
+    sensitiveWaypointLayers: ['maplibre-gl-directions-waypoint'],
+    sensitiveSnappointLayers: ['maplibre-gl-directions-snappoint'],
+    sensitiveRoutelineLayers: ['maplibre-gl-directions-routeline'],
+    sensitiveAltRoutelineLayers: ['maplibre-gl-directions-alt-routeline']
+  })
+
+  // Enable interactivity (if needed)
+  // directions.interactive = true;
+
+  // Optionally add the standard loading-indicator control
+  map.addControl(new LoadingIndicatorControl(directions))
+
+  // Set the waypoints programmatically
+  directions.setWaypoints([
+    [-105.01632, 39.59428],
+    [-105.52064, 39.68238]
+  ])
+})

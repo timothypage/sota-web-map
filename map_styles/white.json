@@ -3,7 +3,7 @@
   "sources": {
     "protomaps": {
       "type": "vector",
-      "url": "pmtiles:///tiles/colorado.pmtiles",
+      "url": "pmtiles:///tiles/colorado2.pmtiles",
       "maxzoom": 15
     }
   },
@@ -339,12 +339,12 @@
           "interpolate",
           ["exponential", 1.6],
           ["zoom"],
-          10,
+          9,
           0,
-          11,
+          10,
           1,
           14.5,
-          3,
+          6,
           20,
           12
         ]
@@ -481,7 +481,7 @@
         ["==", "pmap:kind", "major_road"]
       ],
       "paint": {
-        "line-color": "#ff00ff",
+        "line-color": "hsla(50, 50%, 40%, 1)",
         "line-gap-width": [
           "interpolate",
           ["exponential", 1.6],
@@ -503,7 +503,7 @@
           1
         ]
       },
-      "layout": { "visibility": "none" }
+      "layout": { "visibility": "visible" }
     },
     {
       "id": "roads_major",
@@ -516,7 +516,7 @@
         ["==", "pmap:kind", "major_road"]
       ],
       "paint": {
-        "line-color": "#c8c8c8",
+        "line-color": "hsla(50, 100%, 48%, 1)",
         "line-width": [
           "interpolate",
           ["exponential", 1.6],
@@ -541,7 +541,7 @@
         ["==", "pmap:kind", "highway"]
       ],
       "paint": {
-        "line-color": "#ff00ff",
+        "line-color": "hsla(50, 50%, 40%, 1)",
         "line-gap-width": [
           "interpolate",
           ["exponential", 1.6],
@@ -558,12 +558,14 @@
           ["exponential", 1.6],
           ["zoom"],
           7,
-          0,
+          0.1,
           7.5,
-          1
+          0.5,
+          9,
+          2
         ]
       },
-      "layout": { "visibility": "none" }
+      "layout": { "visibility": "visible" }
     },
     {
       "id": "roads_highway",
@@ -576,7 +578,7 @@
         ["==", "pmap:kind", "highway"]
       ],
       "paint": {
-        "line-color": "#c8c8c8",
+        "line-color": "hsla(50, 100%, 48%, 1)",
         "line-width": [
           "interpolate",
           ["exponential", 1.6],
