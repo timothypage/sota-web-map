@@ -142,6 +142,7 @@ const map = new maplibregl.Map({
         source: 'denver_mountain_parks',
         'source-layer': 'mountain_parks',
         type: 'fill',
+        minzoom: 8,
         paint: {
           'fill-color': 'hsla(230, 100%, 50%, 0.65)'
         }
