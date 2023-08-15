@@ -34,6 +34,17 @@ Download Options or
 FeatureServer
 https://services1.arcgis.com/KbxwQRRfWyEYLgp4/arcgis/rest/services/BLM_CO_Surface_Management_Agency/FeatureServer/0/query?f=pbf&geometry=-11779863.303084994,4813698.293288989,-11760295.423843995,4833266.172529988&maxRecordCountFactor=4&resultOffset=0&resultRecordCount=8000&where=1=1&orderByFields=OBJECTID&outFields=OBJECTID,adm_name&quantizationParameters={"extent":{"xmin":-11779863.303084994,"ymin":4813698.293288989,"xmax":-11760295.423843995,"ymax":4833266.172529988},"mode":"view","originPosition":"upperLeft","tolerance":38.21851414257816}&resultType=tile&returnCentroid=true&spatialRel=esriSpatialRelIntersects&geometryType=esriGeometryEnvelope&defaultSR=102100
 
+
+
+--------
+
+maybe the PADUS dataset would be useful, it exposes protected areas and public access for large swaths of land in the US
+
+for colorado only https://www.sciencebase.gov/catalog/item/61794fc2d34ea58c3c6f9f69
+
+    ogr2ogr -t_srs EPSG:4326 -f GeoJSON padus_co_wilderness_areas.geojson -where "Des_Tp='WA'" /vsizip/PADUS3_0_State_CO_GeoPackage.zip/PADUS3_0StateCO.gpkg PADUS3_0Combined_StateCO
+
+
 ### 3D elevation profiles
 
 https://www.usgs.gov/the-national-map-data-delivery/gis-data-download?qt-science_support_page_related_con=0#qt-science_support_page_related_con
