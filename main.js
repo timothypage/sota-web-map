@@ -150,16 +150,16 @@ const map = new maplibregl.Map({
             16,
             ['literal', [0, 0.75]]
           ],
-          "text-max-angle": 25,
-        "visibility": "visible",
-        "text-padding": 0,
-        "text-font": ["NotoSans-Bold"],
-        "text-transform": "uppercase",
-        "text-letter-spacing": 0.1,
-        "symbol-spacing": 300,
-        "text-line-height": 0.7,
-        "text-allow-overlap": false,
-        "text-ignore-placement": false
+          'text-max-angle': 25,
+          visibility: 'visible',
+          'text-padding': 0,
+          'text-font': ['NotoSans-Bold'],
+          'text-transform': 'uppercase',
+          'text-letter-spacing': 0.1,
+          'symbol-spacing': 300,
+          'text-line-height': 0.7,
+          'text-allow-overlap': false,
+          'text-ignore-placement': false
         },
         paint: {
           'text-color': 'white',
@@ -614,24 +614,41 @@ map.on('load', () => {
   //   [-105.52064, 39.68238]
   // ])
 
-  const home = [-105.01632, 39.59428]
+  let home = [-105.01632, 39.59428]
+
+  let existingPopup = null;
 
   map.on('mousedown', e => {
-    const features = map.queryRenderedFeatures(e.point)
-
-    console.log('features', features)
-
     // console.log('mousedown event', e);
 
     if (e.originalEvent.which !== 3) return
 
-    let div = document.createElement('div')
-    div.innerHTML = 'Navigate Here'
-    div.addEventListener('click', clickEvent => {
-      console.log('clicked!')
+    const features = map.queryRenderedFeatures(e.point)
+    console.log('features', features)
 
+    let div = document.createElement('div')
+
+    let featuresDiv = renderLayersDisplay(features)
+
+    div.appendChild(featuresDiv)
+
+    const navButton = document.createElement('button')
+    navButton.innerText = 'Navigate Here'
+    const setHomeButton = document.createElement('button')
+    setHomeButton.innerText = 'Set Home Location Here'
+
+    navButton.addEventListener('click', clickEvent => {
       directions.setWaypoints([home, [e.lngLat.lng, e.lngLat.lat]])
     })
+
+    setHomeButton.addEventListener('click', clickEvent => {
+      home = [e.lngLat.lng, e.lngLat.lat]
+    })
+
+    div.appendChild(navButton)
+    div.appendChild(setHomeButton)
+
+    if (existingPopup) existingPopup.remove();
 
     let popup = new maplibregl.Popup()
       .setLngLat(e.lngLat)
@@ -640,5 +657,43 @@ map.on('load', () => {
 
     contentElem = popup.getElement().querySelector('.customRoute')
     contentElem.appendChild(div)
+
+    existingPopup = popup;
   })
 })
+
+function renderLayersDisplay (features) {
+  let div = document.createElement('div')
+
+  for (const feature of features) {
+    let text = null;
+
+    if (feature?.source === 'BLM_CO_Surface_Management_Agency') {
+      text = `Managed By ${feature?.properties?.adm_manage || '<unknown>'}`
+    }
+
+    if (feature?.source === 'padus_co_wilderness_areas') {
+      text = feature?.properties?.Loc_Nm
+    }
+
+    if (feature?.source === 'usfs_national_forests') {
+      text = feature?.properties?.FORESTNAME
+    }
+
+    if (feature?.source === 'cpw_public_access_properties') {
+      text = feature?.properties?.PropName
+    }
+
+    if (feature?.source === 'denver_mountain_parks') {
+      text = `Denver Mountain Park: ${feature?.properties?.FORMAL_NAME}`
+    }
+
+    if(text) {
+      let p = document.createElement('p')
+      p.innerText = text
+      div.appendChild(p)
+    }
+  }
+
+  return div
+}
