@@ -613,14 +613,14 @@ map.on('load', () => {
   //   [-105.01632, 39.59428],
   //   [-105.52064, 39.68238]
   // ])
-  let home = [-105.01632, 39.59428];
+  let home = [-105.01632, 39.59428]
 
-  let homeString = localStorage.getItem('homeLocation');
+  let homeString = localStorage.getItem('homeLocation')
   if (homeString) {
     try {
-      home = JSON.parse(homeString);
+      home = JSON.parse(homeString)
     } catch (e) {
-      console.log('invalid home location stored in localStorage');
+      console.log('invalid home location stored in localStorage')
     }
   }
 
