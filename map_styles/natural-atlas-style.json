@@ -1,0 +1,7152 @@
+{
+  "version": 8,
+  "name": "COTREX Topo",
+  "metadata": {
+    "mapbox:autocomposite": false,
+    "mapbox:type": "template"
+  },
+  "center": [-104.736, 39],
+  "zoom": 6,
+  "bearing": 0,
+  "pitch": 0,
+  "sources": {
+    "cotrex": {
+      "type": "vector",
+      "tiles": [
+        "https://d163xdiw0h7s39.cloudfront.net/cotrex/{z}/{x}/{y}/t.pbf"
+      ],
+      "minzoom": 4,
+      "maxzoom": 14
+    }
+  },
+  "sprite": "https://naturalatlas-gl.global.ssl.fastly.net/sprites/base-2d214b0f0945",
+  "glyphs": "https://naturalatlas-gl.global.ssl.fastly.net/fonts/glyphs/v1/{fontstack}/{range}.pbf",
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "minzoom": 0,
+      "filter": ["all"],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "background-color": "#FAFFF9"
+      }
+    },
+    {
+      "id": "hypsometry",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "hypsometry",
+      "minzoom": 0,
+      "maxzoom": 11,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": ["get", "color"],
+        "fill-opacity": {
+          "stops": [
+            [9.5, 1],
+            [10, 0]
+          ]
+        }
+      }
+    },
+    {
+      "id": "landusages",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "landusages",
+      "filter": ["all", ["in", "type", "parking", "golf_course", "pitch"]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": [
+          "match",
+          ["get", "type"],
+          "parking",
+          "#f2f2f2",
+          "pitch",
+          "rgba(231, 250, 204, 1)",
+          "#f9fcf2"
+        ],
+        "fill-opacity": {
+          "stops": [
+            [13.5, 0],
+            [14, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "tree-canopy",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "tree-canopy",
+      "minzoom": 9.5,
+      "maxzoom": 24,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": "#D7F09C",
+        "fill-opacity": {
+          "stops": [
+            [9.5, 0],
+            [10.7, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "areas-sand",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-areas",
+      "filter": [
+        "any",
+        ["in", "class_id", 54, 450, 2551, 2587, 2588, 2589, 6320, 6323, 2566]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-pattern": "sand-md"
+      }
+    },
+    {
+      "id": "boundaries-z10-wilderness",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-boundary-areas",
+      "minzoom": 8,
+      "maxzoom": 24,
+      "filter": ["all", ["in", "class_id", 11051, 11053]],
+      "paint": {
+        "fill-pattern": "dots-wilderness",
+        "fill-opacity": {
+          "stops": [
+            [8, 0],
+            [8.5, 0.6],
+            [10.2, 0.6],
+            [10.5, 0.01]
+          ]
+        },
+        "fill-outline-color": "rgba(196, 234, 159, 0.5)"
+      }
+    },
+    {
+      "id": "boundaries-reservation",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-boundary-areas",
+      "minzoom": 10,
+      "maxzoom": 24,
+      "filter": ["all", ["==", "class_id", 11103]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-pattern": "indian-reservation",
+        "fill-opacity": {
+          "stops": [
+            [10, 0],
+            [10.5, 0.35]
+          ]
+        },
+        "fill-outline-color": "#A0985C"
+      }
+    },
+    {
+      "id": "hydro-glacier",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-hydro-areas",
+      "minzoom": 0,
+      "filter": ["all", ["in", "class_id", 1441, 1492, 1493]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": {
+          "stops": [
+            [9, "rgba(247, 250, 250, 1)"],
+            [10, "rgba(246, 251, 251, 1)"],
+            [11, "rgba(244, 250, 250, 1)"],
+            [11.15, "rgba(255, 255, 255, 1)"]
+          ]
+        },
+        "fill-opacity": 0.8
+      }
+    },
+    {
+      "id": "boundary-fills-zoomed-out",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-boundary-areas",
+      "minzoom": 0,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        [
+          "in",
+          "boundary_type",
+          "major",
+          "reserve",
+          "state_park",
+          "other",
+          "grassland",
+          "wsa"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": {
+          "type": "categorical",
+          "property": "boundary_type",
+          "stops": [
+            ["major", "#88C861"],
+            ["state_park", "#88C861"],
+            ["grassland", "rgba(220, 228, 170, 1)"]
+          ],
+          "default": "#CBE692"
+        },
+        "fill-opacity": {
+          "stops": [
+            [10, 0.5],
+            [10.25, 0.35],
+            [10.5, 0.01]
+          ]
+        }
+      }
+    },
+    {
+      "id": "slot-canyon-outer-stroke",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "na-lines",
+      "filter": ["all", ["in", "class_id", 447]],
+      "paint": {
+        "line-color": "rgba(226, 144, 100, 1)",
+        "line-gap-width": 0,
+        "line-width": {
+          "stops": [
+            [11, 3.5],
+            [15, 10]
+          ]
+        }
+      }
+    },
+    {
+      "id": "slot-canyon-inner-stroke",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "na-lines",
+      "filter": ["all", ["in", "class_id", 447]],
+      "paint": {
+        "line-color": "rgba(255, 255, 255, 1)",
+        "line-gap-width": 0,
+        "line-width": {
+          "stops": [
+            [11, 2],
+            [15, 7]
+          ]
+        }
+      }
+    },
+    {
+      "id": "contours-major",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "contours",
+      "minzoom": 10,
+      "maxzoom": 24,
+      "filter": ["all", ["==", "index", 0]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": {
+          "property": "landcover_type",
+          "type": "categorical",
+          "stops": [
+            [0, "rgba(193, 161, 128, 1)"],
+            [1, "rgba(134, 190, 29, 1)"],
+            [2, "rgba(84, 198, 208, 1)"]
+          ]
+        },
+        "line-width": {
+          "stops": [
+            [10, 0.2],
+            [11.5, 0.8]
+          ]
+        },
+        "line-opacity": {
+          "stops": [
+            [10, 0],
+            [10.4, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "contours-minor",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "contours",
+      "minzoom": 10,
+      "maxzoom": 24,
+      "filter": ["all", ["!=", "index", 0]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": {
+          "property": "landcover_type",
+          "type": "categorical",
+          "stops": [
+            [0, "rgba(193, 161, 128, 1)"],
+            [1, "#86BE1D"],
+            [2, "rgba(84, 198, 208, 1)"]
+          ]
+        },
+        "line-width": 0.3,
+        "line-opacity": {
+          "stops": [
+            [10.2, 0],
+            [11.5, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "contours-labels-ice",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "contours",
+      "minzoom": 13,
+      "filter": ["all", ["==", "index", 0], ["==", "landcover_type", 2]],
+      "layout": {
+        "symbol-placement": "line",
+        "text-field": "{ft}",
+        "text-size": {
+          "stops": [
+            [12, 9],
+            [15, 11]
+          ]
+        },
+        "symbol-avoid-edges": true,
+        "icon-allow-overlap": false,
+        "icon-ignore-placement": false,
+        "icon-optional": false,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-max-width": 10,
+        "text-keep-upright": true,
+        "text-optional": false,
+        "symbol-spacing": 350,
+        "text-font": ["brandontext-bold"],
+        "text-max-angle": 30,
+        "visibility": "visible"
+      },
+      "paint": {
+        "text-color": "rgba(84, 198, 208, 1)",
+        "text-halo-width": 1.7,
+        "text-halo-color": "rgba(255, 255, 255, 1)",
+        "text-halo-blur": 0
+      }
+    },
+    {
+      "id": "contours-labels-tree",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "contours",
+      "minzoom": 12,
+      "filter": ["all", ["==", "index", 0], ["==", "landcover_type", 1]],
+      "layout": {
+        "symbol-placement": "line",
+        "text-field": "{ft}",
+        "text-size": {
+          "stops": [
+            [12, 9],
+            [15, 11]
+          ]
+        },
+        "symbol-avoid-edges": true,
+        "icon-allow-overlap": false,
+        "icon-ignore-placement": false,
+        "icon-optional": false,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-max-width": 10,
+        "text-keep-upright": true,
+        "text-optional": false,
+        "symbol-spacing": 350,
+        "text-font": ["brandontext-bold"],
+        "text-max-angle": 30,
+        "visibility": "visible"
+      },
+      "paint": {
+        "text-color": "#86BE1D",
+        "text-halo-width": 1.7,
+        "text-halo-color": "rgba(227, 245, 195, 1)",
+        "text-halo-blur": 0
+      }
+    },
+    {
+      "id": "contours-labels",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "contours",
+      "minzoom": 12,
+      "filter": ["all", ["==", "index", 0], ["==", "landcover_type", 0]],
+      "layout": {
+        "symbol-placement": "line",
+        "text-field": "{ft}",
+        "text-size": {
+          "stops": [
+            [12, 9],
+            [15, 11]
+          ]
+        },
+        "symbol-avoid-edges": true,
+        "icon-allow-overlap": false,
+        "icon-ignore-placement": false,
+        "icon-optional": false,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-max-width": 10,
+        "text-keep-upright": true,
+        "text-optional": false,
+        "symbol-spacing": 350,
+        "text-font": ["brandontext-bold"],
+        "text-max-angle": 25,
+        "visibility": "visible"
+      },
+      "paint": {
+        "text-color": "rgba(193, 161, 128, 1)",
+        "text-halo-width": 1.7,
+        "text-halo-color": "rgba(247, 247, 242, 1)",
+        "text-halo-blur": 0
+      }
+    },
+    {
+      "id": "hydro-flowlines-canals",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "na-hydro-flowlines",
+      "minzoom": 0,
+      "filter": [
+        "all",
+        ["in", "class_id", 4053, 4054, 9850],
+        ["!=", "artificial", true]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-dasharray": [12, 2, 2, 2],
+        "line-color": "#ADE0EB",
+        "line-width": {
+          "stops": [
+            [10, 0.7],
+            [12, 1.5]
+          ]
+        },
+        "line-offset": 0,
+        "line-blur": 0
+      }
+    },
+    {
+      "id": "hydro-flowlines-intermittent",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "na-hydro-flowlines",
+      "minzoom": 0,
+      "filter": [
+        "all",
+        ["==", "subclass_id", 2],
+        ["!in", "class_id", 4053, 4054, 9850],
+        ["!=", "artificial", true]
+      ],
+      "paint": {
+        "line-dasharray": [5, 2, 2, 2],
+        "line-color": "#ADE0EB",
+        "line-width": 1,
+        "line-offset": 0,
+        "line-blur": 0
+      }
+    },
+    {
+      "id": "hydro-flowlines-perennial",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "na-hydro-flowlines",
+      "minzoom": 5,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        ["!in", "subclass_id", 1, 2],
+        ["!in", "class_id", 4053, 4054, 9850],
+        ["!=", "artificial", true]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": {
+          "stops": [
+            [7, "rgba(209, 230, 232, 1)"],
+            [9, "rgba(192, 221, 228, 1)"],
+            [10, "#ADE0EB"]
+          ]
+        },
+        "line-width": {
+          "stops": [
+            [6, 0.7],
+            [7.5, 1.5],
+            [10, 0.7],
+            [12, 1.5]
+          ]
+        },
+        "line-offset": 0,
+        "line-blur": 0
+      }
+    },
+    {
+      "id": "hydro-wetlands-pattern",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-hydro-areas",
+      "minzoom": 10,
+      "filter": ["all", ["in", "class_id", 3624]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": "rgba(246, 253, 250, 1)",
+        "fill-pattern": "wetland-med",
+        "fill-opacity": {
+          "stops": [
+            [10, 0],
+            [10.3, 0.5]
+          ]
+        }
+      }
+    },
+    {
+      "id": "areas-intermittent-bg",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-hydro-areas",
+      "minzoom": 10,
+      "filter": ["any", ["in", "class_id", 3942], ["==", "subclass_id", 2]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": "#FAFFF9",
+        "fill-opacity": {
+          "stops": [
+            [10, 0],
+            [10.3, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "areas-intermittent",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-hydro-areas",
+      "minzoom": 10,
+      "filter": ["any", ["in", "class_id", 3942], ["==", "subclass_id", 2]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-pattern": "intermittent-water",
+        "fill-opacity": {
+          "stops": [
+            [10, 0],
+            [10.3, 0.5]
+          ]
+        }
+      }
+    },
+    {
+      "id": "hydro-areas",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-hydro-areas",
+      "minzoom": 0,
+      "filter": [
+        "all",
+        [
+          "in",
+          "class_id",
+          3617,
+          3618,
+          3619,
+          3614,
+          3615,
+          3616,
+          3729,
+          3730,
+          3733,
+          3737,
+          3738,
+          3839,
+          3625,
+          3891,
+          3892,
+          3894,
+          4053,
+          4054
+        ],
+        ["!=", "subclass_id", 2]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": "#D9F8FA",
+        "fill-opacity": {
+          "stops": [
+            [10, 0.7],
+            [12, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "hydro-areas-stroke",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "na-hydro-areas",
+      "minzoom": 10,
+      "filter": [
+        "all",
+        [
+          "in",
+          "class_id",
+          3617,
+          3618,
+          3619,
+          3614,
+          3615,
+          3616,
+          3729,
+          3730,
+          3733,
+          3737,
+          3738,
+          3839,
+          3625,
+          3891,
+          3892,
+          3894,
+          4053,
+          4054
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "#BAE2ED",
+        "line-width": 1,
+        "line-offset": 1,
+        "line-opacity": {
+          "stops": [
+            [11, 0.6],
+            [12, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "hydro-glacier-stroke",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "na-hydro-areas",
+      "minzoom": 10,
+      "filter": ["all", ["in", "class_id", 1441, 1492, 1493, 3948]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-dasharray": {
+          "stops": [
+            [11, [2, 1]],
+            [12, [4, 1]],
+            [14, [6, 2]]
+          ]
+        },
+        "line-color": "rgba(84, 198, 208, 1)",
+        "line-opacity": {
+          "stops": [
+            [10, 0],
+            [10.5, 0.8]
+          ]
+        },
+        "line-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          12,
+          ["match", ["get", "class_id"], 3948, 0, 1.3],
+          14,
+          ["match", ["get", "class_id"], 3948, 0.7, 1.3]
+        ]
+      }
+    },
+    {
+      "id": "hydro-rapid",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-hydro-areas",
+      "minzoom": 12,
+      "filter": ["all", ["in", "class_id", 3621]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-pattern": "rapid",
+        "fill-opacity": 0.35
+      }
+    },
+    {
+      "id": "lines-walls",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "na-lines",
+      "minzoom": 12,
+      "filter": ["all", ["in", "class_id", 9050, 9103, 2553, 2568, 2552]],
+      "paint": {
+        "line-color": "rgba(118, 118, 118, 1)",
+        "line-width": {
+          "stops": [
+            [12, 1],
+            [15, 3]
+          ]
+        }
+      }
+    },
+    {
+      "id": "areas-moraine",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-areas",
+      "filter": ["any", ["in", "class_id", 444, 451]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-pattern": "moraine",
+        "fill-antialias": true,
+        "fill-opacity": 0.5
+      }
+    },
+    {
+      "id": "areas",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-areas",
+      "filter": [
+        "all",
+        [
+          "in",
+          "class_id",
+          7737,
+          9318,
+          61,
+          1493850,
+          1493856,
+          6320,
+          6323,
+          6477,
+          6528,
+          6529,
+          9050,
+          5167,
+          9857
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-antialias": true,
+        "fill-opacity": [
+          "match",
+          ["get", "class_id"],
+          [7737, 9318],
+          0.1,
+          [61, 1493850, 1493856],
+          0.12,
+          [9050],
+          0.5,
+          [6477, 6528, 6529],
+          0.25,
+          [6320, 6323],
+          0.15,
+          1
+        ],
+        "fill-color": [
+          "match",
+          ["get", "class_id"],
+          [61, 1493850, 1493856],
+          "#569e00",
+          [7737, 9857],
+          "#6B7F68",
+          [5167, 9050],
+          "#E0E6DA",
+          [9318],
+          "#ffa500",
+          [6477, 6528, 6529],
+          "#edcece",
+          [6320, 6323],
+          "#cbb6ae",
+          "red"
+        ]
+      }
+    },
+    {
+      "id": "areas-playa-stroke",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "na-areas",
+      "filter": ["all", ["in", "class_id", 2566]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(166, 225, 245, 1)",
+        "line-width": {
+          "stops": [
+            [11, 1],
+            [15, 2]
+          ]
+        },
+        "line-opacity": 1,
+        "line-dasharray": [8, 2, 2, 2, 2, 2]
+      }
+    },
+    {
+      "id": "areas-depression-inner",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "na-areas",
+      "filter": ["all", ["in", "class_id", 268, 271, 272, 277, 279]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(197, 168, 141, 1)",
+        "line-width": {
+          "stops": [
+            [14, 3],
+            [16, 5]
+          ]
+        },
+        "line-offset": {
+          "stops": [
+            [14, -1.5],
+            [16, -2.5]
+          ]
+        },
+        "line-dasharray": {
+          "stops": [
+            [14, [0.2, 1]],
+            [16, [0.2, 3]]
+          ]
+        }
+      }
+    },
+    {
+      "id": "areas-stroke",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "na-areas",
+      "filter": [
+        "all",
+        [
+          "in",
+          "class_id",
+          6346,
+          7737,
+          61,
+          1493850,
+          1493856,
+          9318,
+          5167,
+          268,
+          271,
+          272,
+          277,
+          279,
+          9050
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": [
+          "match",
+          ["get", "class_id"],
+          [61, 1493850, 1493856],
+          "#569e00",
+          [5167, 7737],
+          "#6B7F68",
+          9318,
+          "#ffa500",
+          [268, 271, 272, 277, 279, 9207],
+          "#af8e70",
+          [9050],
+          "#cccfc9",
+          "#000000"
+        ],
+        "line-width": {
+          "stops": [
+            [11, 0.9],
+            [15, 1.5]
+          ]
+        },
+        "line-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          12,
+          [
+            "match",
+            ["get", "class_id"],
+            [61, 1493850, 1493856],
+            0.15,
+            [9318, 7737],
+            0.3,
+            9050,
+            0.6,
+            1
+          ],
+          13,
+          [
+            "match",
+            ["get", "class_id"],
+            [61, 1493850, 1493856, 9318, 7737],
+            0.3,
+            9050,
+            0.6,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "aeroways",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "aeroways",
+      "layout": {},
+      "paint": {
+        "line-color": "#E2E8DF",
+        "line-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          11,
+          ["match", ["get", "type"], "runway", 3.5, "taxiway", 0.5, 1],
+          17,
+          ["match", ["get", "type"], "runway", 55, "taxiway", 14, 1]
+        ]
+      }
+    },
+    {
+      "id": "boundaries-restricted-pattern",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-boundary-areas",
+      "filter": ["any", ["in", "boundary_type", "restricted"]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": "rgba(255, 0, 0, 1)",
+        "fill-antialias": true,
+        "fill-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          12,
+          ["match", ["get", "boundary_type"], "wilderness", 0.2, 0],
+          12.5,
+          ["match", ["get", "boundary_type"], "wilderness", 0.2, 0.12]
+        ],
+        "fill-pattern": "stripes-black-sm"
+      }
+    },
+    {
+      "id": "boundaries-tint-wilderness",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-boundary-inner-strokes",
+      "minzoom": 10,
+      "maxzoom": 22,
+      "filter": [
+        "all",
+        ["==", ["zoom"], ["to-number", ["get", "min_zoom"]]],
+        ["==", ["get", "boundary_type"], "wilderness"]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": [
+          "match",
+          ["get", "class_id"],
+          [10948, 10945, 1094, 10954],
+          "#8834af",
+          [10946],
+          "#ff6600",
+          [111],
+          "#32bd3c",
+          [9786],
+          "#73B978",
+          "#b2a36b"
+        ],
+        "fill-opacity": {
+          "stops": [
+            [10.25, 0],
+            [10.5, 0.85],
+            [11.5, 1]
+          ]
+        },
+        "fill-pattern": "dots-wilderness"
+      }
+    },
+    {
+      "id": "boundaries-tint-wsa",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-boundary-inner-strokes",
+      "minzoom": 10,
+      "maxzoom": 22,
+      "filter": [
+        "all",
+        ["==", ["zoom"], ["to-number", ["get", "min_zoom"]]],
+        ["==", ["get", "boundary_type"], "wsa"]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": [
+          "match",
+          ["get", "class_id"],
+          [10948, 10945, 1094, 10954],
+          "#8834af",
+          [10946],
+          "#ff6600",
+          [111],
+          "#32bd3c",
+          [9786],
+          "#73B978",
+          "#b2a36b"
+        ],
+        "fill-opacity": {
+          "stops": [
+            [10.25, 0],
+            [10.5, 0.6],
+            [11.5, 0.7]
+          ]
+        },
+        "fill-pattern": "wsa"
+      }
+    },
+    {
+      "id": "boundaries-tint",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-boundary-inner-strokes",
+      "minzoom": 10,
+      "maxzoom": 22,
+      "filter": [
+        "all",
+        ["==", ["zoom"], ["to-number", ["get", "min_zoom"]]],
+        ["!=", ["get", "boundary_type"], "wsa"],
+        ["!=", ["get", "boundary_type"], "wilderness"],
+        ["!=", ["get", "boundary_type"], "indian_reservation"]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": [
+          "match",
+          ["get", "class_id"],
+          [10948, 10945, 1094, 10954, 10950],
+          "#8834af",
+          [10946],
+          "#ff6600",
+          [111],
+          "#32bd3c",
+          [9786],
+          "#73B978",
+          "#b2a36b"
+        ],
+        "fill-opacity": {
+          "stops": [
+            [10.25, 0],
+            [10.5, 0.25]
+          ]
+        }
+      }
+    },
+    {
+      "id": "state-boundaries-text",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-admin-areas",
+      "minzoom": 11,
+      "maxzoom": 22,
+      "layout": {
+        "visibility": "visible",
+        "symbol-placement": "line",
+        "text-font": ["brandontext-light"],
+        "text-field": "{name}",
+        "text-size": {
+          "stops": [
+            [10, 10],
+            [14, 12]
+          ]
+        },
+        "text-offset": [0, -1],
+        "text-transform": "uppercase",
+        "text-padding": 0
+      },
+      "paint": {
+        "text-color": "rgba(113, 116, 93, 1)",
+        "text-halo-color": "rgba(252, 251, 249, 1)",
+        "text-halo-width": 1.3
+      }
+    },
+    {
+      "id": "state-boundaries-stroke",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "na-admin-areas",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": {
+          "stops": [
+            [9.7, "rgba(195, 204, 146, 1)"],
+            [10, "rgba(145, 150, 116, 1)"]
+          ]
+        },
+        "line-dasharray": {
+          "stops": [
+            [9.3, [1]],
+            [10, [8, 5, 2, 2, 2, 5]]
+          ]
+        },
+        "line-width": {
+          "stops": [
+            [9.3, 1],
+            [10, 1.3]
+          ]
+        }
+      }
+    },
+    {
+      "id": "boundaries-military-fill",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-boundary-areas",
+      "minzoom": 7,
+      "filter": ["all", ["in", "boundary_type", "military"]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-pattern": "military-sm",
+        "fill-opacity": {
+          "stops": [
+            [9, 0],
+            [10, 0.15]
+          ]
+        },
+        "fill-outline-color": "rgba(249, 92, 50, 1)"
+      }
+    },
+    {
+      "id": "boundaries-wilderness",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "na-boundary-areas",
+      "minzoom": 10,
+      "filter": [
+        "all",
+        ["!=", "boundary_type", "restricted"],
+        ["in", "class_id", 11053, 11051]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": [
+          "match",
+          ["get", "boundary_type"],
+          "wsa",
+          "#B0944F",
+          "#4DBB3A"
+        ],
+        "line-width": 1,
+        "line-opacity": 0.4
+      }
+    },
+    {
+      "id": "boundaries-stroke",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "na-boundary-areas",
+      "minzoom": 7,
+      "filter": [
+        "all",
+        ["!in", "boundary_type", "restricted", "military"],
+        ["!in", "class_id", 11053, 11051, 11103]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          10.2,
+          ["rgba", 141, 189, 97, 1],
+          10.5,
+          [
+            "match",
+            ["get", "class_id"],
+            [10948, 10945, 1094, 10954, 10950],
+            "#A572BD",
+            [11106],
+            "#e5a7a7",
+            [10946],
+            "#EEA979",
+            [111],
+            "#86BE6F",
+            [9786],
+            "#73B978",
+            "#b2a36b"
+          ]
+        ],
+        "line-width": {
+          "stops": [
+            [8, 0.5],
+            [9.6, 0.7],
+            [10, 1.25],
+            [10.5, 1.5]
+          ]
+        },
+        "line-offset": 0,
+        "line-opacity": {
+          "stops": [
+            [7, 0],
+            [7.5, 0.4],
+            [11, 0.7]
+          ]
+        }
+      }
+    },
+    {
+      "id": "boundary-stroke-zoomed-out",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "na-boundary-areas",
+      "filter": ["all", ["in", "boundary_type", "major", "state_park"]],
+      "layout": {
+        "line-cap": "butt",
+        "line-join": "bevel"
+      },
+      "paint": {
+        "line-color": "rgba(141, 189, 97, 1)",
+        "line-opacity": {
+          "stops": [
+            [9.5, 1],
+            [9.7, 0]
+          ]
+        },
+        "line-width": {
+          "stops": [
+            [6, 0.5],
+            [8, 1.25]
+          ]
+        }
+      }
+    },
+    {
+      "id": "roads-tunnel",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": [
+        "all",
+        ["==", "tunnel", 1],
+        [
+          "in",
+          "type",
+          "interstate",
+          "motorway",
+          "primary",
+          "secondary",
+          "tertiary",
+          "secondary_link",
+          "tertiary_link",
+          "unclassified"
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          9.2,
+          1,
+          9.8,
+          2.52,
+          13,
+          5.1,
+          15,
+          7.75,
+          18,
+          26
+        ],
+        "line-color": "rgba(119, 118, 118, 1)",
+        "line-opacity": 0.3
+      }
+    },
+    {
+      "id": "roads-aisle-alley-casing",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 14,
+      "filter": ["all", ["in", "type", "parking_aisle", "alley"]],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          14,
+          1,
+          15,
+          3,
+          18,
+          10
+        ],
+        "line-color": "rgba(148, 161, 156, 1)",
+        "line-opacity": [
+          "interpolate",
+          ["exponential", 1],
+          ["zoom"],
+          14,
+          0,
+          14.4,
+          1
+        ]
+      }
+    },
+    {
+      "id": "roads-track-background",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": ["all", ["in", "type", "track"]],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          11,
+          1.4,
+          11.5,
+          1.7,
+          11.7,
+          2.1,
+          12,
+          2.1,
+          13,
+          0
+        ],
+        "line-color": "hsl(0, 0%, 100%)",
+        "line-opacity": 1
+      }
+    },
+    {
+      "id": "roads-track-casing",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": ["all", ["in", "type", "track"]],
+      "layout": {
+        "line-cap": "butt",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-width": {
+          "stops": [
+            [11.3, 1],
+            [11.6999, 1.4],
+            [11.7, 1],
+            [12, 1],
+            [14, 1.3],
+            [16, 1.8]
+          ]
+        },
+        "line-color": "rgba(148, 161, 156, 1)",
+        "line-opacity": 1,
+        "line-gap-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          11.7,
+          0,
+          12,
+          1,
+          13,
+          1.9,
+          15,
+          3,
+          18,
+          8
+        ],
+        "line-dasharray": [
+          "step",
+          ["zoom"],
+          ["literal", [3, 1]],
+          11,
+          ["literal", [3, 1]],
+          12,
+          ["literal", [3, 1]],
+          13,
+          ["literal", [3, 2]],
+          14,
+          ["literal", [5, 2]]
+        ]
+      }
+    },
+    {
+      "id": "roads-service-casing",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": [
+        "any",
+        ["match", ["get", "type"], ["driveway", "road"], true, false],
+        [
+          "all",
+          ["match", ["get", "in_populated_area"], 1, true, false],
+          ["match", ["get", "type"], ["service"], true, false]
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          11.5,
+          0.3,
+          12,
+          0.4,
+          13,
+          0.5,
+          14,
+          1
+        ],
+        "line-color": {
+          "stops": [
+            [11.5, "rgba(185, 181, 181, 1)"],
+            [12.5, "rgba(148, 161, 156, 1)"]
+          ]
+        },
+        "line-opacity": {
+          "stops": [
+            [11.4, 0],
+            [11.5, 1]
+          ]
+        },
+        "line-gap-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          11.5,
+          0,
+          11.7,
+          0.2,
+          12,
+          0.9,
+          13,
+          1.5,
+          15,
+          3.6,
+          18,
+          16.5
+        ]
+      }
+    },
+    {
+      "id": "roads-residential-casing",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": [
+        "any",
+        ["match", ["get", "type"], ["living_street"], true, false],
+        ["match", ["get", "type"], ["residential"], true, false],
+        [
+          "all",
+          ["match", ["get", "in_populated_area"], 0, true, false],
+          ["match", ["get", "type"], ["service"], true, false]
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          10,
+          0.3,
+          11,
+          0.4,
+          12,
+          0.5,
+          13,
+          1
+        ],
+        "line-color": {
+          "stops": [
+            [10.2, "rgba(185, 181, 181, 1)"],
+            [11.5, "#94A19C"]
+          ]
+        },
+        "line-opacity": ["interpolate", ["linear"], ["zoom"], 10.1, 0, 10.3, 1],
+        "line-gap-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          10,
+          0,
+          10.2,
+          0.2,
+          10.5,
+          0.9,
+          12,
+          2,
+          13,
+          2.3,
+          15,
+          4.1,
+          18,
+          18
+        ]
+      }
+    },
+    {
+      "id": "roads-tertiary-casing",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": [
+        "all",
+        [
+          "in",
+          "type",
+          "tertiary",
+          "secondary_link",
+          "tertiary_link",
+          "unclassified"
+        ],
+        ["!=", "tunnel", 1]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          9,
+          0.5,
+          10,
+          1,
+          10.6,
+          1,
+          11,
+          1
+        ],
+        "line-color": {
+          "stops": [
+            [9.9, "rgba(255, 255, 255, 1)"],
+            [10, "rgba(208, 205, 205, 1)"],
+            [11.5, "rgba(172, 175, 175, 1)"]
+          ]
+        },
+        "line-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          9,
+          0,
+          9.1,
+          1,
+          11,
+          1,
+          11.2,
+          1
+        ],
+        "line-gap-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          9.95,
+          0,
+          10,
+          0.2,
+          10.7,
+          0.2,
+          10.9,
+          0.5,
+          11.5,
+          2,
+          18,
+          20
+        ]
+      }
+    },
+    {
+      "id": "roads-secondary-casing",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": [
+        "all",
+        [
+          "in",
+          "type",
+          "secondary",
+          "motorway_link",
+          "trunk_link",
+          "primary_link"
+        ],
+        ["!=", "tunnel", 1]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          9.4,
+          1,
+          10,
+          3.2,
+          13,
+          5.1,
+          15,
+          7.75,
+          18,
+          26
+        ],
+        "line-color": {
+          "stops": [
+            [9.6, "#FFFFFF"],
+            [10, "#E3D2BF"],
+            [11, "#DA9142"]
+          ]
+        },
+        "line-opacity": {
+          "stops": [
+            [7.5, 0],
+            [7.65, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "roads-primary-casing",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": ["all", ["in", "type", "primary"], ["!=", "tunnel", 1]],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          6.5,
+          0.3,
+          8.4,
+          1,
+          9.8,
+          3.2,
+          13,
+          5.1,
+          15,
+          7.75,
+          18,
+          26
+        ],
+        "line-color": {
+          "stops": [
+            [9.1, "rgba(255, 255, 255, 1)"],
+            [9.4, "rgba(225, 206, 185, 1)"],
+            [10.5, "#D16F1E"]
+          ]
+        },
+        "line-opacity": {
+          "stops": [
+            [6.2, 0],
+            [6.45, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "roads-aisle-alley",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 14,
+      "filter": ["all", ["in", "type", "parking_aisle", "alley"]],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          14,
+          0.7,
+          15,
+          2,
+          18,
+          7
+        ],
+        "line-color": "hsl(0, 0%, 100%)",
+        "line-opacity": [
+          "interpolate",
+          ["exponential", 1],
+          ["zoom"],
+          14,
+          0,
+          14.4,
+          1
+        ]
+      }
+    },
+    {
+      "id": "roads-track",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": ["all", ["in", "type", "track"]],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          11.5,
+          0,
+          12,
+          0.7,
+          13,
+          1,
+          15,
+          2.3,
+          18,
+          12
+        ],
+        "line-color": "hsl(0, 0%, 100%)",
+        "line-opacity": {
+          "stops": [
+            [13.5, 0.8],
+            [14.5, 0.6],
+            [16, 0.3]
+          ]
+        }
+      }
+    },
+    {
+      "id": "roads-service",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 11,
+      "maxzoom": 22,
+      "filter": [
+        "any",
+        ["match", ["get", "type"], ["driveway", "road"], true, false],
+        [
+          "all",
+          ["match", ["get", "in_populated_area"], 1, true, false],
+          ["match", ["get", "type"], ["service"], true, false]
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          11.5,
+          0,
+          11.7,
+          0.2,
+          12,
+          0.9,
+          13,
+          1.5,
+          15,
+          3.6,
+          18,
+          16.5
+        ],
+        "line-color": "hsl(0, 0%, 100%)",
+        "line-opacity": ["interpolate", ["linear"], ["zoom"], 11.4, 0, 11.5, 1]
+      }
+    },
+    {
+      "id": "roads-residential",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": [
+        "any",
+        ["match", ["get", "type"], ["living_street"], true, false],
+        ["match", ["get", "type"], ["residential"], true, false],
+        [
+          "all",
+          ["match", ["get", "in_populated_area"], 0, true, false],
+          ["match", ["get", "type"], ["service"], true, false]
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          10,
+          0,
+          10.5,
+          0.5,
+          12,
+          2,
+          13,
+          2.3,
+          15,
+          4.1,
+          18,
+          18
+        ],
+        "line-color": "#FFFFFF",
+        "line-opacity": ["interpolate", ["linear"], ["zoom"], 10, 0, 10.2, 1]
+      }
+    },
+    {
+      "id": "roads-motorway-casing",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": [
+        "all",
+        ["!=", "tunnel", 1],
+        ["in", "type", "motorway", "interstate", "trunk"]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          6.5,
+          0.3,
+          8.3,
+          2.5,
+          8.5,
+          3.3,
+          13,
+          6,
+          15,
+          10.5,
+          18,
+          40
+        ],
+        "line-color": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          9,
+          "#ffffff",
+          9.2,
+          ["match", ["get", "type"], "interstate", "#A64B16", "#D26B30"]
+        ],
+        "line-opacity": {
+          "stops": [
+            [6.2, 0],
+            [6.5, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "roads-tertiary",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 9,
+      "filter": [
+        "all",
+        [
+          "in",
+          "type",
+          "tertiary",
+          "secdary_link",
+          "tertiary_link",
+          "unclassified"
+        ],
+        ["!=", "tunnel", 1]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          9.9,
+          0.85,
+          10.5,
+          1.2,
+          11.5,
+          2,
+          18,
+          20
+        ],
+        "line-color": "rgba(255, 255, 255, 1)",
+        "line-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          9.8,
+          0,
+          9.9,
+          1,
+          11,
+          1,
+          11.2,
+          1
+        ],
+        "line-gap-width": 0
+      }
+    },
+    {
+      "id": "roads-secondary",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": [
+        "all",
+        [
+          "in",
+          "type",
+          "secondary",
+          "motorway_link",
+          "trunk_link",
+          "primary_link"
+        ],
+        ["!=", "tunnel", 1]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          9.5,
+          0.6,
+          9.8,
+          1.3,
+          13,
+          3.1,
+          15,
+          5.3,
+          18,
+          22
+        ],
+        "line-color": {
+          "stops": [
+            [9.9, "rgba(255, 255, 255, 1)"],
+            [10, "rgba(248, 240, 216, 1)"],
+            [11, "#FFE38E"]
+          ]
+        },
+        "line-opacity": {
+          "stops": [
+            [9.3, 0],
+            [9.4, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "roads-primary",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": ["all", ["in", "type", "primary"], ["!=", "tunnel", 1]],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          8.5,
+          0.6,
+          8.8,
+          1.3,
+          13,
+          3.1,
+          15,
+          5.3,
+          18,
+          22
+        ],
+        "line-color": {
+          "stops": [
+            [9.4, "rgba(250, 248, 243, 1)"],
+            [9.5, "rgba(246, 239, 219, 1)"],
+            [10.5, "#FFC165"]
+          ]
+        },
+        "line-opacity": {
+          "stops": [
+            [8.3, 0],
+            [8.4, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "roads-motorway",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": [
+        "all",
+        ["in", "type", "motorway", "trunk"],
+        ["!=", "tunnel", 1]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          8.3,
+          2,
+          13,
+          4.2,
+          15,
+          7.9,
+          18,
+          35
+        ],
+        "line-color": {
+          "stops": [
+            [9.2, "rgba(249, 249, 245, 1)"],
+            [9.5, "rgba(249, 232, 181, 1)"],
+            [11, "#FFDA6F"]
+          ]
+        },
+        "line-opacity": {
+          "stops": [
+            [7, 0],
+            [7.2, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "roads-inter",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": ["all", ["in", "type", "interstate"], ["!=", "tunnel", 1]],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          8.3,
+          2,
+          13,
+          4.2,
+          15,
+          7.9,
+          18,
+          35
+        ],
+        "line-color": {
+          "stops": [
+            [9.2, "rgba(255, 255, 255, 1)"],
+            [9.5, "#FF944F"]
+          ]
+        },
+        "line-opacity": 1
+      }
+    },
+    {
+      "id": "roads-tertiary-casing-bridge",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [
+          "in",
+          "type",
+          "tertiary",
+          "secondary_link",
+          "tertiary_link",
+          "unclassified"
+        ],
+        ["!=", "tunnel", 1],
+        ["==", "bridge", 1]
+      ],
+      "layout": {
+        "line-cap": "butt",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          9,
+          0.5,
+          10,
+          1,
+          10.6,
+          1,
+          11,
+          1
+        ],
+        "line-color": {
+          "stops": [
+            [9.9, "rgba(255, 255, 255, 1)"],
+            [10, "rgba(208, 205, 205, 1)"],
+            [11.5, "rgba(172, 175, 175, 1)"]
+          ]
+        },
+        "line-opacity": ["interpolate", ["linear"], ["zoom"], 9, 0, 9.1, 0.5],
+        "line-gap-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          9.95,
+          0,
+          10,
+          0.2,
+          10.7,
+          0.2,
+          10.9,
+          0.5,
+          11.5,
+          2,
+          18,
+          20
+        ]
+      }
+    },
+    {
+      "id": "roads-secondary-casing-bridge",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 13,
+      "filter": [
+        "all",
+        [
+          "in",
+          "type",
+          "secondary",
+          "motorway_link",
+          "trunk_link",
+          "primary_link"
+        ],
+        ["!=", "tunnel", 1],
+        ["==", "bridge", 1]
+      ],
+      "layout": {
+        "line-cap": "butt",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          9.4,
+          1,
+          10,
+          3.2,
+          13,
+          5.1,
+          15,
+          7.75,
+          18,
+          26
+        ],
+        "line-color": {
+          "stops": [
+            [9.6, "rgba(255, 255, 255, 1)"],
+            [10, "rgba(227, 210, 191, 1)"],
+            [11, "#DA9142"]
+          ]
+        },
+        "line-opacity": {
+          "stops": [
+            [7.5, 0],
+            [7.65, 0.5]
+          ]
+        }
+      }
+    },
+    {
+      "id": "roads-primary-casing-bridge",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 13,
+      "filter": [
+        "all",
+        ["in", "type", "primary"],
+        ["!=", "tunnel", 1],
+        ["==", "bridge", 1]
+      ],
+      "layout": {
+        "line-cap": "butt",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          6.5,
+          0.3,
+          8.4,
+          1,
+          9.8,
+          3.2,
+          13,
+          5.1,
+          15,
+          7.75,
+          18,
+          26
+        ],
+        "line-color": {
+          "stops": [
+            [9.1, "rgba(255, 255, 255, 1)"],
+            [9.4, "rgba(225, 206, 185, 1)"],
+            [10.5, "#D16F1E"]
+          ]
+        },
+        "line-opacity": {
+          "stops": [
+            [6.2, 0],
+            [6.45, 0.5]
+          ]
+        }
+      }
+    },
+    {
+      "id": "roads-motorway-casing-bridge",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 13,
+      "filter": [
+        "all",
+        ["!=", "tunnel", 1],
+        ["in", "type", "motorway", "interstate", "trunk"],
+        ["==", "bridge", 1]
+      ],
+      "layout": {
+        "line-cap": "butt",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          8.3,
+          2.5,
+          8.5,
+          3.3,
+          13,
+          6,
+          15,
+          10.5,
+          18,
+          40
+        ],
+        "line-color": "#D26B30",
+        "line-opacity": {
+          "stops": [
+            [8.2, 0],
+            [8.5, 0.5]
+          ]
+        }
+      }
+    },
+    {
+      "id": "roads-tertiary-bridge",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 9,
+      "filter": [
+        "all",
+        [
+          "in",
+          "type",
+          "tertiary",
+          "secondary_link",
+          "tertiary_link",
+          "unclassified"
+        ],
+        ["!=", "tunnel", 1],
+        ["==", "bridge", 1]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          9.9,
+          0.85,
+          10.5,
+          1.2,
+          11.5,
+          2,
+          18,
+          20
+        ],
+        "line-color": "rgba(255, 255, 255, 1)",
+        "line-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          9.8,
+          0,
+          9.9,
+          1,
+          11,
+          1,
+          11.2,
+          1
+        ],
+        "line-gap-width": 0
+      }
+    },
+    {
+      "id": "roads-secondary-bridge",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": [
+        "all",
+        [
+          "in",
+          "type",
+          "secondary",
+          "motorway_link",
+          "trunk_link",
+          "primary_link"
+        ],
+        ["!=", "tunnel", 1],
+        ["==", "bridge", 1]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          9.5,
+          0.6,
+          9.8,
+          1.3,
+          13,
+          3.1,
+          15,
+          5.3,
+          18,
+          22
+        ],
+        "line-color": {
+          "stops": [
+            [9.9, "rgba(255, 255, 255, 1)"],
+            [10, "rgba(248, 240, 216, 1)"],
+            [11, "#FFE38E"]
+          ]
+        },
+        "line-opacity": {
+          "stops": [
+            [9.3, 0],
+            [9.4, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "roads-primary-bridge",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "filter": [
+        "all",
+        ["in", "type", "primary"],
+        ["!=", "tunnel", 1],
+        ["==", "bridge", 1]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          8.5,
+          0.6,
+          8.8,
+          1.3,
+          13,
+          3.1,
+          15,
+          5.3,
+          18,
+          22
+        ],
+        "line-color": {
+          "stops": [
+            [9.4, "rgba(250, 248, 243, 1)"],
+            [9.5, "rgba(246, 239, 219, 1)"],
+            [10.5, "#FFC165"]
+          ]
+        },
+        "line-opacity": {
+          "stops": [
+            [8.3, 0],
+            [8.4, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "roads-motorway-bridge",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 10,
+      "filter": [
+        "all",
+        ["in", "type", "motorway", "trunk"],
+        ["!=", "tunnel", 1],
+        ["==", "bridge", 1]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          8.3,
+          2,
+          13,
+          4.2,
+          15,
+          7.9,
+          18,
+          35
+        ],
+        "line-color": {
+          "stops": [
+            [8.2, "rgba(249, 249, 245, 1)"],
+            [8.5, "rgba(249, 232, 181, 1)"],
+            [11, "#FFDA6F"]
+          ]
+        },
+        "line-opacity": {
+          "stops": [
+            [7, 0],
+            [7.2, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "roads-inter-bridge",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 10,
+      "filter": [
+        "all",
+        ["in", "type", "interstate"],
+        ["!=", "tunnel", 1],
+        ["==", "bridge", 1]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          8.3,
+          2,
+          13,
+          4.2,
+          15,
+          7.9,
+          18,
+          35
+        ],
+        "line-color": {
+          "stops": [
+            [8.2, "rgba(248, 246, 245, 1)"],
+            [8.5, "#FF944F"]
+          ]
+        },
+        "line-opacity": 1
+      }
+    },
+    {
+      "id": "state-boundaries-mask",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "na-admin-areas",
+      "filter": ["all", ["!=", "name", "Colorado"]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": "rgba(159, 157, 157, 1)",
+        "fill-opacity": {
+          "stops": [
+            [9.3, 0.2],
+            [10, 0]
+          ]
+        }
+      }
+    },
+    {
+      "id": "trail-road-overlap-casing",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "minzoom": 10,
+      "filter": [
+        "all",
+        ["any", ["has", "place_id_1"], ["==", "long_trail", "yes"]],
+        ["==", "class_id", 8843]
+      ],
+      "layout": {
+        "line-cap": "butt",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-width": {
+          "stops": [
+            [11, 1],
+            [15, 3.5]
+          ]
+        },
+        "line-gap-width": [
+          "interpolate",
+          ["exponential", 1.35],
+          ["zoom"],
+          6.5,
+          0.3,
+          8.4,
+          1,
+          9.8,
+          3.2,
+          13,
+          5.1,
+          15,
+          7.75,
+          18,
+          26
+        ],
+        "line-color": {
+          "type": "categorical",
+          "property": "long_trail",
+          "stops": [["yes", "rgba(230, 169, 255, 1)"]],
+          "default": "rgba(135, 208, 120, 1)"
+        },
+        "line-opacity": [
+          "interpolate",
+          ["cubic-bezier", 0, 1, 1, 1],
+          ["zoom"],
+          11,
+          ["case", ["==", ["get", "long_trail"], "yes"], 1, 0],
+          11.1,
+          1,
+          13,
+          1,
+          15,
+          0.6
+        ],
+        "line-dasharray": {
+          "stops": [
+            [11, [3, 2]],
+            [13, [4, 3]]
+          ]
+        }
+      }
+    },
+    {
+      "id": "railroad-bg",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 10.5,
+      "maxzoom": 24,
+      "filter": ["all", ["in", "type", "rail", "preserved"]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(178, 178, 178, 1)",
+        "line-opacity": {
+          "stops": [
+            [10.5, 0],
+            [10.6, 1]
+          ]
+        },
+        "line-width": {
+          "stops": [
+            [10.5, 1.7],
+            [14, 2.5],
+            [16, 3.5]
+          ]
+        }
+      }
+    },
+    {
+      "id": "railroad",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 10.5,
+      "maxzoom": 22,
+      "filter": ["all", ["in", "type", "rail", "preserved"]],
+      "paint": {
+        "line-color": "rgba(255, 255, 255, 1)",
+        "line-width": {
+          "stops": [
+            [10.5, 1],
+            [14, 1.5],
+            [16, 2.5]
+          ]
+        },
+        "line-dasharray": [4, 4],
+        "line-opacity": {
+          "stops": [
+            [10.5, 0],
+            [10.6, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "featured-routes",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "featured-routes",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-opacity": 0.001,
+        "line-width": 5,
+        "line-color": "white"
+      }
+    },
+    {
+      "id": "trails-casing",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "filter": [
+        "any",
+        ["all", ["!=", ["get", "class_id"], 8843]],
+        ["all", ["==", ["get", "long_trail"], "yes"], ["<=", ["zoom"], 9]]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-blur": 0,
+        "line-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          9,
+          2,
+          11,
+          [
+            "case",
+            ["has", "surface"],
+            ["match", ["get", "surface"], ["track", "road"], 4, 4],
+            4
+          ],
+          13,
+          [
+            "case",
+            ["has", "surface"],
+            ["match", ["get", "surface"], ["track", "road"], 7, 7],
+            7
+          ],
+          16,
+          [
+            "case",
+            ["has", "surface"],
+            ["match", ["get", "surface"], ["track", "road"], 10, 6],
+            6
+          ]
+        ],
+        "line-color": {
+          "type": "categorical",
+          "property": "long_trail",
+          "stops": [["yes", "rgba(249, 191, 233, 1)"]],
+          "default": "#B8F290"
+        },
+        "line-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          10.1,
+          ["case", ["==", ["get", "long_trail"], "yes"], 1, 0],
+          10.5,
+          1
+        ]
+      }
+    },
+    {
+      "id": "trails-stroke",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "minzoom": 5,
+      "filter": [
+        "any",
+        ["all", ["!=", ["get", "class_id"], 8843]],
+        ["all", ["==", ["get", "long_trail"], "yes"], ["<=", ["zoom"], 9]]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-blur": 0,
+        "line-dasharray": {
+          "stops": [
+            [8, [1.5, 1]],
+            [10, [3, 1]]
+          ]
+        },
+        "line-gap-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          11,
+          0,
+          12,
+          [
+            "case",
+            ["has", "surface"],
+            ["match", ["get", "surface"], ["track", "road"], 1, 0],
+            0
+          ],
+          13,
+          [
+            "case",
+            ["has", "surface"],
+            ["match", ["get", "surface"], ["track", "road"], 1.5, 0],
+            0
+          ],
+          16,
+          [
+            "case",
+            ["has", "surface"],
+            ["match", ["get", "surface"], ["track", "road"], 4, 0],
+            0
+          ]
+        ],
+        "line-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          7,
+          0.4,
+          9,
+          0.8,
+          11,
+          1,
+          11.01,
+          [
+            "case",
+            ["has", "surface"],
+            ["match", ["get", "surface"], ["track", "road"], 1, 1.6],
+            1.6
+          ],
+          16,
+          [
+            "case",
+            ["has", "surface"],
+            ["match", ["get", "surface"], ["track", "road"], 1.5, 1.7],
+            1.7
+          ]
+        ],
+        "line-color": {
+          "type": "categorical",
+          "property": "long_trail",
+          "stops": [["yes", "rgba(200, 77, 241, 1)"]],
+          "default": "#21880B"
+        },
+        "line-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          9,
+          ["case", ["==", ["get", "long_trail"], "yes"], 1, 0.3],
+          10,
+          ["case", ["==", ["get", "long_trail"], "yes"], 1, 0.6],
+          10.5,
+          1
+        ]
+      }
+    },
+    {
+      "id": "trails-junctions",
+      "type": "circle",
+      "source": "cotrex",
+      "source-layer": "cotrex-trail-junctions",
+      "filter": ["in", "class_id", 8850, 8842],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "circle-radius": {
+          "stops": [
+            [12, 1],
+            [12.1, 1.2],
+            [13, 1.8],
+            [15.5, 3]
+          ]
+        },
+        "circle-color": {
+          "type": "categorical",
+          "property": "long_trail",
+          "stops": [["yes", "hsl(287, 83%, 56%)"]],
+          "default": "#21880B"
+        },
+        "circle-stroke-color": "#BEF090",
+        "circle-stroke-width": {
+          "stops": [
+            [13, 0.2],
+            [14.5, 1]
+          ]
+        },
+        "circle-opacity": {
+          "stops": [
+            [13, 0],
+            [13.1, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "motor-trail-all-stroke",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "minzoom": 7,
+      "filter": [
+        "all",
+        [
+          "any",
+          ["!=", ["get", "ohv_gt_50"], "no"],
+          ["!=", ["get", "motorcycle"], "no"],
+          ["!=", ["get", "atv"], "no"]
+        ],
+        ["has", "ohv_gt_50"]
+      ],
+      "layout": {
+        "visibility": "none",
+        "line-cap": "round",
+        "line-join": "miter"
+      },
+      "paint": {
+        "line-width": {
+          "stops": [
+            [6, 1.25],
+            [10, 2.5],
+            [12, 4],
+            [14, 7]
+          ]
+        },
+        "line-color": "#B8F290",
+        "line-opacity": {
+          "stops": [
+            [7.35, 0],
+            [7.6, 0.2],
+            [8.3, 0.2],
+            [8.5, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "motor-road-casing",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "minzoom": 7,
+      "filter": [
+        "all",
+        [
+          "any",
+          ["!=", ["get", "ohv_gt_50"], "no"],
+          ["!=", ["get", "highway_vehicles"], "no"],
+          ["!=", ["get", "atv"], "no"]
+        ],
+        [
+          "all",
+          ["has", "highway_vehicles"],
+          ["has", "atv"],
+          ["has", "ohv_gt_50"]
+        ],
+        ["==", ["get", "class_id"], 8843]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "none"
+      },
+      "paint": {
+        "line-width": {
+          "stops": [
+            [6, 1.25],
+            [10, 2.5],
+            [12, 4],
+            [14, 7]
+          ]
+        },
+        "line-color": "#21880B",
+        "line-opacity": {
+          "stops": [
+            [7.35, 0],
+            [7.6, 0.2],
+            [8.3, 0.2],
+            [8.5, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "motor-stroke",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "minzoom": 7,
+      "filter": [
+        "all",
+        [
+          "any",
+          ["!=", "ohv_gt_50", "no"],
+          ["!=", "atv", "no"],
+          ["!=", "motorcycle", "no"],
+          ["!=", "highway_vehicles", "no"]
+        ],
+        [
+          "all",
+          ["has", "highway_vehicles"],
+          ["has", "atv"],
+          ["has", "ohv_gt_50"],
+          ["has", "motorcycle"]
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "none"
+      },
+      "paint": {
+        "line-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          6,
+          [
+            "case",
+            [
+              "any",
+              [
+                "all",
+                ["!=", ["get", "motorcycle"], "no"],
+                ["==", ["get", "ohv_gt_50"], "no"],
+                ["==", ["get", "highway_vehicles"], "no"],
+                ["!=", ["get", "atv"], "no"]
+              ],
+              [
+                "all",
+                ["!=", ["get", "motorcycle"], "no"],
+                ["==", ["get", "ohv_gt_50"], "no"],
+                ["==", ["get", "highway_vehicles"], "no"],
+                ["==", ["get", "atv"], "no"]
+              ]
+            ],
+            1.5,
+            0.5
+          ],
+          10,
+          [
+            "case",
+            [
+              "any",
+              [
+                "all",
+                ["!=", ["get", "motorcycle"], "no"],
+                ["==", ["get", "ohv_gt_50"], "no"],
+                ["==", ["get", "highway_vehicles"], "no"],
+                ["!=", ["get", "atv"], "no"]
+              ],
+              [
+                "all",
+                ["!=", ["get", "motorcycle"], "no"],
+                ["==", ["get", "ohv_gt_50"], "no"],
+                ["==", ["get", "highway_vehicles"], "no"],
+                ["==", ["get", "atv"], "no"]
+              ]
+            ],
+            3,
+            1
+          ],
+          12,
+          [
+            "case",
+            [
+              "any",
+              [
+                "all",
+                ["!=", ["get", "motorcycle"], "no"],
+                ["==", ["get", "ohv_gt_50"], "no"],
+                ["==", ["get", "highway_vehicles"], "no"],
+                ["!=", ["get", "atv"], "no"]
+              ],
+              [
+                "all",
+                ["!=", ["get", "motorcycle"], "no"],
+                ["==", ["get", "ohv_gt_50"], "no"],
+                ["==", ["get", "highway_vehicles"], "no"],
+                ["==", ["get", "atv"], "no"]
+              ]
+            ],
+            6,
+            2.5
+          ],
+          14,
+          [
+            "case",
+            [
+              "any",
+              [
+                "all",
+                ["!=", ["get", "motorcycle"], "no"],
+                ["==", ["get", "ohv_gt_50"], "no"],
+                ["==", ["get", "highway_vehicles"], "no"],
+                ["!=", ["get", "atv"], "no"]
+              ],
+              [
+                "all",
+                ["!=", ["get", "motorcycle"], "no"],
+                ["==", ["get", "ohv_gt_50"], "no"],
+                ["==", ["get", "highway_vehicles"], "no"],
+                ["==", ["get", "atv"], "no"]
+              ]
+            ],
+            7,
+            4
+          ]
+        ],
+        "line-color": "#B8F290",
+        "line-opacity": {
+          "stops": [
+            [7.35, 0],
+            [7.6, 0.2],
+            [8.3, 0.2],
+            [8.5, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "motor-special-dash",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "minzoom": 7,
+      "filter": [
+        "all",
+        [
+          "all",
+          ["!=", "ohv_gt_50", "no"],
+          ["!=", "atv", "no"],
+          ["!=", "motorcycle", "no"],
+          ["==", "highway_vehicles", "no"]
+        ],
+        [
+          "all",
+          ["has", "highway_vehicles"],
+          ["has", "atv"],
+          ["has", "ohv_gt_50"],
+          ["has", "motorcycle"]
+        ]
+      ],
+      "layout": {
+        "visibility": "none",
+        "line-cap": "butt"
+      },
+      "paint": {
+        "line-width": {
+          "stops": [
+            [6, 0.5],
+            [10, 1],
+            [12, 1.2],
+            [14, 1.9]
+          ]
+        },
+        "line-color": "#21880B",
+        "line-opacity": {
+          "stops": [
+            [7.35, 0],
+            [7.6, 0.2],
+            [8.3, 0.2],
+            [8.5, 1]
+          ]
+        },
+        "line-dasharray": [3, 1.5],
+        "line-gap-width": {
+          "stops": [
+            [6, 0.5],
+            [10, 1],
+            [11, 2],
+            [14, 3]
+          ]
+        }
+      }
+    },
+    {
+      "id": "motor-special-stroke",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "minzoom": 7,
+      "filter": [
+        "all",
+        [
+          "all",
+          ["!=", "ohv_gt_50", "no"],
+          ["!=", "atv", "no"],
+          ["!=", "motorcycle", "no"],
+          ["==", "highway_vehicles", "no"]
+        ],
+        [
+          "all",
+          ["has", "highway_vehicles"],
+          ["has", "atv"],
+          ["has", "ohv_gt_50"],
+          ["has", "motorcycle"]
+        ]
+      ],
+      "layout": {
+        "visibility": "none",
+        "line-cap": "square"
+      },
+      "paint": {
+        "line-width": {
+          "stops": [
+            [6, 0.3],
+            [11, 0.6],
+            [14, 1]
+          ]
+        },
+        "line-color": "#21880B",
+        "line-opacity": {
+          "stops": [
+            [7.35, 0],
+            [7.6, 0.2],
+            [8.3, 0.2],
+            [8.5, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "motor-trail-all-dash",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "minzoom": 7,
+      "filter": [
+        "all",
+        [
+          "all",
+          ["!=", "ohv_gt_50", "no"],
+          ["!=", "atv", "no"],
+          ["!=", "highway_vehicles", "no"],
+          ["!=", "motorcycle", "no"]
+        ],
+        [
+          "all",
+          ["has", "highway_vehicles"],
+          ["has", "atv"],
+          ["has", "ohv_gt_50"],
+          ["has", "motorcycle"]
+        ],
+        ["==", "class_id", 8842]
+      ],
+      "layout": {
+        "visibility": "none",
+        "line-cap": "butt",
+        "line-join": "miter"
+      },
+      "paint": {
+        "line-width": {
+          "stops": [
+            [6, 0.5],
+            [10, 1],
+            [12, 1.2],
+            [14, 1.9]
+          ]
+        },
+        "line-color": "#21880B",
+        "line-opacity": {
+          "stops": [
+            [7.35, 0],
+            [7.6, 0.2],
+            [8.3, 0.2],
+            [8.5, 1]
+          ]
+        },
+        "line-dasharray": [4.5, 1.5],
+        "line-gap-width": {
+          "stops": [
+            [6, 0.5],
+            [10, 1],
+            [11, 2],
+            [14, 3]
+          ]
+        }
+      }
+    },
+    {
+      "id": "motor-trail-dash-single",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "minzoom": 7,
+      "filter": [
+        "all",
+        [
+          "all",
+          ["==", "ohv_gt_50", "no"],
+          ["!=", "atv", "no"],
+          ["==", "highway_vehicles", "no"],
+          ["!=", "motorcycle", "no"]
+        ],
+        [
+          "all",
+          ["has", "highway_vehicles"],
+          ["has", "atv"],
+          ["has", "ohv_gt_50"],
+          ["has", "motorcycle"]
+        ],
+        ["==", "class_id", 8842]
+      ],
+      "layout": {
+        "visibility": "none",
+        "line-cap": "butt",
+        "line-join": "miter"
+      },
+      "paint": {
+        "line-width": {
+          "stops": [
+            [6, 0.75],
+            [10, 1.5],
+            [12, 2],
+            [14, 4]
+          ]
+        },
+        "line-color": "#21880B",
+        "line-opacity": {
+          "stops": [
+            [7.35, 0],
+            [7.6, 0.2],
+            [8.3, 0.2],
+            [8.5, 1]
+          ]
+        },
+        "line-dasharray": [2.3, 1]
+      }
+    },
+    {
+      "id": "motor-road-dash",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "minzoom": 7,
+      "filter": [
+        "all",
+        ["!=", ["get", "motorcycle"], "no"],
+        ["!=", ["get", "ohv_gt_50"], "no"],
+        ["!=", ["get", "highway_vehicles"], "no"],
+        ["!=", ["get", "atv"], "no"],
+        ["==", ["get", "class_id"], 8843],
+        [
+          "all",
+          ["has", "highway_vehicles"],
+          ["has", "atv"],
+          ["has", "ohv_gt_50"],
+          ["has", "motorcycle"]
+        ]
+      ],
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-width": {
+          "stops": [
+            [6, 0.3],
+            [12, 2.5],
+            [14, 5]
+          ]
+        },
+        "line-color": {
+          "stops": [
+            [10, "rgba(87, 160, 71, 1)"],
+            [11, "#21880B"]
+          ]
+        },
+        "line-opacity": {
+          "stops": [
+            [7.35, 0],
+            [7.6, 0.2],
+            [8.3, 0.2],
+            [8.5, 1]
+          ]
+        },
+        "line-dasharray": [1.5, 2]
+      }
+    },
+    {
+      "id": "motor-motorcycle",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "minzoom": 7,
+      "filter": [
+        "all",
+        ["!=", ["get", "motorcycle"], "no"],
+        ["==", ["get", "ohv_gt_50"], "no"],
+        ["==", ["get", "highway_vehicles"], "no"],
+        ["==", ["get", "atv"], "no"]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "visibility": "none",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-width": {
+          "stops": [
+            [6, 0.5],
+            [10, 1.3],
+            [12, 2],
+            [14, 4]
+          ]
+        },
+        "line-color": "#21880B",
+        "line-opacity": {
+          "stops": [
+            [7.35, 0],
+            [7.6, 0.2],
+            [8.3, 0.2],
+            [8.5, 1]
+          ]
+        },
+        "line-dasharray": [0.01, 2]
+      }
+    },
+    {
+      "id": "hydro-points",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-hydro-points",
+      "minzoom": 11,
+      "filter": ["all"],
+      "layout": {
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "icon-image": "{icon}",
+        "icon-rotate": ["case", ["has", "aspect"], ["get", "aspect"], 0],
+        "icon-size": 1,
+        "visibility": "visible",
+        "icon-padding": 0
+      },
+      "paint": {
+        "icon-opacity": {
+          "stops": [
+            [11, 0],
+            [11.1, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "points",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-points",
+      "minzoom": 11,
+      "filter": ["all", ["!in", "class_id", 2578, 9206, 9154, 9205]],
+      "layout": {
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "icon-image": "{icon}",
+        "icon-rotate": ["case", ["has", "aspect"], ["get", "aspect"], 0],
+        "icon-size": 1,
+        "visibility": "visible",
+        "icon-padding": 0
+      },
+      "paint": {
+        "icon-opacity": {
+          "stops": [
+            [11, 0],
+            [11.1, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "hydro-flowline-labels",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-hydro-flowlines",
+      "filter": ["all", ["==", "label_enabled", 1]],
+      "layout": {
+        "symbol-placement": "line",
+        "text-font": ["brandontext-medium"],
+        "text-field": "{name}",
+        "symbol-avoid-edges": true,
+        "text-size": 11,
+        "text-max-angle": 30,
+        "visibility": "visible"
+      },
+      "paint": {
+        "text-halo-color": {
+          "type": "categorical",
+          "property": "artificial",
+          "stops": [[true, "#D9F8FA"]],
+          "default": "rgba(255, 255, 255, 1)"
+        },
+        "text-halo-width": 2,
+        "text-color": "rgba(91, 187, 208, 1)"
+      }
+    },
+    {
+      "id": "roads-labels-sm",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 13,
+      "filter": [
+        "any",
+        ["match", ["get", "type"], ["unclassified", "tertiary"], true, false],
+        [
+          "all",
+          [">", ["zoom"], 13],
+          ["match", ["get", "type"], ["residential"], true, false]
+        ],
+        [
+          "all",
+          [">", ["zoom"], 14],
+          ["match", ["get", "type"], ["service"], true, false]
+        ]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "text-field": "{name}",
+        "symbol-placement": "line",
+        "text-size": [
+          "interpolate",
+          ["exponential", 1],
+          ["zoom"],
+          12,
+          9,
+          15,
+          11
+        ],
+        "text-font": ["brandontext-medium"],
+        "icon-padding": 10,
+        "text-max-width": 1000,
+        "text-line-height": 3,
+        "text-transform": "uppercase",
+        "symbol-spacing": 400
+      },
+      "paint": {
+        "text-color": "#727A6C",
+        "text-halo-width": 1.7,
+        "text-halo-color": "#fcfcfc"
+      }
+    },
+    {
+      "id": "roads-labels-lg",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 12,
+      "filter": [
+        "all",
+        ["in", "type", "motorway", "trunk", "primary", "secondary"],
+        ["!=", "tunnel", 1]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "text-field": "{name}",
+        "symbol-placement": "line",
+        "text-size": [
+          "interpolate",
+          ["exponential", 1],
+          ["zoom"],
+          12,
+          9,
+          15,
+          11
+        ],
+        "text-font": ["brandontext-bold"],
+        "icon-padding": 10,
+        "text-max-width": 1000,
+        "text-line-height": 3,
+        "text-transform": "uppercase",
+        "symbol-spacing": 400
+      },
+      "paint": {
+        "text-color": "#FFFFFF",
+        "text-halo-width": 1.7,
+        "text-halo-color": {
+          "type": "categorical",
+          "property": "type",
+          "stops": [
+            ["secondary", "#D4903C"],
+            ["motorway", "#da9142"],
+            ["trunk", "#da9142"]
+          ],
+          "default": "#d16f1e"
+        }
+      }
+    },
+    {
+      "id": "points-without-collisions",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-points",
+      "filter": ["all", ["in", "class_id", 2578, 9206, 9154, 9205]],
+      "layout": {
+        "icon-allow-overlap": false,
+        "icon-ignore-placement": false,
+        "icon-image": "{icon}",
+        "icon-rotate": ["get", "aspect"],
+        "icon-size": {
+          "stops": [
+            [12, 0.75],
+            [13, 1]
+          ]
+        },
+        "visibility": "visible",
+        "icon-padding": 0,
+        "icon-optional": false
+      }
+    },
+    {
+      "id": "instrumentation",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "instrumentation",
+      "layout": {
+        "icon-image": "stream-gauge",
+        "icon-allow-overlap": false,
+        "icon-ignore-placement": false,
+        "visibility": "visible",
+        "icon-pitch-alignment": "viewport",
+        "icon-size": 1
+      }
+    },
+    {
+      "id": "buildings-stroke",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "buildings",
+      "minzoom": 1,
+      "maxzoom": 22,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(169, 178, 164, 1)",
+        "line-width": 1,
+        "line-translate": [
+          "interpolate",
+          ["exponential", 1],
+          ["zoom"],
+          14,
+          ["literal", [0.05, 0.05]],
+          15,
+          ["literal", [0.3, 0.3]]
+        ],
+        "line-opacity": [
+          "interpolate",
+          ["exponential", 1],
+          ["zoom"],
+          14.25,
+          0,
+          14.4,
+          1
+        ]
+      }
+    },
+    {
+      "id": "buildings",
+      "type": "fill",
+      "source": "cotrex",
+      "source-layer": "buildings",
+      "minzoom": 1,
+      "maxzoom": 22,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": "rgba(231, 235, 230, 1)",
+        "fill-opacity": [
+          "interpolate",
+          ["exponential", 1],
+          ["zoom"],
+          14,
+          0,
+          14.4,
+          1
+        ],
+        "fill-outline-color": "rgba(180, 185, 177, 1)"
+      }
+    },
+    {
+      "id": "power-points",
+      "type": "circle",
+      "source": "cotrex",
+      "source-layer": "power-lines",
+      "layout": {},
+      "paint": {
+        "circle-radius": 2,
+        "circle-color": "rgba(183, 187, 183, 1)",
+        "circle-opacity": {
+          "stops": [
+            [13, 0],
+            [13.3, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "power-lines",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "power-lines",
+      "paint": {
+        "line-color": "rgba(183, 187, 183, 1)",
+        "line-opacity": {
+          "stops": [
+            [13, 0],
+            [13.3, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "power-lines-text",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "power-lines",
+      "minzoom": 13.3,
+      "layout": {
+        "text-field": "POWER LINE",
+        "symbol-placement": "line",
+        "text-size": 9,
+        "text-font": ["brandontext-medium"],
+        "icon-offset": [0, 0],
+        "text-offset": [0, 0.7],
+        "text-max-angle": 15,
+        "symbol-spacing": 550
+      },
+      "paint": {
+        "text-color": "rgba(183, 187, 183, 1)",
+        "text-halo-color": "rgba(255, 255, 255, 1)",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "ski-lifts",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "aerial-lines",
+      "minzoom": 12,
+      "filter": ["all"],
+      "paint": {
+        "line-color": "rgba(118, 118, 118, 1)",
+        "line-width": 1,
+        "line-dasharray": [1.2, 1.2],
+        "line-opacity": {
+          "stops": [
+            [12.4, 0],
+            [12.5, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "ski-lifts-labels",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "aerial-lines",
+      "minzoom": 13.3,
+      "layout": {
+        "text-field": "{name}",
+        "symbol-placement": "line",
+        "text-size": 11,
+        "text-font": ["brandontext-medium"],
+        "icon-offset": [0, 0],
+        "text-offset": [0, 0.7],
+        "text-max-angle": 15,
+        "symbol-spacing": 300
+      },
+      "paint": {
+        "text-color": "rgba(150, 150, 150, 1)",
+        "text-halo-color": "rgba(255, 255, 255, 1)",
+        "text-halo-width": 1,
+        "text-opacity": {
+          "stops": [
+            [12.4, 0],
+            [12.5, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "trails-oneway",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "minzoom": 13,
+      "filter": [
+        "all",
+        ["==", ["get", "visible"], true],
+        ["==", ["get", "oneway"], "yes"]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "oneway",
+        "icon-size": {
+          "stops": [
+            [13.5, 0.4],
+            [15, 1]
+          ]
+        },
+        "symbol-placement": "line",
+        "symbol-spacing": 60
+      },
+      "paint": {
+        "icon-opacity": {
+          "stops": [
+            [13.25, 0],
+            [13.4, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "trails-labels-mileage",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "minzoom": 13,
+      "filter": ["all", ["==", ["get", "visible"], true]],
+      "layout": {
+        "text-field": "{length_mi_rounded}mi",
+        "symbol-placement": "line",
+        "text-size": {
+          "stops": [
+            [12, 9],
+            [17, 11]
+          ]
+        },
+        "text-font": ["brandontext-bold"],
+        "text-max-angle": 40,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "visibility": "visible",
+        "symbol-spacing": 200,
+        "text-padding": 0
+      },
+      "paint": {
+        "text-halo-width": 2,
+        "text-halo-color": {
+          "type": "categorical",
+          "property": "long_trail",
+          "stops": [["yes", "rgba(252, 242, 255, 1)"]],
+          "default": "rgba(222, 255, 194, 1)"
+        },
+        "text-color": {
+          "type": "categorical",
+          "property": "long_trail",
+          "stops": [["yes", "hsl(287, 83%, 56%)"]],
+          "default": "rgba(33, 136, 11, 1)"
+        }
+      }
+    },
+    {
+      "id": "line-boating-restriction-labels",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-line-labels",
+      "minzoom": 0,
+      "maxzoom": 22,
+      "filter": ["all", ["==", "style", "boating-restriction"]],
+      "layout": {
+        "visibility": "visible",
+        "text-field": "{label}",
+        "symbol-placement": "line",
+        "text-size": 11,
+        "text-offset": [0, 1.2],
+        "text-font": ["brandontext-regular"],
+        "symbol-spacing": 350,
+        "text-letter-spacing": 0.2
+      },
+      "paint": {
+        "text-halo-color": "rgba(221, 247, 245, 1)",
+        "text-color": "#1C9CB8"
+      }
+    },
+    {
+      "id": "line-boating-restriction",
+      "type": "line",
+      "source": "cotrex",
+      "source-layer": "na-line-labels",
+      "minzoom": 0,
+      "maxzoom": 22,
+      "filter": ["all", ["==", "style", "boating-restriction"]],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-pattern": "boating-restriction",
+        "line-width": 14,
+        "line-opacity": {
+          "stops": [
+            [13, 0],
+            [13.2, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "line-labels-center",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-line-labels",
+      "minzoom": 1,
+      "maxzoom": 17,
+      "filter": [
+        "all",
+        ["==", "tile", true],
+        ["!=", "style", "boating-restriction"]
+      ],
+      "layout": {
+        "text-size": ["case", ["has", "text_size"], ["get", "text_size"], 12],
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-max-angle": 35,
+        "symbol-spacing": {
+          "stops": [
+            [11, 200],
+            [12, 300],
+            [13, 350],
+            [14, 350]
+          ]
+        },
+        "text-font": [
+          "match",
+          ["get", "class_id"],
+          [
+            3617,
+            3618,
+            3619,
+            3614,
+            3615,
+            3616,
+            4053,
+            4054,
+            3624,
+            3675,
+            3676,
+            3737,
+            3677,
+            3678,
+            1493
+          ],
+          ["literal", ["brandontext-regular"]],
+          ["literal", ["brandontext-light"]]
+        ],
+        "symbol-placement": "line-center",
+        "text-padding": 0,
+        "text-field": "{label}",
+        "text-max-width": 1000,
+        "visibility": "visible",
+        "symbol-avoid-edges": true,
+        "text-letter-spacing": [
+          "case",
+          ["has", "text_spacing"],
+          ["get", "text_spacing"],
+          0.1
+        ],
+        "text-line-height": 1.2,
+        "text-rotate": 0,
+        "text-justify": "center",
+        "text-anchor": "center"
+      },
+      "paint": {
+        "text-color": [
+          "match",
+          ["get", "class_id"],
+          [
+            3617,
+            3618,
+            3619,
+            3614,
+            3615,
+            3616,
+            4053,
+            4054,
+            3624,
+            3675,
+            3676,
+            3737,
+            3677,
+            3678,
+            3890,
+            2554,
+            1493,
+            3891
+          ],
+          "#1C9CB8",
+          "#6B7F68"
+        ],
+        "text-halo-color": [
+          "match",
+          ["get", "class_id"],
+          [
+            3617,
+            3618,
+            3619,
+            3614,
+            3615,
+            3616,
+            4053,
+            4054,
+            3624,
+            3675,
+            3676,
+            3737,
+            3677,
+            3890,
+            2554,
+            3678,
+            3891
+          ],
+          "rgba(221, 247, 245, 1)",
+          "rgba(252, 252, 252,0.8)"
+        ],
+        "text-halo-width": {
+          "stops": [
+            [11, 1],
+            [12, 2],
+            [13, 2.4]
+          ]
+        },
+        "text-translate-anchor": "map",
+        "text-halo-blur": 1
+      }
+    },
+    {
+      "id": "line-labels-not-center",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-line-labels",
+      "minzoom": 1,
+      "maxzoom": 17,
+      "filter": [
+        "all",
+        ["!=", "tile", true],
+        ["!=", "style", "boating-restriction"]
+      ],
+      "layout": {
+        "text-size": ["case", ["has", "text_size"], ["get", "text_size"], 12],
+        "text-allow-overlap": true,
+        "text-ignore-placement": false,
+        "text-max-angle": 35,
+        "symbol-spacing": {
+          "stops": [
+            [11, 200],
+            [12, 300],
+            [13, 350],
+            [14, 350]
+          ]
+        },
+        "text-font": [
+          "match",
+          ["get", "class_id"],
+          [
+            3617,
+            3618,
+            3619,
+            3614,
+            3615,
+            3616,
+            4053,
+            4054,
+            3624,
+            3675,
+            3676,
+            3737,
+            3677,
+            3678,
+            1493
+          ],
+          ["literal", ["brandontext-regular"]],
+          ["literal", ["brandontext-light"]]
+        ],
+        "symbol-placement": "line",
+        "text-padding": 0,
+        "text-field": "{label}",
+        "text-max-width": 1000,
+        "visibility": "visible",
+        "symbol-avoid-edges": true,
+        "text-letter-spacing": [
+          "case",
+          ["has", "text_spacing"],
+          ["get", "text_spacing"],
+          0.1
+        ],
+        "text-line-height": 1.2,
+        "text-rotate": 0,
+        "text-justify": "center",
+        "text-anchor": "center"
+      },
+      "paint": {
+        "text-color": [
+          "match",
+          ["get", "class_id"],
+          [
+            3617,
+            3618,
+            3619,
+            3614,
+            3615,
+            3616,
+            4053,
+            4054,
+            3624,
+            3675,
+            3676,
+            3737,
+            3677,
+            3678,
+            3890,
+            2554,
+            1493,
+            3891
+          ],
+          "#1C9CB8",
+          "#6B7F68"
+        ],
+        "text-halo-color": [
+          "match",
+          ["get", "class_id"],
+          [
+            3617,
+            3618,
+            3619,
+            3614,
+            3615,
+            3616,
+            4053,
+            4054,
+            3624,
+            3675,
+            3676,
+            3737,
+            3677,
+            3678,
+            3890,
+            2554,
+            3891
+          ],
+          "#DDF7F5",
+          "rgba(252, 252, 252,0.8)"
+        ],
+        "text-halo-width": {
+          "stops": [
+            [11, 1],
+            [12, 2],
+            [13, 2.4]
+          ]
+        },
+        "text-translate-anchor": "map",
+        "text-halo-blur": 1
+      }
+    },
+    {
+      "id": "boundaries-text",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-boundary-areas",
+      "minzoom": 11.5,
+      "maxzoom": 22,
+      "filter": [
+        "all",
+        ["!in", "boundary_type", "restricted", "indian_reservation"]
+      ],
+      "layout": {
+        "symbol-placement": "line",
+        "text-field": "{name}",
+        "text-size": {
+          "stops": [
+            [14, 13],
+            [14.5, 22],
+            [15.1, 13]
+          ]
+        },
+        "text-pitch-alignment": "map",
+        "text-rotation-alignment": "map",
+        "text-offset": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          15.99,
+          ["literal", [0, 0.59]],
+          16,
+          ["literal", [0, 0.55]]
+        ],
+        "text-max-angle": 25,
+        "visibility": "visible",
+        "text-padding": 0,
+        "text-font": ["brandontext-bold"],
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.1,
+        "symbol-spacing": 300,
+        "text-line-height": 0.7,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false
+      },
+      "paint": {
+        "text-halo-color": [
+          "match",
+          ["get", "class_id"],
+          [10948, 10945, 1094, 10954],
+          "rgba(165, 114, 189, 1)",
+          [10946],
+          "#EEA979",
+          [111, 11051],
+          "#86BE6F",
+          [11106],
+          "#e5a7a7",
+          [9786],
+          "#73B978",
+          "#b2a36b"
+        ],
+        "text-halo-width": 1.8,
+        "text-color": "#FFFFFF"
+      }
+    },
+    {
+      "id": "peak-labels-left-elev",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-peak-labels",
+      "filter": [
+        "any",
+        [">=", ["zoom"], 11],
+        ["all", ["==", ["get", "style"], "bold"], ["<", ["zoom"], 11]]
+      ],
+      "layout": {
+        "icon-image": "spot-elevation",
+        "icon-size": 1,
+        "icon-padding": 0,
+        "text-field": "{elev}",
+        "text-font": ["brandontext-regularitalic"],
+        "text-size": 10,
+        "text-anchor": "bottom-right",
+        "text-offset": [-0.8, 1.45],
+        "text-max-width": 8,
+        "text-justify": "right",
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-padding": 1,
+        "visibility": "visible",
+        "text-optional": false,
+        "icon-offset": [0, 0],
+        "icon-allow-overlap": false,
+        "icon-ignore-placement": false,
+        "text-line-height": 3,
+        "icon-optional": true
+      },
+      "paint": {
+        "text-halo-width": 1.5,
+        "text-halo-color": "rgba(255, 255, 255, 0.8)",
+        "text-color": "rgba(144, 142, 142, 1)",
+        "text-translate": [0, 0],
+        "icon-opacity": 1
+      }
+    },
+    {
+      "id": "peak-labels-left",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-peak-labels",
+      "filter": ["all", ["!=", "style", "bold"]],
+      "layout": {
+        "icon-image": "mtn-smhalo",
+        "icon-size": 1,
+        "icon-padding": 0,
+        "text-field": "{label}",
+        "text-font": ["brandontext-medium"],
+        "text-size": {
+          "stops": [
+            [10, 10],
+            [11, 12],
+            [12, 13],
+            [14, 15]
+          ]
+        },
+        "text-anchor": "bottom-right",
+        "text-offset": [-0.7, 1.45],
+        "text-max-width": 1000,
+        "text-justify": "right",
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-padding": 1,
+        "visibility": "visible",
+        "text-optional": false,
+        "icon-offset": [0, 0],
+        "icon-allow-overlap": false,
+        "icon-ignore-placement": false,
+        "text-line-height": 3
+      },
+      "paint": {
+        "text-halo-width": 1.5,
+        "text-halo-color": "rgba(255, 255, 255, 0.8)",
+        "text-color": "#444942",
+        "icon-halo-blur": 0,
+        "icon-halo-width": 0,
+        "text-translate": [0, 0],
+        "icon-color": "rgba(68, 68, 68, 1)"
+      }
+    },
+    {
+      "id": "peak-labels",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-peak-labels",
+      "filter": ["all", ["!=", "style", "bold"]],
+      "layout": {
+        "icon-image": "mtn-smhalo",
+        "icon-size": 1,
+        "icon-padding": 0,
+        "text-field": "{label}",
+        "text-font": ["brandontext-medium"],
+        "text-size": {
+          "stops": [
+            [10, 10],
+            [11, 12],
+            [12, 13],
+            [14, 15]
+          ]
+        },
+        "text-anchor": "bottom-left",
+        "text-offset": [0.6, 1.45],
+        "text-max-width": 1000,
+        "text-justify": "left",
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-padding": 2,
+        "visibility": "visible",
+        "text-optional": false,
+        "icon-ignore-placement": false,
+        "icon-optional": false,
+        "icon-allow-overlap": false,
+        "icon-offset": [0, 0],
+        "text-line-height": 3
+      },
+      "paint": {
+        "text-halo-width": 1.5,
+        "text-halo-color": "rgba(255, 255, 255, 0.8)",
+        "text-color": {
+          "stops": [
+            [10, "rgba(102, 107, 99, 1)"],
+            [11, "#444942"]
+          ]
+        },
+        "icon-halo-blur": 0,
+        "icon-halo-width": 0,
+        "text-translate": [0, 0],
+        "icon-color": "rgba(68, 68, 68, 1)",
+        "icon-opacity": 1
+      }
+    },
+    {
+      "id": "peak-labels-left-bold",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-peak-labels",
+      "filter": ["all", ["==", "style", "bold"]],
+      "layout": {
+        "icon-image": "mtn",
+        "icon-size": {
+          "stops": [
+            [9, 1],
+            [10, 1.2]
+          ]
+        },
+        "icon-padding": 0,
+        "text-field": "{label}",
+        "text-font": ["brandontext-bold"],
+        "text-size": {
+          "stops": [
+            [9, 11],
+            [11, 15],
+            [12, 17],
+            [14, 19]
+          ]
+        },
+        "text-anchor": "bottom-right",
+        "text-offset": [-0.7, 0.6],
+        "text-max-width": 8,
+        "text-justify": "right",
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-padding": 1,
+        "visibility": "visible",
+        "text-optional": true,
+        "icon-offset": [0, 0],
+        "icon-allow-overlap": false,
+        "icon-ignore-placement": false
+      },
+      "paint": {
+        "text-halo-width": 1.5,
+        "text-halo-color": "rgba(255, 255, 255, 0.8)",
+        "text-color": "#444942",
+        "icon-halo-blur": 0,
+        "icon-halo-width": 0,
+        "text-translate": [0, 0],
+        "icon-color": "rgba(68, 68, 68, 1)"
+      }
+    },
+    {
+      "id": "peak-labels-bold",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-peak-labels",
+      "filter": ["all", ["==", "style", "bold"]],
+      "layout": {
+        "icon-image": "mtn",
+        "icon-size": {
+          "stops": [
+            [9, 1],
+            [10, 1.2]
+          ]
+        },
+        "icon-padding": 0,
+        "text-field": "{label}",
+        "text-font": ["brandontext-bold"],
+        "text-size": {
+          "stops": [
+            [9, 11],
+            [11, 15],
+            [12, 17],
+            [14, 19]
+          ]
+        },
+        "text-anchor": "bottom-left",
+        "text-offset": [0.7, 1.2],
+        "text-max-width": 50,
+        "text-justify": "left",
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-padding": 2,
+        "visibility": "visible",
+        "text-optional": false,
+        "icon-ignore-placement": false,
+        "icon-optional": false,
+        "icon-allow-overlap": false,
+        "icon-offset": [0, 0],
+        "text-line-height": 2.5
+      },
+      "paint": {
+        "text-halo-width": 1.5,
+        "text-halo-color": "rgba(255, 255, 255, 0.8)",
+        "text-color": "#444942",
+        "icon-halo-blur": 0,
+        "icon-halo-width": 0,
+        "text-translate": [0, 0],
+        "icon-color": "rgba(68, 68, 68, 1)",
+        "icon-opacity": 1
+      }
+    },
+    {
+      "id": "road-shields1",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 11,
+      "maxzoom": 24,
+      "filter": ["all", ["has", "refnum1"], ["!=", "refnum1", ""]],
+      "layout": {
+        "text-field": "{refnum1}",
+        "symbol-placement": "line",
+        "text-rotation-alignment": "viewport",
+        "icon-rotation-alignment": "viewport",
+        "text-size": {
+          "stops": [
+            [11, 8],
+            [12, 10],
+            [15, 10],
+            [17, 13]
+          ]
+        },
+        "text-font": ["brandontext-black"],
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "visibility": "visible",
+        "symbol-spacing": 300,
+        "text-padding": 0,
+        "text-letter-spacing": 0,
+        "text-transform": "none",
+        "icon-size": {
+          "stops": [
+            [11, 0.8],
+            [12, 1]
+          ]
+        },
+        "text-justify": "center",
+        "icon-text-fit": "none",
+        "icon-text-fit-padding": [0, 5, 0, 5],
+        "icon-image": [
+          "match",
+          ["get", "shield1"],
+          ["CO"],
+          "co",
+          ["US"],
+          [
+            "case",
+            ["<=", ["length", ["get", "refnum1"]], 2],
+            "us-highway-2",
+            ["==", ["length", ["get", "refnum1"]], 3],
+            "us-highway-3",
+            ["==", ["length", ["get", "refnum1"]], 4],
+            "us-highway-4",
+            ["==", ["length", ["get", "refnum1"]], 5],
+            "us-highway-5",
+            ""
+          ],
+          ["I"],
+          [
+            "case",
+            ["<=", ["length", ["get", "refnum1"]], 2],
+            "interstate-2",
+            ["==", ["length", ["get", "refnum1"]], 3],
+            "interstate-3",
+            ["==", ["length", ["get", "refnum1"]], 4],
+            "interstate-4",
+            ""
+          ],
+          [
+            "case",
+            ["<=", ["length", ["get", "refnum1"]], 2],
+            "trail-num-road-2",
+            ["==", ["length", ["get", "refnum1"]], 3],
+            "trail-num-road-3",
+            ["==", ["length", ["get", "refnum1"]], 4],
+            "trail-num-road",
+            ["==", ["length", ["get", "refnum1"]], 5],
+            "trail-num-road-5",
+            ""
+          ]
+        ]
+      },
+      "paint": {
+        "text-halo-width": 0,
+        "text-color": {
+          "type": "categorical",
+          "property": "shield1",
+          "stops": [
+            ["CO", "rgba(115, 123, 110, 1)"],
+            ["I", "rgba(255, 255, 255, 1)"]
+          ],
+          "default": "rgba(115, 123, 110, 1)"
+        },
+        "text-opacity": 1,
+        "text-halo-color": "rgba(255, 255, 255, 1)"
+      }
+    },
+    {
+      "id": "road-shields2",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "roads",
+      "minzoom": 11,
+      "maxzoom": 24,
+      "filter": ["all", ["has", "refnum2"], ["!=", "refnum2", ""]],
+      "layout": {
+        "text-field": "{refnum2}",
+        "symbol-placement": "line",
+        "text-rotation-alignment": "viewport",
+        "icon-rotation-alignment": "viewport",
+        "text-size": {
+          "stops": [
+            [11, 8],
+            [12, 10],
+            [15, 10],
+            [17, 13]
+          ]
+        },
+        "text-font": ["brandontext-black"],
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "visibility": "visible",
+        "symbol-spacing": 350,
+        "text-padding": 0,
+        "text-letter-spacing": 0,
+        "text-transform": "none",
+        "icon-size": {
+          "stops": [
+            [11, 0.8],
+            [12, 1]
+          ]
+        },
+        "text-justify": "center",
+        "icon-text-fit": "none",
+        "icon-text-fit-padding": [0, 5, 0, 5],
+        "icon-image": [
+          "match",
+          ["get", "shield2"],
+          ["CO"],
+          "co",
+          ["US"],
+          [
+            "case",
+            ["<=", ["length", ["get", "refnum2"]], 2],
+            "us-highway-2",
+            ["==", ["length", ["get", "refnum2"]], 3],
+            "us-highway-3",
+            ["==", ["length", ["get", "refnum2"]], 4],
+            "us-highway-4",
+            ["==", ["length", ["get", "refnum2"]], 5],
+            "us-highway-5",
+            ""
+          ],
+          ["I"],
+          [
+            "case",
+            ["<=", ["length", ["get", "refnum2"]], 2],
+            "interstate-2",
+            ["==", ["length", ["get", "refnum2"]], 3],
+            "interstate-3",
+            ["==", ["length", ["get", "refnum2"]], 4],
+            "interstate-4",
+            ""
+          ],
+          [
+            "case",
+            ["<=", ["length", ["get", "refnum2"]], 2],
+            "trail-num-road-2",
+            ["==", ["length", ["get", "refnum2"]], 3],
+            "trail-num-road-3",
+            ["==", ["length", ["get", "refnum2"]], 4],
+            "trail-num-road",
+            ["==", ["length", ["get", "refnum2"]], 5],
+            "trail-num-road-5",
+            ""
+          ]
+        ]
+      },
+      "paint": {
+        "text-halo-width": 0,
+        "text-color": {
+          "type": "categorical",
+          "property": "shield2",
+          "stops": [
+            ["CO", "rgba(115, 123, 110, 1)"],
+            ["I", "rgba(255, 255, 255, 1)"]
+          ],
+          "default": "#737B6E"
+        },
+        "text-opacity": 1,
+        "text-halo-color": "rgba(255, 255, 255, 1)"
+      }
+    },
+    {
+      "id": "trail-numbers",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "minzoom": 11,
+      "maxzoom": 24,
+      "filter": ["all", ["has", "trail_num"]],
+      "layout": {
+        "text-field": ["get", "trail_num"],
+        "symbol-placement": "line",
+        "text-rotation-alignment": "viewport",
+        "icon-rotation-alignment": "viewport",
+        "text-size": {
+          "stops": [
+            [11, 8],
+            [12, 10],
+            [15, 10],
+            [17, 13]
+          ]
+        },
+        "text-font": ["brandontext-black"],
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "visibility": "visible",
+        "symbol-spacing": 100,
+        "text-padding": 0,
+        "text-letter-spacing": 0,
+        "text-transform": "uppercase",
+        "icon-image": [
+          "match",
+          ["get", "class_id"],
+          8843,
+          "trail-num-road",
+          "trail-num"
+        ],
+        "icon-size": {
+          "stops": [
+            [11, 0.8],
+            [12, 1]
+          ]
+        },
+        "text-justify": "center",
+        "icon-offset": [0, 0],
+        "icon-text-fit": "width",
+        "icon-text-fit-padding": [0, 5, 0, 5]
+      },
+      "paint": {
+        "text-halo-width": 0,
+        "text-color": [
+          "match",
+          ["get", "class_id"],
+          8843,
+          "#737B6E",
+          "rgba(33, 136, 11, 1)"
+        ],
+        "text-opacity": 1,
+        "text-halo-color": "rgba(255, 255, 255, 1)"
+      }
+    },
+    {
+      "id": "point-labels-arrow",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-point-labels",
+      "filter": [
+        "all",
+        ["!in", "class_id", 9857, 2578],
+        ["==", "style", "arrow"]
+      ],
+      "layout": {
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "icon-rotate": [
+          "match",
+          ["get", "placements"],
+          "E",
+          180,
+          "N",
+          90,
+          "S",
+          -90,
+          0
+        ],
+        "icon-size": 1,
+        "visibility": "visible",
+        "icon-padding": 0,
+        "icon-optional": false,
+        "text-field": [
+          "case",
+          ["has", "label_abbr"],
+          ["to-string", ["get", "label_abbr"]],
+          ["case", ["has", "label"], ["to-string", ["get", "label"]], ""]
+        ],
+        "text-font": [
+          "match",
+          ["get", "font"],
+          "Bold",
+          ["literal", ["brandontext-bold"]],
+          "Light",
+          ["literal", ["brandontext-light"]],
+          "Medium",
+          ["literal", ["brandontext-medium"]],
+          "Regular Italic",
+          ["literal", ["brandontext-regularitalic"]],
+          ["literal", ["brandontext-regular"]]
+        ],
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          9,
+          [
+            "case",
+            ["has", "group"],
+            [
+              "match",
+              ["get", "group"],
+              [101, 102, 350],
+              10,
+              [104, 120, 311],
+              11,
+              [105, 121, 201, 441, 451, 461, 471, 481, 482],
+              12,
+              [202, 312, 410, 421, 431, 442, 452, 462, 472, 483],
+              14,
+              [203, 422, 432, 443, 453],
+              16,
+              [401],
+              18,
+              [463, 473],
+              24,
+              [464, 474, 484],
+              32,
+              11
+            ],
+            [
+              "match",
+              ["get", "class_id"],
+              [441, 100],
+              25,
+              9523,
+              10,
+              [9677, 100146, 9362, 9832],
+              12,
+              [9050, 8845],
+              13,
+              11
+            ]
+          ],
+          10,
+          [
+            "case",
+            ["has", "group"],
+            [
+              "match",
+              ["get", "group"],
+              [101, 102, 309, 350],
+              10,
+              [104, 120],
+              11,
+              [105, 121, 201, 310, 441, 451, 461, 471, 481, 482],
+              12,
+              [202, 311, 410, 421, 431, 442, 452, 462, 472],
+              14,
+              [203, 422, 432, 443, 453, 483],
+              16,
+              [312, 401],
+              18,
+              [463, 473],
+              24,
+              [464, 474, 484],
+              32,
+              11
+            ],
+            [
+              "match",
+              ["get", "class_id"],
+              [441, 9882],
+              25,
+              9523,
+              10,
+              [9677, 100146, 9362, 9832],
+              12,
+              [9050, 8845],
+              13,
+              11
+            ]
+          ],
+          11,
+          [
+            "case",
+            ["has", "group"],
+            [
+              "match",
+              ["get", "group"],
+              [101, 102],
+              10,
+              [104, 120, 308, 350],
+              11,
+              [105, 121, 201, 309, 441, 451, 461, 471, 481, 482],
+              12,
+              [202, 410, 421, 431, 442, 452, 462, 472],
+              14,
+              [203, 310, 422, 432, 443, 453],
+              16,
+              [401, 483],
+              18,
+              311,
+              20,
+              [312, 463, 473],
+              24,
+              [464, 474, 484],
+              32,
+              12
+            ],
+            [
+              "match",
+              ["get", "class_id"],
+              [441, 9882],
+              25,
+              9523,
+              10,
+              [9677, 100146, 9362, 9832],
+              12,
+              [9050, 8845],
+              13,
+              11
+            ]
+          ],
+          12,
+          [
+            "case",
+            ["has", "group"],
+            [
+              "match",
+              ["get", "group"],
+              [101, 102, 305],
+              10,
+              [104, 120, 350],
+              11,
+              [105, 121, 201, 306, 307, 441, 451, 461, 471, 481],
+              12,
+              [202, 308, 410, 421, 431, 442, 452, 462, 472, 482],
+              14,
+              [203, 309, 422, 432, 443, 453],
+              16,
+              [401],
+              18,
+              310,
+              22,
+              [463, 473, 483],
+              24,
+              311,
+              28,
+              [312, 464, 474, 484],
+              32,
+              11
+            ],
+            [
+              "match",
+              ["get", "class_id"],
+              [441, 9882],
+              25,
+              9523,
+              10,
+              [9677, 100146, 9362, 9832],
+              12,
+              [9050, 8845],
+              13,
+              11
+            ]
+          ],
+          13,
+          [
+            "case",
+            ["has", "group"],
+            [
+              "match",
+              ["get", "group"],
+              [101, 102, 304],
+              10,
+              [104, 120],
+              11,
+              [105, 121, 201, 305, 350, 441, 451, 461, 471, 481],
+              12,
+              [202, 306, 410, 421, 431, 442, 452, 462, 472, 482],
+              14,
+              [203, 307, 422, 432, 443, 453],
+              16,
+              [401],
+              18,
+              308,
+              20,
+              309,
+              22,
+              [463, 473],
+              24,
+              [310, 483],
+              28,
+              [311, 312, 464, 474, 484],
+              32,
+              11
+            ],
+            [
+              "match",
+              ["get", "class_id"],
+              [441, 9882],
+              25,
+              9523,
+              10,
+              [9677, 100146, 9832],
+              12,
+              [9050, 9362, 8845],
+              13,
+              11
+            ]
+          ],
+          14,
+          [
+            "case",
+            ["has", "group"],
+            [
+              "match",
+              ["get", "group"],
+              [101, 102, 302],
+              10,
+              [104, 120, 303],
+              11,
+              [105, 121, 201, 304, 350, 441, 451, 461, 471, 481],
+              12,
+              [202, 410, 421, 431, 442, 452, 462, 472],
+              14,
+              [203, 305, 422, 432, 443, 453],
+              16,
+              [306, 401],
+              18,
+              307,
+              22,
+              [463, 473],
+              24,
+              [308, 309, 310],
+              28,
+              [311, 312, 464, 474, 484, 483],
+              32,
+              12
+            ],
+            [
+              "match",
+              ["get", "class_id"],
+              [441, 9882],
+              25,
+              9523,
+              10,
+              [9677, 100146, 9832],
+              12,
+              [9050, 9362, 8845],
+              13,
+              11
+            ]
+          ],
+          15,
+          [
+            "case",
+            ["has", "group"],
+            [
+              "match",
+              ["get", "group"],
+              [101, 102],
+              10,
+              [104, 120, 301],
+              11,
+              [105, 121, 201, 302, 350, 441, 451, 461, 471, 481],
+              12,
+              [202, 303, 410, 421, 431, 442, 452, 462, 472, 482],
+              14,
+              [203, 304, 422, 432, 443, 453],
+              16,
+              [401],
+              18,
+              305,
+              20,
+              306,
+              22,
+              [463, 473],
+              24,
+              [307, 308, 309],
+              28,
+              [310, 311, 312, 464, 474, 484, 483],
+              32,
+              12
+            ],
+            [
+              "match",
+              ["get", "class_id"],
+              [441, 9882],
+              25,
+              9523,
+              10,
+              [9677, 100146, 9832],
+              12,
+              [9050, 9362, 8845],
+              13,
+              11
+            ]
+          ],
+          17,
+          [
+            "case",
+            ["has", "group"],
+            [
+              "match",
+              ["get", "group"],
+              [101, 102],
+              10,
+              [104, 120],
+              11,
+              [105, 121, 201, 301, 350, 441, 451, 461, 471, 481],
+              12,
+              [202, 410, 421, 431, 442, 452, 462, 472, 482],
+              14,
+              [203, 302, 422, 432, 443, 453],
+              16,
+              [303, 401],
+              18,
+              304,
+              20,
+              305,
+              22,
+              [463, 473],
+              24,
+              [306, 307, 308],
+              28,
+              [309, 310, 311, 312, 464, 474, 484, 483],
+              32,
+              14
+            ],
+            [
+              "match",
+              ["get", "class_id"],
+              [441, 9882],
+              25,
+              9523,
+              10,
+              [9677, 100146, 9832],
+              12,
+              [9050, 9362, 8845],
+              13,
+              11
+            ]
+          ]
+        ],
+        "text-anchor": [
+          "match",
+          ["get", "placements"],
+          "W",
+          "right",
+          "E",
+          "left",
+          "N",
+          "bottom",
+          "S",
+          "top",
+          "center"
+        ],
+        "text-offset": [
+          "match",
+          ["get", "placements"],
+          "W",
+          ["literal", [-2.2, 0]],
+          "E",
+          ["literal", [2.2, 0]],
+          "N",
+          ["literal", [0, -2.2]],
+          "S",
+          ["literal", [0, 2.2]],
+          ["literal", [0, 0]]
+        ],
+        "text-max-width": 11,
+        "text-transform": [
+          "match",
+          ["get", "class_id"],
+          [11103, 11051, 11053, 54],
+          "uppercase",
+          "none"
+        ],
+        "icon-anchor": "center",
+        "text-optional": true,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-rotate": 1,
+        "text-letter-spacing": ["match", ["get", "class_id"], [54], 0.3, 0],
+        "icon-image": "arrow",
+        "text-padding": 2,
+        "text-line-height": 1.2,
+        "icon-offset": [-15, 0],
+        "text-justify": "center"
+      },
+      "paint": {
+        "text-halo-color": [
+          "match",
+          ["get", "class_id"],
+          [
+            2571,
+            2551,
+            2587,
+            2588,
+            2589,
+            3617,
+            3618,
+            3619,
+            3614,
+            3615,
+            3616,
+            4053,
+            4054,
+            3624,
+            3675,
+            3676,
+            3737,
+            3677,
+            3678
+          ],
+          [
+            "case",
+            ["!=", ["get", "text_offset"], 0],
+            "hsl(0, 0%, 100%)",
+            "rgba(221, 247, 245, 1)"
+          ],
+          "rgba(255, 255, 255, 1)"
+        ],
+        "text-halo-width": 1.7,
+        "text-color": [
+          "match",
+          ["get", "class_id"],
+          54,
+          "#6B7F68",
+          [268],
+          "rgba(197, 168, 141, 1)",
+          [9050],
+          "#666666",
+          [6528],
+          "#BA9B9B",
+          [11103],
+          "#7A7B6D",
+          [11106, 11105],
+          "#D48481",
+          [447],
+          "#e18a64",
+          [6477, 6529],
+          "#D4B5B5",
+          [
+            3628,
+            3620,
+            3621,
+            3623,
+            6423,
+            6426,
+            1441,
+            1492,
+            1493,
+            3617,
+            3618,
+            3619,
+            3614,
+            3615,
+            3616,
+            4053,
+            4054,
+            3624,
+            3675,
+            3676,
+            3737,
+            3677,
+            3678
+          ],
+          "#1C9CB8",
+          [9362],
+          "#666464",
+          [11051],
+          "#4DB34D",
+          [11053],
+          "rgba(175, 146, 114, 1)",
+          "#444444"
+        ],
+        "text-opacity": 1,
+        "icon-opacity": ["match", ["get", "class_id"], [3620], 0, 1]
+      }
+    },
+    {
+      "id": "point-labels-hydro-offset",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-point-labels",
+      "minzoom": 0,
+      "maxzoom": 22,
+      "filter": [
+        "all",
+        [">=", "group", 301],
+        ["<=", "group", 312],
+        ["has", "offset_size"]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "text-field": [
+          "case",
+          ["has", "label_abbr"],
+          ["to-string", ["get", "label_abbr"]],
+          ["case", ["has", "label"], ["to-string", ["get", "label"]], ""]
+        ],
+        "text-font": ["brandontext-medium"],
+        "text-size": ["get", "offset_size"],
+        "text-anchor": {
+          "stops": [
+            [14, "left"],
+            [15, "center"]
+          ]
+        },
+        "text-justify": "left",
+        "text-offset": {
+          "stops": [
+            [14, [1.1, 0]],
+            [15, [0, 0]]
+          ]
+        },
+        "text-optional": true,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-padding": 2,
+        "text-line-height": 1.1,
+        "text-max-width": 6
+      },
+      "paint": {
+        "text-halo-color": {
+          "stops": [
+            [14.999, "hsl(0, 0%, 100%)"],
+            [15, "rgba(221, 247, 245, 1)"]
+          ]
+        },
+        "text-halo-width": 1.2,
+        "text-color": "#1C9CB8",
+        "text-opacity": 1
+      }
+    },
+    {
+      "id": "point-labels-hydro-center",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-point-labels",
+      "minzoom": 0,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        [">=", "group", 301],
+        ["<=", "group", 312],
+        ["has", "s9"],
+        ["!has", "offset_size"]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "text-field": [
+          "case",
+          ["has", "label_abbr"],
+          ["to-string", ["get", "label_abbr"]],
+          ["case", ["has", "label"], ["to-string", ["get", "label"]], ""]
+        ],
+        "text-font": ["brandontext-regular"],
+        "text-size": [
+          "interpolate",
+          ["exponential", 0.95],
+          ["zoom"],
+          9,
+          ["get", "s9"],
+          17,
+          ["get", "s17"]
+        ],
+        "text-anchor": "center",
+        "text-justify": "center",
+        "text-optional": true,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-padding": 2,
+        "text-line-height": 1.2,
+        "text-max-width": 8
+      },
+      "paint": {
+        "text-halo-color": "rgba(221, 247, 245, 1)",
+        "text-halo-width": 1.2,
+        "text-color": "#1C9CB8",
+        "text-opacity": 1
+      }
+    },
+    {
+      "id": "point-labels-uppercase",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-point-labels",
+      "filter": ["all", ["in", "class_id", 54, 11103, 11051, 11053]],
+      "layout": {
+        "visibility": "visible",
+        "text-field": "{label}",
+        "text-font": ["brandontext-medium"],
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          9,
+          ["get", "s9"],
+          17,
+          ["get", "s17"]
+        ],
+        "text-max-width": 8,
+        "text-transform": "uppercase",
+        "text-optional": true,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-rotate": 1,
+        "text-letter-spacing": 0.3,
+        "text-padding": 2,
+        "text-line-height": 1.2
+      },
+      "paint": {
+        "text-halo-color": "rgba(255, 255, 255, 1)",
+        "text-halo-width": 1.7,
+        "text-color": [
+          "match",
+          ["get", "class_id"],
+          54,
+          "#6B7F68",
+          [11103],
+          "#7A7B6D",
+          [11051],
+          "#4DB34D",
+          [11053],
+          "rgba(175, 146, 114, 1)",
+          "#444444"
+        ]
+      }
+    },
+    {
+      "id": "point-labels-working",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-point-labels",
+      "minzoom": 11,
+      "filter": [
+        "all",
+        [
+          "!in",
+          "class_id",
+          54,
+          11103,
+          11051,
+          11053,
+          9857,
+          2578,
+          3617,
+          3618,
+          3619,
+          3614,
+          3615,
+          3616,
+          4053,
+          4054,
+          3624,
+          3675,
+          3676,
+          3737,
+          3677,
+          3678
+        ],
+        ["!=", "style", "arrow"]
+      ],
+      "layout": {
+        "icon-allow-overlap": false,
+        "icon-ignore-placement": false,
+        "icon-rotate": ["case", ["has", "aspect"], ["get", "aspect"], 0],
+        "icon-size": 1,
+        "visibility": "visible",
+        "icon-padding": 0,
+        "icon-optional": false,
+        "text-field": [
+          "case",
+          ["has", "label_abbr"],
+          ["to-string", ["get", "label_abbr"]],
+          ["case", ["has", "label"], ["to-string", ["get", "label"]], ""]
+        ],
+        "text-font": [
+          "match",
+          ["get", "font"],
+          "Bold",
+          ["literal", ["brandontext-bold"]],
+          "Light",
+          ["literal", ["brandontext-light"]],
+          "Medium",
+          ["literal", ["brandontext-medium"]],
+          "Regular Italic",
+          ["literal", ["brandontext-regularitalic"]],
+          ["literal", ["brandontext-regular"]]
+        ],
+        "text-size": [
+          "interpolate",
+          ["exponential", 0.95],
+          ["zoom"],
+          9,
+          ["case", ["has", "s9"], ["to-number", ["get", "s9"]], 9],
+          17,
+          ["case", ["has", "s17"], ["to-number", ["get", "s17"]], 14]
+        ],
+        "text-anchor": [
+          "case",
+          ["has", "text_offset"],
+          ["match", ["get", "text_offset"], [0], "center", "left"],
+          "left"
+        ],
+        "text-justify": [
+          "case",
+          ["has", "text_offset"],
+          ["match", ["get", "text_offset"], [0], "center", "left"],
+          "left"
+        ],
+        "text-offset": [
+          "case",
+          ["==", ["get", "text_offset"], 0],
+          ["literal", [0, 0]],
+          ["==", ["get", "text_offset"], 7],
+          ["literal", [0.636, 0]],
+          ["==", ["get", "text_offset"], 8],
+          ["literal", [0.727, 0]],
+          ["==", ["get", "text_offset"], 10],
+          ["literal", [0.909, 0]],
+          ["==", ["get", "text_offset"], 12],
+          ["literal", [1.091, 0]],
+          ["==", ["get", "text_offset"], 13],
+          ["literal", [1, 0]],
+          ["==", ["get", "text_offset"], 15],
+          ["literal", [1.364, 0]],
+          ["==", ["get", "text_offset"], 16],
+          ["literal", [1.455, 0]],
+          ["literal", [1, 0]]
+        ],
+        "text-max-width": [
+          "match",
+          ["get", "class_id"],
+          [54, 441, 269, 436, 264],
+          3,
+          [2551],
+          6,
+          11
+        ],
+        "text-transform": [
+          "match",
+          ["get", "class_id"],
+          [11103, 11051, 11053, 54],
+          "uppercase",
+          "none"
+        ],
+        "icon-anchor": "center",
+        "text-optional": true,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-rotate": 1,
+        "text-letter-spacing": ["match", ["get", "class_id"], [54], 0.3, 0],
+        "text-padding": 2,
+        "text-line-height": 1.2,
+        "icon-image": [
+          "match",
+          ["get", "class_id"],
+          [5181, 9810, 3621, 3620],
+          "",
+          ["get", "icon"]
+        ]
+      },
+      "paint": {
+        "text-halo-color": [
+          "match",
+          ["get", "class_id"],
+          [
+            2571,
+            2551,
+            2587,
+            2588,
+            2589,
+            3617,
+            3618,
+            3619,
+            3614,
+            3615,
+            3616,
+            4053,
+            4054,
+            3624,
+            3675,
+            3676,
+            3737,
+            3677,
+            3678
+          ],
+          [
+            "case",
+            ["!=", ["get", "text_offset"], 0],
+            "hsl(0, 0%, 100%)",
+            "rgba(221, 247, 245, 1)"
+          ],
+          "rgba(255, 255, 255, 1)"
+        ],
+        "text-halo-width": 1.7,
+        "text-color": [
+          "match",
+          ["get", "class_id"],
+          54,
+          "#6B7F68",
+          [268],
+          "rgba(197, 168, 141, 1)",
+          [9050],
+          "#666666",
+          [6528],
+          "#BA9B9B",
+          [11103],
+          "#7A7B6D",
+          [11106, 11105],
+          "#D48481",
+          [447],
+          "#E29064",
+          [6477, 6529],
+          "#D4B5B5",
+          [
+            3628,
+            3620,
+            3621,
+            3623,
+            6423,
+            6426,
+            1441,
+            1492,
+            1493,
+            3617,
+            3618,
+            3619,
+            3614,
+            3615,
+            3616,
+            4053,
+            4054,
+            3624,
+            3675,
+            3676,
+            3737,
+            3677,
+            3678
+          ],
+          "#1C9CB8",
+          [9362],
+          "#666464",
+          [11051],
+          "#4DB34D",
+          [11053],
+          "rgba(175, 146, 114, 1)",
+          "#444444"
+        ],
+        "text-opacity": 1
+      }
+    },
+    {
+      "id": "trail-shields-alt",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "filter": ["all", ["has", "shield_alt"]],
+      "layout": {
+        "icon-image": "{shield_alt}",
+        "icon-size": {
+          "stops": [
+            [6, 0.4],
+            [12, 0.7]
+          ]
+        },
+        "symbol-placement": "point",
+        "icon-allow-overlap": false,
+        "icon-padding": 30,
+        "symbol-spacing": 250
+      },
+      "paint": {}
+    },
+    {
+      "id": "trail-shields",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "filter": ["all", ["has", "shield"]],
+      "layout": {
+        "icon-image": "{shield}",
+        "icon-size": {
+          "stops": [
+            [6, 0.4],
+            [12, 0.7]
+          ]
+        },
+        "symbol-placement": "point",
+        "icon-allow-overlap": false,
+        "icon-padding": 60,
+        "symbol-spacing": 250,
+        "visibility": "visible"
+      },
+      "paint": {}
+    },
+    {
+      "id": "poi-labels",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "cotrex-poi-labels",
+      "minzoom": 10,
+      "filter": [
+        "all",
+        ["==", ["min", ["zoom"], 16], ["to-number", ["get", "data_z"]]]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "text-font": {
+          "property": "class_id",
+          "type": "categorical",
+          "default": ["brandontext-medium"],
+          "stops": [
+            [8844, ["brandontext-bold"]],
+            [8850, ["brandontext-bold"]]
+          ]
+        },
+        "text-field": "{label}",
+        "text-pitch-alignment": "viewport",
+        "text-rotation-alignment": "viewport",
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-line-height": 1,
+        "text-size": {
+          "stops": [
+            [11.99, 12],
+            [12, 13]
+          ]
+        },
+        "text-justify": "left",
+        "text-anchor": "left",
+        "text-offset": {
+          "property": "offset",
+          "type": "categorical",
+          "stops": [
+            ["-48-0", [-2.3, 0]],
+            ["0--48", [1.14, 3.7]],
+            ["-48-72", [-2.3, -5.55]],
+            ["72--48", [6.2, 3.7]],
+            ["0--120", [1.14, 9.25]],
+            ["-72--24", [-3.9, 1.85]],
+            ["-24-24", [-0.52, -1.85]],
+            ["24--72", [2.9, 5.55]],
+            ["0-0", [1.14, 0]],
+            ["72-72", [6.2, -5.55]],
+            ["48--24", [4.6, 1.85]],
+            ["72-48", [6.2, -3.7]],
+            ["-24--96", [-0.52, 7.4]],
+            ["-24-48", [-0.52, -3.7]],
+            ["48-0", [4.6, 0]],
+            ["0-96", [1.14, -7.4]],
+            ["-72-24", [-3.9, -1.85]],
+            ["-72--48", [-3.9, 3.7]],
+            ["48-72", [4.6, -5.55]],
+            ["-24-0", [-0.52, 0]],
+            ["72-24", [6.2, -1.85]],
+            ["48--72", [4.6, 5.55]],
+            ["48--48", [4.6, 3.7]],
+            ["-24--48", [-0.52, 3.7]],
+            ["72--24", [6.2, 1.85]],
+            ["0--24", [1.14, 1.85]],
+            ["0-24", [1.14, -1.85]],
+            ["-120-0", [-7.4, 0]],
+            ["24--96", [2.9, 7.4]],
+            ["-72-0", [-3.9, 0]],
+            ["-48--96", [-2.3, 7.4]],
+            ["-96-0", [-5.7, 0]],
+            ["-120--24", [-7.4, 1.85]],
+            ["48--96", [4.6, 7.4]],
+            ["24--24", [2.9, 1.85]],
+            ["24--48", [2.9, 3.7]],
+            ["-72--72", [-3.9, 5.55]],
+            ["24-0", [2.9, 0]],
+            ["-72-48", [-3.9, -3.7]],
+            ["96--24", [8, 1.85]],
+            ["0-72", [1.14, -5.45]],
+            ["-24--72", [-0.52, 5.55]],
+            ["48-48", [4.6, -3.7]],
+            ["-48--24", [-2.3, 1.85]],
+            ["-48-24", [-2.3, -1.85]],
+            ["24-24", [2.9, -1.85]],
+            ["-96-24", [-5.7, -1.85]],
+            ["-48--48", [-2.3, 3.7]],
+            ["24-96", [2.9, -7.4]],
+            ["0--96", [1.14, 7.4]],
+            ["-48--72", [-2.3, 5.55]],
+            ["72-0", [6.2, 0]],
+            ["96-0", [8, 0]],
+            ["24-72", [2.9, -5.55]],
+            ["0-48", [1.14, -3.7]],
+            ["-24-72", [-0.52, -5.55]],
+            ["48-96", [4.6, -7.4]],
+            ["72--72", [6.2, 5.55]],
+            ["-48-48", [-2.3, -3.7]],
+            ["-96--24", [-5.7, 1.85]],
+            ["48-24", [4.6, -1.85]],
+            ["-24--24", [-0.52, 1.85]],
+            ["0--72", [1.14, 5.55]],
+            ["96--48", [8, 3.7]],
+            ["0-120", [1.14, -9.25]],
+            ["24-48", [2.9, -3.7]],
+            ["0--51", [1.14, 4.5]],
+            ["-34-17", [-1.56, -1.5]],
+            ["34-0", [3.78, 0]],
+            ["34-34", [3.78, -3]],
+            ["17--17", [2.41, 1.5]],
+            ["-17--34", [-0.21, 3]],
+            ["-34-0", [-1.56, 0]],
+            ["0-17", [1.14, -1.5]],
+            ["17--34", [2.41, 3]],
+            ["-17-51", [-0.21, -4.5]],
+            ["34--17", [3.78, 1.5]],
+            ["34-17", [3.78, -1.5]],
+            ["17-0", [2.41, 0]],
+            ["-17--51", [-0.21, 4.5]],
+            ["-34--34", [-1.56, 3]],
+            ["0-34", [1.14, -3]],
+            ["0--34", [1.14, 3]],
+            ["17--51", [2.41, 4.5]],
+            ["-51-0", [-2.88, 0]],
+            ["-17--17", [-0.21, 1.5]],
+            ["17-51", [2.41, -4.5]],
+            ["-17-0", [-0.21, 0]],
+            ["17-17", [2.41, -1.5]],
+            ["-34--17", [-1.56, 1.5]],
+            ["-17-34", [-0.21, -3]],
+            ["34--34", [3.78, 3]],
+            ["-34-34", [-1.56, -3]],
+            ["17-34", [2.41, -3]],
+            ["0--17", [1.14, 1.5]],
+            ["-17-17", [-0.21, -1.5]],
+            ["51--17", [5.1, 1.5]],
+            ["51-34", [5.1, -3]],
+            ["51-0", [5.1, 0]],
+            ["34--68", [3.78, 6]],
+            ["-51-17", [-2.88, -1.5]],
+            ["51-51", [5.1, -4.5]],
+            ["-34-51", [-1.56, -4.5]],
+            ["51--51", [5.1, 4.5]],
+            ["-51-51", [-2.88, -4.5]],
+            ["17--68", [2.41, 6]],
+            ["-51--34", [-2.88, 3]],
+            ["34-51", [3.78, -4.5]],
+            ["-17--85", [-0.21, -7.5]],
+            ["-68-34", [-4.2, -3]],
+            ["-68-0", [-4.2, 0]],
+            ["0-51", [1.14, -4.5]],
+            ["-34--51", [-1.56, 4.5]],
+            ["-34-68", [-1.56, -6]],
+            ["34--51", [3.78, 4.5]],
+            ["-51--17", [-2.88, 1.5]],
+            ["68--17", [6.38, 1.5]],
+            ["-51-34", [-2.88, -3]],
+            ["0--68", [1.14, 6]],
+            ["-17--68", [-0.21, 6]],
+            ["-68--17", [-4.2, 1.5]],
+            ["51--34", [5.1, 3]],
+            ["0-68", [1.14, -6]],
+            ["51-17", [5.1, -1.5]],
+            ["66--22", [5.61, 1.65]],
+            ["-66--44", [-3.4, 3.3]],
+            ["22-44", [2.6, -3.3]],
+            ["-22--66", [-0.4, 4.95]],
+            ["22--66", [2.6, 4.95]],
+            ["66-66", [5.61, -4.95]],
+            ["88-0", [7.12, 0]],
+            ["66-44", [5.61, -3.3]],
+            ["66-0", [5.61, 0]],
+            ["88-44", [7.12, -3.3]],
+            ["22-66", [2.6, -4.95]],
+            ["0--44", [1.14, 3.3]],
+            ["-66-44", [-3.4, -3.3]],
+            ["44-44", [4.1, -3.3]],
+            ["-22-66", [-0.4, -4.95]],
+            ["66-22", [5.61, -1.65]],
+            ["-22-88", [-0.4, -6.6]],
+            ["-66--66", [-3.4, 4.95]],
+            ["-44-66", [-1.85, -4.95]],
+            ["-22-22", [-0.4, -1.65]],
+            ["-88-0", [-4.95, 0]],
+            ["-44-88", [-1.85, -6.6]],
+            ["0-66", [1.14, -4.95]],
+            ["0-88", [1.14, -6.6]],
+            ["-44--88", [-1.85, 6.6]],
+            ["22--110", [2.6, 8.25]],
+            ["66--44", [5.61, 3.3]],
+            ["22--44", [2.6, 3.3]],
+            ["-66--22", [-3.4, 1.65]],
+            ["44-66", [4.1, -4.95]],
+            ["-22--44", [-0.4, 3.3]],
+            ["-66-0", [-3.4, 0]],
+            ["-44--44", [-1.85, 3.3]],
+            ["88-22", [7.12, -1.65]],
+            ["44-22", [4.1, -1.65]],
+            ["0-44", [1.14, -3.3]],
+            ["22-0", [2.6, 0]],
+            ["44--22", [4.1, 1.65]],
+            ["-22-0", [-0.4, 0]],
+            ["22--22", [2.6, 1.65]],
+            ["110-22", [8.62, -1.65]],
+            ["22--88", [2.6, 6.6]],
+            ["-44-44", [-1.85, -3.3]],
+            ["-44--22", [-1.85, 1.65]],
+            ["-22--88", [-0.4, 6.6]],
+            ["0-110", [1.14, -8.25]],
+            ["0--22", [1.14, 1.65]],
+            ["44--44", [4.1, 3.3]],
+            ["-22-44", [-0.4, -3.3]],
+            ["-44-0", [-1.85, 0]],
+            ["88-66", [7.12, -4.95]],
+            ["0--66", [1.14, 4.95]],
+            ["44--66", [4.1, 4.95]],
+            ["-44-22", [-1.85, -1.65]],
+            ["-22--22", [-0.4, 1.65]],
+            ["0-22", [1.14, -1.65]],
+            ["-66-22", [-3.4, -1.65]],
+            ["22-22", [2.6, -1.65]],
+            ["-44--66", [-1.85, 4.95]],
+            ["44-0", [4.1, 0]],
+            ["44--88", [4.1, 6.6]],
+            ["0--88", [1.14, 6.6]],
+            ["-66-66", [-3.4, -4.95]],
+            ["-72--96", [-3.9, 6.5]],
+            ["72-96", [6.2, -7.18]]
+          ]
+        },
+        "text-padding": 1,
+        "text-max-width": 11
+      },
+      "paint": {
+        "text-translate": [0, 0],
+        "text-translate-anchor": "map",
+        "text-color": {
+          "property": "class_id",
+          "type": "categorical",
+          "default": "#544f4f",
+          "stops": [
+            [8844, "#252B27"],
+            [8850, "#252B27"]
+          ]
+        },
+        "text-halo-color": "rgba(255, 255, 255, 1)",
+        "text-halo-width": 2
+      }
+    },
+    {
+      "id": "population-labels-high-zoom",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-population-labels",
+      "minzoom": 11,
+      "maxzoom": 24,
+      "filter": ["all"],
+      "layout": {
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "icon-rotate": 0,
+        "icon-size": 1.2,
+        "visibility": "visible",
+        "icon-padding": 0,
+        "icon-optional": false,
+        "text-field": "{label}",
+        "text-font": [
+          "step",
+          ["zoom"],
+          [
+            "match",
+            ["get", "population_size"],
+            [5, 6],
+            ["literal", ["brandontext-bold"]],
+            ["literal", ["brandontext-medium"]]
+          ],
+          11,
+          [
+            "match",
+            ["get", "population_size"],
+            [5, 6],
+            ["literal", ["brandontext-bold"]],
+            ["literal", ["brandontext-medium"]]
+          ],
+          12,
+          [
+            "match",
+            ["get", "population_size"],
+            [5, 6],
+            ["literal", ["brandontext-bold"]],
+            ["literal", ["brandontext-medium"]]
+          ],
+          13,
+          [
+            "match",
+            ["get", "population_size"],
+            [5, 6],
+            ["literal", ["brandontext-bold"]],
+            ["literal", ["brandontext-medium"]]
+          ],
+          14,
+          [
+            "match",
+            ["get", "population_size"],
+            [4, 5, 6],
+            ["literal", ["brandontext-bold"]],
+            ["literal", ["brandontext-medium"]]
+          ],
+          22,
+          [
+            "match",
+            ["get", "population_size"],
+            [2, 3, 4, 5, 6],
+            ["literal", ["brandontext-bold"]],
+            ["literal", ["brandontext-medium"]]
+          ]
+        ],
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          11,
+          [
+            "match",
+            ["get", "population_size"],
+            1,
+            11,
+            2,
+            12,
+            3,
+            14,
+            4,
+            16,
+            5,
+            18,
+            6,
+            22,
+            11
+          ],
+          12,
+          [
+            "match",
+            ["get", "population_size"],
+            1,
+            12,
+            2,
+            14,
+            3,
+            16,
+            4,
+            18,
+            5,
+            22,
+            6,
+            22,
+            11
+          ],
+          13,
+          [
+            "match",
+            ["get", "population_size"],
+            1,
+            14,
+            2,
+            18,
+            3,
+            18,
+            4,
+            24,
+            5,
+            22,
+            6,
+            22,
+            12
+          ],
+          14,
+          [
+            "match",
+            ["get", "population_size"],
+            1,
+            20,
+            2,
+            28,
+            3,
+            22,
+            4,
+            32,
+            5,
+            22,
+            6,
+            22,
+            16
+          ]
+        ],
+        "text-anchor": "center",
+        "text-justify": "center",
+        "text-offset": [0, 0],
+        "text-allow-overlap": true,
+        "text-ignore-placement": false,
+        "text-transform": "none",
+        "text-letter-spacing": {
+          "stops": [
+            [11, 0.02],
+            [15, 0.1]
+          ]
+        },
+        "text-max-width": 15,
+        "text-padding": 0
+      },
+      "paint": {
+        "text-halo-color": "rgba(255, 255, 255, 0.8)",
+        "text-halo-width": {
+          "stops": [
+            [11.5, 1.7],
+            [12.5, 2.3],
+            [15, 3]
+          ]
+        },
+        "text-color": {
+          "stops": [
+            [11.5, "#3D443F"],
+            [13, "rgba(141, 145, 142, 1)"]
+          ]
+        },
+        "text-opacity": {
+          "stops": [
+            [11.4999, 0],
+            [11.5, 1],
+            [14, 1],
+            [14.5, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "poi-cluster-lowzoom",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "cotrex-poi-labels",
+      "minzoom": 5,
+      "maxzoom": 11,
+      "filter": ["all", ["!has", "class_id"]],
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "{icon}",
+        "icon-size": ["step", ["zoom"], 0.75, 11, 0.75, 12, 0.9, 13, 1],
+        "icon-rotation-alignment": "viewport",
+        "icon-keep-upright": false,
+        "icon-ignore-placement": false,
+        "icon-optional": false,
+        "icon-allow-overlap": true,
+        "icon-padding": 0
+      },
+      "paint": {
+        "icon-opacity": {
+          "stops": [
+            [10.45, 1],
+            [10.5, 1]
+          ]
+        },
+        "icon-translate-anchor": "map"
+      }
+    },
+    {
+      "id": "motor-labels",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "minzoom": 11,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        [
+          "any",
+          ["!=", "ohv_gt_50", "no"],
+          ["!=", "atv", "no"],
+          ["!=", "motorcycle", "no"],
+          ["!=", "highway_vehicles", "no"]
+        ],
+        [
+          "all",
+          ["has", "highway_vehicles"],
+          ["has", "atv"],
+          ["has", "ohv_gt_50"],
+          ["has", "motorcycle"]
+        ]
+      ],
+      "layout": {
+        "text-field": [
+          "case",
+          ["has", "trail_num"],
+          [
+            "concat",
+            ["to-string", ["get", "name"]],
+            " ",
+            "#",
+            ["to-string", ["get", "trail_num"]]
+          ],
+          ["get", "name"]
+        ],
+        "symbol-placement": "line",
+        "text-size": {
+          "stops": [
+            [15, 12],
+            [17, 13]
+          ]
+        },
+        "text-font": ["brandontext-bold"],
+        "text-max-angle": 40,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "visibility": "none",
+        "symbol-spacing": 300,
+        "text-padding": 0,
+        "text-letter-spacing": 0,
+        "text-transform": "uppercase"
+      },
+      "paint": {
+        "text-halo-width": 2.5,
+        "text-halo-color": "rgba(255, 255, 255, 1)",
+        "text-color": {
+          "type": "categorical",
+          "property": "long_trail",
+          "stops": [["yes", "hsl(287, 83%, 56%)"]],
+          "default": "rgba(33, 136, 11, 1)"
+        },
+        "text-opacity": 1
+      }
+    },
+    {
+      "id": "trails-labels",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "cotrex-trails",
+      "minzoom": 11,
+      "maxzoom": 24,
+      "filter": ["in", "class_id", 8850, 8842],
+      "layout": {
+        "text-field": ["coalesce", ["get", "label"], ["get", "name"]],
+        "symbol-placement": "line",
+        "text-size": {
+          "stops": [
+            [14, 10],
+            [17, 13]
+          ]
+        },
+        "text-font": ["brandontext-bold"],
+        "text-max-angle": 100,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "visibility": "visible",
+        "symbol-spacing": 300,
+        "text-padding": 0,
+        "text-letter-spacing": 0,
+        "text-transform": "uppercase"
+      },
+      "paint": {
+        "text-halo-width": 1.5,
+        "text-halo-color": {
+          "type": "categorical",
+          "property": "long_trail",
+          "stops": [["yes", "rgba(252, 242, 255, 1)"]],
+          "default": "rgba(222, 255, 194, 1)"
+        },
+        "text-color": {
+          "type": "categorical",
+          "property": "long_trail",
+          "stops": [["yes", "hsl(287, 83%, 56%)"]],
+          "default": "rgba(33, 136, 11, 1)"
+        },
+        "text-opacity": 1
+      }
+    },
+    {
+      "id": "poi-cluster-icon-symbols",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "cotrex-poi-labels",
+      "minzoom": 9,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        ["==", ["min", ["zoom"], 16], ["to-number", ["get", "data_z"]]]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "icon-image": [
+          "case",
+          [
+            "all",
+            ["has", "symbol_image"],
+            [
+              "match",
+              ["get", "icon"],
+              ["observation-point", "cave", "parking"],
+              false,
+              true
+            ]
+          ],
+          [
+            "case",
+            [
+              "all",
+              [
+                "any",
+                ["==", ["get", "class_id"], 9882],
+                ["==", ["get", "class_id"], 9000]
+              ],
+              ["==", ["get", "cluster_size"], 1]
+            ],
+            "parking",
+            ["to-string", ["get", "symbol_image"]]
+          ],
+          ["to-string", ["get", "icon"]]
+        ],
+        "icon-size": ["step", ["zoom"], 0.75, 11, 0.75, 12, 0.9, 13, 1],
+        "icon-offset": {
+          "property": "offset2",
+          "type": "categorical",
+          "stops": [
+            ["-48-0", [-48, 0]],
+            ["0--48", [0, 48]],
+            ["-48-72", [-48, -72]],
+            ["72--48", [72, 48]],
+            ["0--120", [0, 120]],
+            ["-72--24", [-72, 24]],
+            ["-24-24", [-24, -24]],
+            ["24--72", [24, 72]],
+            ["0-0", [0, 0]],
+            ["72-72", [72, -72]],
+            ["48--24", [48, 24]],
+            ["72-48", [72, -48]],
+            ["-24--96", [-24, 96]],
+            ["-24-48", [-24, -48]],
+            ["48-0", [48, 0]],
+            ["0-96", [0, -96]],
+            ["-72-24", [-72, -24]],
+            ["-72--48", [-72, 48]],
+            ["48-72", [48, -72]],
+            ["-24-0", [-24, 0]],
+            ["72-24", [72, -24]],
+            ["48--72", [48, 72]],
+            ["48--48", [48, 48]],
+            ["-24--48", [-24, 48]],
+            ["72--24", [72, 24]],
+            ["0--24", [0, 24]],
+            ["0-24", [0, -24]],
+            ["-120-0", [-120, 0]],
+            ["24--96", [24, 96]],
+            ["-72-0", [-72, 0]],
+            ["-48--96", [-48, 96]],
+            ["-96-0", [-96, 0]],
+            ["-120--24", [-120, 24]],
+            ["48--96", [48, 96]],
+            ["24--24", [24, 24]],
+            ["24--48", [24, 48]],
+            ["-72--72", [-72, 72]],
+            ["24-0", [24, 0]],
+            ["-72-48", [-72, -48]],
+            ["96--24", [96, 24]],
+            ["0-72", [0, -72]],
+            ["-24--72", [-24, 72]],
+            ["48-48", [48, -48]],
+            ["-48--24", [-48, 24]],
+            ["-48-24", [-48, -24]],
+            ["24-24", [24, -24]],
+            ["-96-24", [-96, -24]],
+            ["-48--48", [-48, 48]],
+            ["24-96", [24, -96]],
+            ["0--96", [0, 96]],
+            ["-48--72", [-48, 72]],
+            ["72-0", [72, 0]],
+            ["96-0", [96, 0]],
+            ["24-72", [24, -72]],
+            ["0-48", [0, -48]],
+            ["-24-72", [-24, -72]],
+            ["48-96", [48, -96]],
+            ["72--72", [72, 72]],
+            ["-48-48", [-48, -48]],
+            ["-96--24", [-96, 24]],
+            ["48-24", [48, -24]],
+            ["-24--24", [-24, 24]],
+            ["0--72", [0, 72]],
+            ["96--48", [96, 48]],
+            ["0-120", [0, -120]],
+            ["24-48", [24, -48]]
+          ]
+        },
+        "icon-keep-upright": false,
+        "icon-ignore-placement": false,
+        "icon-optional": false,
+        "icon-allow-overlap": true,
+        "icon-padding": 0
+      },
+      "paint": {
+        "icon-opacity": {
+          "stops": [
+            [10.45, 0],
+            [10.5, 1]
+          ]
+        },
+        "icon-translate-anchor": "map"
+      }
+    },
+    {
+      "id": "poi-cluster-count",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "cotrex-poi-labels",
+      "minzoom": 10,
+      "filter": [
+        "all",
+        [">", ["to-number", ["get", "count"]], 1],
+        ["==", ["min", ["zoom"], 16], ["to-number", ["get", "data_z"]]]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "icon-image": "count-{count}",
+        "icon-offset": {
+          "property": "offset",
+          "type": "categorical",
+          "stops": [
+            ["-48-0", [-48, 0]],
+            ["0--48", [0, 48]],
+            ["-48-72", [-48, -72]],
+            ["72--48", [72, 48]],
+            ["0--120", [0, 120]],
+            ["-72--24", [-72, 24]],
+            ["-24-24", [-24, -24]],
+            ["24--72", [24, 72]],
+            ["0-0", [0, 0]],
+            ["72-72", [72, -72]],
+            ["48--24", [48, 24]],
+            ["72-48", [72, -48]],
+            ["-24--96", [-24, 96]],
+            ["-24-48", [-24, -48]],
+            ["48-0", [48, 0]],
+            ["0-96", [0, -96]],
+            ["-72-24", [-72, -24]],
+            ["-72--48", [-72, 48]],
+            ["48-72", [48, -72]],
+            ["-24-0", [-24, 0]],
+            ["72-24", [72, -24]],
+            ["48--72", [48, 72]],
+            ["48--48", [48, 48]],
+            ["-24--48", [-24, 48]],
+            ["72--24", [72, 24]],
+            ["0--24", [0, 24]],
+            ["0-24", [0, -24]],
+            ["-120-0", [-120, 0]],
+            ["24--96", [24, 96]],
+            ["-72-0", [-72, 0]],
+            ["-48--96", [-48, 96]],
+            ["-96-0", [-96, 0]],
+            ["-120--24", [-120, 24]],
+            ["48--96", [48, 96]],
+            ["24--24", [24, 24]],
+            ["24--48", [24, 48]],
+            ["-72--72", [-72, 72]],
+            ["24-0", [24, 0]],
+            ["-72-48", [-72, -48]],
+            ["96--24", [96, 24]],
+            ["0-72", [0, -72]],
+            ["-24--72", [-24, 72]],
+            ["48-48", [48, -48]],
+            ["-48--24", [-48, 24]],
+            ["-48-24", [-48, -24]],
+            ["24-24", [24, -24]],
+            ["-96-24", [-96, -24]],
+            ["-48--48", [-48, 48]],
+            ["24-96", [24, -96]],
+            ["0--96", [0, 96]],
+            ["-48--72", [-48, 72]],
+            ["72-0", [72, 0]],
+            ["96-0", [96, 0]],
+            ["24-72", [24, -72]],
+            ["0-48", [0, -48]],
+            ["-24-72", [-24, -72]],
+            ["48-96", [48, -96]],
+            ["72--72", [72, 72]],
+            ["-48-48", [-48, -48]],
+            ["-96--24", [-96, 24]],
+            ["48-24", [48, -24]],
+            ["-24--24", [-24, 24]],
+            ["0--72", [0, 72]],
+            ["96--48", [96, 48]],
+            ["0-120", [0, -120]],
+            ["24-48", [24, -48]],
+            ["0--51", [0, 50.4]],
+            ["-34-17", [-33.6, -16.8]],
+            ["34-0", [33.6, 0]],
+            ["34-34", [33.6, -33.6]],
+            ["17--17", [16.8, 16.8]],
+            ["-17--34", [-16.8, 33.6]],
+            ["-34-0", [-33.6, 0]],
+            ["0-17", [0, -16.8]],
+            ["17--34", [16.8, 33.6]],
+            ["-17-51", [-16.8, -50.4]],
+            ["34--17", [33.6, 16.8]],
+            ["34-17", [33.6, -16.8]],
+            ["17-0", [16.8, 0]],
+            ["-17--51", [-16.8, 50.4]],
+            ["-34--34", [-33.6, 33.6]],
+            ["0-34", [0, -33.6]],
+            ["0--34", [0, 33.6]],
+            ["17--51", [16.8, 50.4]],
+            ["-51-0", [-50.4, 0]],
+            ["-17--17", [-16.8, 16.8]],
+            ["17-51", [16.8, -50.4]],
+            ["-17-0", [-16.8, 0]],
+            ["17-17", [16.8, -16.8]],
+            ["-34--17", [-33.6, 16.8]],
+            ["-17-34", [-16.8, -33.6]],
+            ["34--34", [33.6, 33.6]],
+            ["-34-34", [-33.6, -33.6]],
+            ["17-34", [16.8, -33.6]],
+            ["0--17", [0, 16.8]],
+            ["-17-17", [-16.8, -16.8]],
+            ["51--17", [50.4, 16.8]],
+            ["51-34", [50.4, -33.6]],
+            ["51-0", [50.4, 0]],
+            ["34--68", [33.6, 67.2]],
+            ["-51-17", [-50.4, -16.8]],
+            ["51-51", [50.4, -50.4]],
+            ["-34-51", [-33.6, -50.4]],
+            ["51--51", [50.4, 50.4]],
+            ["-51-51", [-50.4, -50.4]],
+            ["17--68", [16.8, 67.2]],
+            ["-51--34", [-50.4, 33.6]],
+            ["34-51", [33.6, -50.4]],
+            ["-17--85", [-16.8, 84]],
+            ["-68-34", [-67.2, -33.6]],
+            ["-68-0", [-67.2, 0]],
+            ["0-51", [0, -50.4]],
+            ["-34--51", [-33.6, 50.4]],
+            ["-34-68", [-33.6, -67.2]],
+            ["34--51", [33.6, 50.4]],
+            ["-51--17", [-50.4, 16.8]],
+            ["68--17", [67.2, 16.8]],
+            ["-51-34", [-50.4, -33.6]],
+            ["0--68", [0, 67.2]],
+            ["-17--68", [-16.8, 67.2]],
+            ["-68--17", [-67.2, 16.8]],
+            ["51--34", [50.4, 33.6]],
+            ["0-68", [0, -67.2]],
+            ["51-17", [50.4, -16.8]],
+            ["66--22", [62.1, 20.7]],
+            ["-66--44", [-62.1, 41.4]],
+            ["22-44", [20.7, -41.4]],
+            ["-22--66", [-20.7, 62.1]],
+            ["22--66", [20.7, 62.1]],
+            ["66-66", [62.1, -62.1]],
+            ["88-0", [82.8, 0]],
+            ["66-44", [62.1, -41.4]],
+            ["66-0", [62.1, 0]],
+            ["88-44", [82.8, -41.4]],
+            ["22-66", [20.7, -62.1]],
+            ["0--44", [0, 41.4]],
+            ["-66-44", [-62.1, -41.4]],
+            ["44-44", [41.4, -41.4]],
+            ["-22-66", [-20.7, -62.1]],
+            ["66-22", [62.1, -20.7]],
+            ["-22-88", [-20.7, -82.8]],
+            ["-66--66", [-62.1, 62.1]],
+            ["-44-66", [-41.4, -62.1]],
+            ["-22-22", [-20.7, -20.7]],
+            ["-88-0", [-82.8, 0]],
+            ["-44-88", [-41.4, -82.8]],
+            ["0-66", [0, -62.1]],
+            ["0-88", [0, -82.8]],
+            ["-44--88", [-41.4, 82.8]],
+            ["22--110", [20.7, 103.5]],
+            ["66--44", [62.1, 41.4]],
+            ["22--44", [20.7, 41.4]],
+            ["-66--22", [-62.1, 20.7]],
+            ["44-66", [41.4, -62.1]],
+            ["-22--44", [-20.7, 41.4]],
+            ["-66-0", [-62.1, 0]],
+            ["-44--44", [-41.4, 41.4]],
+            ["88-22", [82.8, -20.7]],
+            ["44-22", [41.4, -20.7]],
+            ["0-44", [0, -41.4]],
+            ["22-0", [20.7, 0]],
+            ["44--22", [41.4, 20.7]],
+            ["-22-0", [-20.7, 0]],
+            ["22--22", [20.7, 20.7]],
+            ["110-22", [103.5, -20.7]],
+            ["22--88", [20.7, 82.8]],
+            ["-44-44", [-41.4, -41.4]],
+            ["-44--22", [-41.4, 20.7]],
+            ["-22--88", [-20.7, 82.8]],
+            ["0-110", [0, -103.5]],
+            ["0--22", [0, 20.7]],
+            ["44--44", [41.4, 41.4]],
+            ["-22-44", [-20.7, -41.4]],
+            ["-44-0", [-41.4, 0]],
+            ["88-66", [82.8, -62.1]],
+            ["0--66", [0, 62.1]],
+            ["44--66", [41.4, 62.1]],
+            ["-44-22", [-41.4, -20.7]],
+            ["-22--22", [-20.7, 20.7]],
+            ["0-22", [0, -20.7]],
+            ["-66-22", [-62.1, -20.7]],
+            ["22-22", [20.7, -20.7]],
+            ["-44--66", [-41.4, 62.1]],
+            ["44-0", [41.4, 0]],
+            ["44--88", [41.4, 82.8]],
+            ["0--88", [0, 82.8]],
+            ["-66-66", [-62.1, -62.1]],
+            ["-72--96", [-72, 96]],
+            ["72-96", [72, -96]]
+          ]
+        },
+        "icon-size": 1,
+        "icon-rotation-alignment": "viewport",
+        "icon-keep-upright": false,
+        "icon-ignore-placement": true,
+        "icon-optional": true,
+        "icon-allow-overlap": true,
+        "icon-padding": 0
+      },
+      "paint": {
+        "icon-translate-anchor": "viewport",
+        "icon-translate": [6, 7],
+        "icon-halo-width": 0,
+        "icon-halo-color": "rgba(255, 255, 255, 1)",
+        "icon-opacity": {
+          "stops": [
+            [10.45, 0],
+            [10.5, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "region-area-labels-low-zoom",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-region-labels",
+      "minzoom": 0,
+      "maxzoom": 10,
+      "filter": [
+        "all",
+        ["==", "show_as_point", false],
+        ["in", "boundary_type", "major", "state_park", "reserve"]
+      ],
+      "layout": {
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "icon-rotate": 0,
+        "icon-size": 1.2,
+        "visibility": "visible",
+        "icon-padding": 0,
+        "icon-optional": false,
+        "text-field": "{label}",
+        "text-font": {
+          "type": "categorical",
+          "property": "boundary_type",
+          "default": ["brandontext-medium"],
+          "stops": [
+            ["major", ["brandontext-black"]],
+            ["state_park", ["brandontext-black"]]
+          ]
+        },
+        "text-anchor": "center",
+        "text-justify": "center",
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-transform": "uppercase",
+        "text-letter-spacing": {
+          "stops": [
+            [10, -0.01],
+            [11, 0.01]
+          ]
+        },
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          [
+            "interpolate",
+            ["linear"],
+            ["to-number", ["get", "shp_area"]],
+            0,
+            8,
+            0.45,
+            10
+          ],
+          10,
+          [
+            "interpolate",
+            ["linear"],
+            ["to-number", ["get", "shp_area"]],
+            0,
+            12,
+            0.8,
+            24
+          ]
+        ]
+      },
+      "paint": {
+        "text-halo-color": "rgba(255, 255, 255, 0.8)",
+        "text-halo-width": 1,
+        "text-color": {
+          "type": "categorical",
+          "property": "boundary_type",
+          "stops": [
+            ["major", "#318737"],
+            ["state_park", "#318737"]
+          ],
+          "default": "#B3C887"
+        },
+        "text-opacity": {
+          "stops": [
+            [11.49999, 1],
+            [11.5, 0]
+          ]
+        }
+      }
+    },
+    {
+      "id": "population-labels-low-zoom",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-population-labels",
+      "minzoom": 0,
+      "maxzoom": 12,
+      "filter": ["all"],
+      "layout": {
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "icon-rotate": 0,
+        "icon-size": 1.2,
+        "visibility": "visible",
+        "icon-padding": 0,
+        "icon-optional": false,
+        "text-field": "{label}",
+        "text-font": [
+          "step",
+          ["zoom"],
+          [
+            "match",
+            ["get", "population_size"],
+            [5, 6],
+            ["literal", ["brandontext-bold"]],
+            ["literal", ["brandontext-medium"]]
+          ],
+          11,
+          [
+            "match",
+            ["get", "population_size"],
+            [4, 5, 6],
+            ["literal", ["brandontext-bold"]],
+            ["literal", ["brandontext-medium"]]
+          ],
+          12,
+          [
+            "match",
+            ["get", "population_size"],
+            [4, 5, 6],
+            ["literal", ["brandontext-bold"]],
+            ["literal", ["brandontext-medium"]]
+          ],
+          13,
+          [
+            "match",
+            ["get", "population_size"],
+            [3, 4, 5, 6],
+            ["literal", ["brandontext-bold"]],
+            ["literal", ["brandontext-medium"]]
+          ],
+          22,
+          [
+            "match",
+            ["get", "population_size"],
+            [2, 3, 4, 5, 6],
+            ["literal", ["brandontext-bold"]],
+            ["literal", ["brandontext-medium"]]
+          ]
+        ],
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          [
+            "match",
+            ["get", "population_size"],
+            1,
+            6,
+            2,
+            6,
+            3,
+            6,
+            4,
+            8,
+            5,
+            10,
+            6,
+            12,
+            10
+          ],
+          11,
+          [
+            "match",
+            ["get", "population_size"],
+            1,
+            10,
+            2,
+            12,
+            3,
+            14,
+            4,
+            16,
+            5,
+            18,
+            6,
+            22,
+            10
+          ],
+          12,
+          [
+            "match",
+            ["get", "population_size"],
+            1,
+            12,
+            2,
+            14,
+            3,
+            16,
+            4,
+            18,
+            5,
+            22,
+            6,
+            22,
+            12
+          ],
+          13,
+          [
+            "match",
+            ["get", "population_size"],
+            1,
+            14,
+            2,
+            16,
+            3,
+            18,
+            4,
+            22,
+            5,
+            22,
+            6,
+            22,
+            13
+          ],
+          14,
+          [
+            "match",
+            ["get", "population_size"],
+            1,
+            14,
+            2,
+            16,
+            3,
+            18,
+            4,
+            22,
+            5,
+            22,
+            6,
+            22,
+            13
+          ]
+        ],
+        "text-anchor": "center",
+        "text-justify": "center",
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-transform": "none",
+        "text-letter-spacing": {
+          "stops": [
+            [10, 0.02],
+            [11, 0.01]
+          ]
+        }
+      },
+      "paint": {
+        "text-halo-color": "rgba(255, 255, 255, 0.8)",
+        "text-halo-width": {
+          "stops": [
+            [9, 1.5],
+            [10, 2.4]
+          ]
+        },
+        "text-color": {
+          "stops": [
+            [10.5, "#444942"],
+            [11.5, "#444942"]
+          ]
+        },
+        "text-opacity": {
+          "stops": [
+            [11.49999, 1],
+            [11.5, 0]
+          ]
+        }
+      }
+    },
+    {
+      "id": "region-area-labels",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-region-labels",
+      "minzoom": 10,
+      "maxzoom": 24,
+      "filter": ["all", ["has", "s11"]],
+      "layout": {
+        "visibility": "visible",
+        "text-field": "{label}",
+        "text-font": ["brandontext-bolditalic"],
+        "text-max-width": 8,
+        "text-size": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          11,
+          ["get", "s11"],
+          17,
+          ["get", "s17"]
+        ],
+        "text-offset": [0, 0],
+        "text-justify": "center",
+        "text-anchor": "center",
+        "text-transform": "uppercase",
+        "text-padding": 0
+      },
+      "paint": {
+        "text-color": "#444942",
+        "text-halo-color": "rgba(255, 255, 255, 1)",
+        "text-halo-width": 2
+      }
+    },
+    {
+      "id": "region-point-labels",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-region-labels",
+      "minzoom": 5,
+      "maxzoom": 10,
+      "filter": ["all", ["==", "show_as_point", true]],
+      "layout": {
+        "icon-allow-overlap": false,
+        "icon-image": "attraction-dot",
+        "icon-padding": 15,
+        "text-field": "{label}",
+        "text-font": ["brandontext-medium"],
+        "text-size": 12,
+        "text-justify": "left",
+        "text-anchor": "left",
+        "text-line-height": 1,
+        "icon-offset": [0, 0],
+        "text-offset": [0.5, 0]
+      },
+      "paint": {
+        "text-color": {
+          "stops": [
+            [9.8, "#318737"],
+            [10, "rgba(57, 72, 47, 1)"]
+          ]
+        },
+        "text-halo-color": "rgba(255, 255, 255, 0.8)",
+        "text-halo-width": 1.5,
+        "icon-opacity": {
+          "stops": [
+            [9.7, 1],
+            [10, 0]
+          ]
+        }
+      }
+    },
+    {
+      "id": "state-labels",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-state-labels",
+      "minzoom": 0,
+      "maxzoom": 24,
+      "filter": ["all"],
+      "layout": {
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+        "icon-rotate": 0,
+        "icon-size": 1.2,
+        "visibility": "visible",
+        "icon-padding": 0,
+        "icon-optional": false,
+        "text-field": "{label}",
+        "text-font": ["brandontext-black"],
+        "text-size": {
+          "stops": [
+            [4, 14],
+            [10, 32]
+          ]
+        },
+        "text-anchor": "center",
+        "text-justify": "center",
+        "text-offset": [0.6, 0],
+        "text-allow-overlap": true,
+        "text-ignore-placement": false,
+        "text-transform": "uppercase",
+        "text-letter-spacing": {
+          "stops": [
+            [11, 0.02],
+            [15, 0.1]
+          ]
+        },
+        "text-max-width": 10,
+        "text-padding": 0,
+        "text-optional": false
+      },
+      "paint": {
+        "text-halo-color": "rgba(255, 255, 255, 0.8)",
+        "text-halo-width": 1.5,
+        "text-color": "rgba(85, 93, 80, 1)",
+        "text-opacity": {
+          "stops": [
+            [7, 1],
+            [7.2, 0]
+          ]
+        }
+      }
+    },
+    {
+      "id": "callouts",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-graphics",
+      "minzoom": 10,
+      "layout": {
+        "text-field": "{callout_text}",
+        "text-font": ["brandontext-callout"],
+        "text-anchor": ["get", "anchor"],
+        "text-justify": ["get", "justify"],
+        "text-max-width": 120,
+        "text-size": 15,
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "text-offset": [
+          "match",
+          ["get", "graphic"],
+          "callout-ne",
+          ["literal", [0, -0.8]],
+          "callout-nw",
+          ["literal", [0, -0.8]],
+          "callout-se",
+          ["literal", [0, 1]],
+          "callout-sw",
+          ["literal", [0, 1]],
+          ["literal", [0, 0]]
+        ]
+      },
+      "paint": {
+        "text-color": "rgba(60, 67, 60, 1)",
+        "text-opacity": {
+          "stops": [
+            [10.5, 0],
+            [10.5001, 1]
+          ]
+        }
+      }
+    },
+    {
+      "id": "callouts-text",
+      "type": "symbol",
+      "source": "cotrex",
+      "source-layer": "na-graphics",
+      "minzoom": 10,
+      "layout": {
+        "text-field": "{label}",
+        "text-font": ["brandontext-medium"],
+        "text-anchor": ["get", "anchor"],
+        "text-justify": ["get", "justify"],
+        "text-max-width": 120,
+        "text-size": 15,
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "text-offset": [
+          "match",
+          ["get", "graphic"],
+          "callout-ne",
+          ["literal", [1.7, -0.95]],
+          "callout-nw",
+          ["literal", [-1.7, -0.95]],
+          "callout-se",
+          ["literal", [1.7, 0.85]],
+          "callout-sw",
+          ["literal", [-1.7, 0.85]],
+          ["literal", [0, 0]]
+        ]
+      },
+      "paint": {
+        "text-color": "rgba(255, 255, 255, 1)",
+        "text-opacity": {
+          "stops": [
+            [10.5, 0],
+            [10.5001, 1]
+          ]
+        }
+      }
+    }
+  ],
+  "id": "cotrex-topo",
+  "owner": ""
+}
