@@ -56,6 +56,10 @@ const map = new maplibregl.Map({
         url: 'pmtiles:///tiles/co_sma.pmtiles',
         minzoom: 8
       },
+      usfs_national_forests: {
+        type: 'vector',
+        url: 'pmtiles:///tiles/usfs_national_forests.pmtiles'
+      },
       denver_mountain_parks: {
         type: 'vector',
         url: 'pmtiles:///tiles/denver_mountain_parks.pmtiles'
@@ -93,6 +97,99 @@ const map = new maplibregl.Map({
         type: 'fill',
         paint: {
           'fill-color': 'hsla(122, 55%, 33%, 0.66)'
+        }
+      },
+
+      {
+        id: 'usfs-national-forests-fill',
+        source: 'usfs_national_forests',
+        'source-layer': 'usfs_national_forests',
+        type: 'fill',
+        minzoom: 8,
+        paint: {
+          'fill-color': 'hsla(0, 0%, 0%, 0)'
+        }
+      },
+
+      {
+        id: 'usfs-national-forests',
+        source: 'usfs_national_forests',
+        'source-layer': 'usfs_national_forests',
+        type: 'line',
+        minzoom: 8,
+        paint: {
+          'line-color': 'hsla(122, 55%, 33%, 1)',
+          'line-width': 2
+        }
+      },
+
+      {
+        id: 'usfs-national-forests-label',
+        type: 'symbol',
+        source: 'usfs_national_forests',
+        'source-layer': 'usfs_national_forests',
+        layout: {
+          'symbol-placement': 'line',
+          'text-font': ['NotoSans-Regular'],
+          'text-field': ['get', 'FORESTNAME'],
+          'text-size': {
+            stops: [
+              [14, 13],
+              [14.5, 22],
+              [15.1, 13]
+            ]
+          },
+          'text-pitch-alignment': 'map',
+          'text-rotation-alignment': 'map',
+          'text-offset': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            15.99,
+            ['literal', [0, 0.69]],
+            16,
+            ['literal', [0, 0.75]]
+          ],
+          "text-max-angle": 25,
+        "visibility": "visible",
+        "text-padding": 0,
+        "text-font": ["NotoSans-Bold"],
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.1,
+        "symbol-spacing": 300,
+        "text-line-height": 0.7,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false
+        },
+        paint: {
+          'text-color': 'white',
+          'text-halo-width': 1.8,
+          'text-halo-color': 'hsla(122, 70%, 23%, 1)'
+        }
+      },
+
+      {
+        id: 'usfs-national-forests-casing',
+        source: 'usfs_national_forests',
+        'source-layer': 'usfs_national_forests',
+        type: 'line',
+        minzoom: 12,
+        paint: {
+          'line-color': 'hsla(122, 55%, 33%, 0.15)',
+          'line-width': {
+            stops: [
+              [12, 18],
+              [14, 25],
+              [22, 50]
+            ]
+          },
+          'line-offset': {
+            stops: [
+              [12, 9],
+              [14, 12.5],
+              [22, 25]
+            ]
+          }
         }
       },
 
@@ -239,7 +336,7 @@ const map = new maplibregl.Map({
           },
           'text-font': ['Open Sans Regular'],
           'text-anchor': 'bottom',
-                    'text-offset': {
+          'text-offset': {
             stops: [
               [10, [0, -1]],
               [20, [0, -2]]
@@ -490,23 +587,23 @@ map.on('load', () => {
   // Enable interactivity (if needed)
   // directions.interactive = true;
 
-  let contentElem = null;
+  let contentElem = null
 
-  directions.on("fetchroutesend", e => {
+  directions.on('fetchroutesend', e => {
     console.log('fetchroutesend event', e)
 
-    if (e.data.code === "Ok") {
-      const distance = `${Math.trunc(e.data.routes[0].distance / 1000)} km`;
+    if (e.data.code === 'Ok') {
+      const distance = `${Math.trunc(e.data.routes[0].distance / 1000)} km`
 
-      const disp = document.querySelector('#directions-overlay .directions-overlay-content')
-
-      contentElem.innerHTML = distance;
-
-      console.log(
-        `${Math.trunc(e.data.routes[0].distance / 1000)} km`
+      const disp = document.querySelector(
+        '#directions-overlay .directions-overlay-content'
       )
+
+      contentElem.innerHTML = distance
+
+      console.log(`${Math.trunc(e.data.routes[0].distance / 1000)} km`)
     }
-  });
+  })
 
   // Optionally add the standard loading-indicator control
   map.addControl(new LoadingIndicatorControl(directions))
@@ -517,34 +614,31 @@ map.on('load', () => {
   //   [-105.52064, 39.68238]
   // ])
 
-  const home = [-105.01632, 39.59428];
-
+  const home = [-105.01632, 39.59428]
 
   map.on('mousedown', e => {
+    const features = map.queryRenderedFeatures(e.point)
+
+    console.log('features', features)
 
     // console.log('mousedown event', e);
 
-    if (e.originalEvent.which !== 3) return;
+    if (e.originalEvent.which !== 3) return
 
-    let div = document.createElement('div');
-    div.innerHTML = "Navigate Here"
+    let div = document.createElement('div')
+    div.innerHTML = 'Navigate Here'
     div.addEventListener('click', clickEvent => {
       console.log('clicked!')
 
-      directions.setWaypoints([
-        home,
-        [e.lngLat.lng, e.lngLat.lat]
-      ])
+      directions.setWaypoints([home, [e.lngLat.lng, e.lngLat.lat]])
     })
 
     let popup = new maplibregl.Popup()
       .setLngLat(e.lngLat)
       .setHTML("<div class='customRoute'></div>")
-      .addTo(map);
+      .addTo(map)
 
-      contentElem = popup.getElement().querySelector('.customRoute');
-      contentElem.appendChild(div);
-
-
+    contentElem = popup.getElement().querySelector('.customRoute')
+    contentElem.appendChild(div)
   })
 })
