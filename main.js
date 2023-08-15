@@ -112,6 +112,18 @@ const map = new maplibregl.Map({
       },
 
       {
+        id: 'usfs-national-forests-large',
+        source: 'usfs_national_forests',
+        'source-layer': 'usfs_national_forests',
+        type: 'fill',
+        minzoom: 1,
+        maxzoom: 8,
+        paint: {
+          'fill-color': 'hsla(122, 55%, 33%, 0.7)'
+        }
+      },
+
+      {
         id: 'usfs-national-forests',
         source: 'usfs_national_forests',
         'source-layer': 'usfs_national_forests',
