@@ -590,7 +590,6 @@ map.on('load', () => {
   let contentElem = null
 
   directions.on('fetchroutesend', e => {
-    console.log('fetchroutesend event', e)
 
     if (e.data.code === 'Ok') {
       const distance = `${Math.trunc(e.data.routes[0].distance / 1000)} km`
@@ -600,8 +599,6 @@ map.on('load', () => {
       )
 
       contentElem.innerHTML = distance
-
-      console.log(`${Math.trunc(e.data.routes[0].distance / 1000)} km`)
     }
   })
 
@@ -624,16 +621,10 @@ map.on('load', () => {
     }
   }
 
+  let existingPopup = null
 
-  let existingPopup = null;
-
-  map.on('mousedown', e => {
-    // console.log('mousedown event', e);
-
-    if (e.originalEvent.which !== 3) return
-
+  function handleClickEvent (e) {
     const features = map.queryRenderedFeatures(e.point)
-    console.log('features', features)
 
     let div = document.createElement('div')
 
@@ -650,20 +641,20 @@ map.on('load', () => {
       directions.setWaypoints([home, [e.lngLat.lng, e.lngLat.lat]])
     })
 
-    navButton.style = "margin-bottom: 2rem;"
+    navButton.style = 'margin-bottom: 2rem;'
 
     setHomeButton.addEventListener('click', clickEvent => {
       home = [e.lngLat.lng, e.lngLat.lat]
 
-      localStorage.setItem('homeLocation', JSON.stringify(home));
+      localStorage.setItem('homeLocation', JSON.stringify(home))
 
-      existingPopup.remove();
+      existingPopup.remove()
     })
 
     div.appendChild(navButton)
     div.appendChild(setHomeButton)
 
-    if (existingPopup) existingPopup.remove();
+    if (existingPopup) existingPopup.remove()
 
     let popup = new maplibregl.Popup()
       .setLngLat(e.lngLat)
@@ -673,15 +664,20 @@ map.on('load', () => {
     contentElem = popup.getElement().querySelector('.customRoute')
     contentElem.appendChild(div)
 
-    existingPopup = popup;
-  })
+    existingPopup = popup
+  }
+
+  let downPos = {}
+
+  map.on('click', handleClickEvent)
+
 })
 
 function renderLayersDisplay (features) {
   let div = document.createElement('div')
 
   for (const feature of features) {
-    let text = null;
+    let text = null
 
     if (feature?.source === 'BLM_CO_Surface_Management_Agency') {
       text = `Managed By ${feature?.properties?.adm_manage || '<unknown>'}`
@@ -703,7 +699,7 @@ function renderLayersDisplay (features) {
       text = `Denver Mountain Park: ${feature?.properties?.FORMAL_NAME}`
     }
 
-    if(text) {
+    if (text) {
       let p = document.createElement('p')
       p.innerText = text
       div.appendChild(p)
