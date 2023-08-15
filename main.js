@@ -613,8 +613,17 @@ map.on('load', () => {
   //   [-105.01632, 39.59428],
   //   [-105.52064, 39.68238]
   // ])
+  let home = [-105.01632, 39.59428];
 
-  let home = [-105.01632, 39.59428]
+  let homeString = localStorage.getItem('homeLocation');
+  if (homeString) {
+    try {
+      home = JSON.parse(homeString);
+    } catch (e) {
+      console.log('invalid home location stored in localStorage');
+    }
+  }
+
 
   let existingPopup = null;
 
@@ -641,8 +650,14 @@ map.on('load', () => {
       directions.setWaypoints([home, [e.lngLat.lng, e.lngLat.lat]])
     })
 
+    navButton.style = "margin-bottom: 2rem;"
+
     setHomeButton.addEventListener('click', clickEvent => {
       home = [e.lngLat.lng, e.lngLat.lat]
+
+      localStorage.setItem('homeLocation', JSON.stringify(home));
+
+      existingPopup.remove();
     })
 
     div.appendChild(navButton)
