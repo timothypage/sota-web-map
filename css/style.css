@@ -9,15 +9,32 @@ body {
 
 #directions-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 150px;
+  left: 20px;
 }
 
 .directions-overlay-content {
   padding: 20px;
-  /* background: white; */
+  background: white;
 }
 
 .customRoute {
   cursor: pointer;
+}
+
+#top-nav-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+}
+
+#top-nav-overlay .nav-contents {
+  height: 110px;
+
+
+  background-color: hsla(235, 13%, 48%, 0.6);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(248, 250, 252, 0.06);
 }

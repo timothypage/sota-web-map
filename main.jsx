@@ -9,6 +9,23 @@ import MapLibreGlDirections, {
 
 import basemap from './map_styles/white.json'
 
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+
+import { configureStore } from '@reduxjs/toolkit'
+import navigationReducer from '/src/reducers/navigationReducer.js'
+
+import { Provider } from 'react-redux'
+
+import MapPopupContent from '/src/components/MapPopupContent'
+
+
+const store = configureStore({
+  reducer: {
+    navigation: navigationReducer
+  }
+})
+
 let protocol = new pmtiles.Protocol()
 maplibregl.addProtocol('pmtiles', protocol.tile)
 
@@ -165,7 +182,6 @@ const map = new maplibregl.Map({
           'text-max-angle': 25,
           visibility: 'visible',
           'text-padding': 0,
-          'text-font': ['NotoSans-Bold'],
           'text-transform': 'uppercase',
           'text-letter-spacing': 0.1,
           'symbol-spacing': 300,
@@ -617,54 +633,10 @@ map.on('load', () => {
   // Optionally add the standard loading-indicator control
   map.addControl(new LoadingIndicatorControl(directions))
 
-  // Set the waypoints programmatically
-  // directions.setWaypoints([
-  //   [-105.01632, 39.59428],
-  //   [-105.52064, 39.68238]
-  // ])
-  let home = [-105.01632, 39.59428]
-
-  let homeString = localStorage.getItem('homeLocation')
-  if (homeString) {
-    try {
-      home = JSON.parse(homeString)
-    } catch (e) {
-      console.log('invalid home location stored in localStorage')
-    }
-  }
-
   let existingPopup = null
 
   function handleClickEvent (e) {
     const features = map.queryRenderedFeatures(e.point)
-
-    let div = document.createElement('div')
-
-    let featuresDiv = renderLayersDisplay(features)
-
-    div.appendChild(featuresDiv)
-
-    const navButton = document.createElement('button')
-    navButton.innerText = 'Navigate Here'
-    const setHomeButton = document.createElement('button')
-    setHomeButton.innerText = 'Set Home Location Here'
-
-    navButton.addEventListener('click', clickEvent => {
-      directions.setWaypoints([home, [e.lngLat.lng, e.lngLat.lat]])
-    })
-
-    navButton.style = 'margin-bottom: 2rem;'
-
-    setHomeButton.addEventListener('click', clickEvent => {
-      home = [e.lngLat.lng, e.lngLat.lat]
-
-      localStorage.setItem('homeLocation', JSON.stringify(home))
-
-      existingPopup.remove()
-    })
-
-    div.appendChild(navButton)
-    div.appendChild(setHomeButton)
 
     if (existingPopup) existingPopup.remove()
 
@@ -674,49 +646,17 @@ map.on('load', () => {
       .addTo(map)
 
     contentElem = popup.getElement().querySelector('.customRoute')
-    contentElem.appendChild(div)
+    ReactDOM.createRoot(contentElem).render(
+      <React.StrictMode>
+        <Provider store={store}>
+          <MapPopupContent map={map} directions={directions} features={features} popupEvent={e} popup={popup} />
+        </Provider>
+      </React.StrictMode>
+    )
+    // contentElem.appendChild(div)
 
     existingPopup = popup
   }
 
-  let downPos = {}
-
   map.on('click', handleClickEvent)
-
 })
-
-function renderLayersDisplay (features) {
-  let div = document.createElement('div')
-
-  for (const feature of features) {
-    let text = null
-
-    if (feature?.source === 'BLM_CO_Surface_Management_Agency') {
-      text = `Managed By ${feature?.properties?.adm_manage || '<unknown>'}`
-    }
-
-    if (feature?.source === 'padus_co_wilderness_areas') {
-      text = feature?.properties?.Loc_Nm
-    }
-
-    if (feature?.source === 'usfs_national_forests') {
-      text = feature?.properties?.FORESTNAME
-    }
-
-    if (feature?.source === 'cpw_public_access_properties') {
-      text = feature?.properties?.PropName
-    }
-
-    if (feature?.source === 'denver_mountain_parks') {
-      text = `Denver Mountain Park: ${feature?.properties?.FORMAL_NAME}`
-    }
-
-    if (text) {
-      let p = document.createElement('p')
-      p.innerText = text
-      div.appendChild(p)
-    }
-  }
-
-  return div
-}
