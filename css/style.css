@@ -50,3 +50,11 @@ p, h1, h2, h3, h4, h5, h6 {
 #map {
   height: 100dvh;
 }
+
+#application-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+}
