@@ -17,6 +17,7 @@ import ReactDOM from 'react-dom/client'
 
 import { configureStore } from '@reduxjs/toolkit'
 import navigationReducer from '/src/reducers/navigationReducer.js'
+import searchReducer from '/src/reducers/searchReducer.js'
 
 import { Provider } from 'react-redux'
 import MapProvider from '/src/providers/MapProvider.jsx'
@@ -27,7 +28,8 @@ import MapPopupContent from '/src/components/MapPopupContent'
 
 const store = configureStore({
   reducer: {
-    navigation: navigationReducer
+    navigation: navigationReducer,
+    search: searchReducer
   }
 })
 
