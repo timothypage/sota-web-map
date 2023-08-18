@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  results: [{name: 'Summit1'}, {name: 'Summit2'}]
+  results: []
 }
 
 export const searchSlice = createSlice({
@@ -18,6 +18,7 @@ export const searchSlice = createSlice({
 })
 
 export const selectSearchResults = state => state[searchSlice.name].results
+export const selectTopSearchResults = state => state[searchSlice.name].results
 
 export const { updateSearchResults } = searchSlice.actions
 
