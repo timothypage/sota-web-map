@@ -1,0 +1,11 @@
+.topBar {
+  background-color: hsla(235, 13%, 48%, 0.6);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(248, 250, 252, 0.06);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding-block: 12px;
+}

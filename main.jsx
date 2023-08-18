@@ -19,7 +19,10 @@ import { configureStore } from '@reduxjs/toolkit'
 import navigationReducer from '/src/reducers/navigationReducer.js'
 
 import { Provider } from 'react-redux'
+import MapProvider from '/src/providers/MapProvider.jsx'
+import DirectionsProvider from '/src/providers/DirectionsProvider.jsx'
 
+import OverlayWrapper from '/src/components/OverlayWrapper'
 import MapPopupContent from '/src/components/MapPopupContent'
 
 const store = configureStore({
@@ -46,6 +49,20 @@ const map = new maplibregl.Map({
   }
 })
 
+// we'll need the `map` from above for navigation
+
+ReactDOM.createRoot(
+  document.querySelector('#application-overlay')
+).render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <MapProvider map={map}>
+        <OverlayWrapper />
+      </MapProvider>
+    </Provider>
+  </React.StrictMode>
+)
+
 map.addControl(
   new maplibregl.NavigationControl({
     showZoom: true,
@@ -70,10 +87,6 @@ map.on('load', () => {
     if (e.data.code === 'Ok') {
       const distance = `${Math.trunc(e.data.routes[0].distance / 1000)} km`
 
-      const disp = document.querySelector(
-        '#directions-overlay .directions-overlay-content'
-      )
-
       contentElem.innerHTML = distance
     }
   })
@@ -96,18 +109,19 @@ map.on('load', () => {
     contentElem = popup.getElement().querySelector('.customRoute')
     ReactDOM.createRoot(contentElem).render(
       <React.StrictMode>
-        <Provider store={store}>
-          <MapPopupContent
-            map={map}
-            directions={directions}
-            features={features}
-            popupEvent={e}
-            popup={popup}
-          />
-        </Provider>
+        <MapProvider map={map}>
+          <DirectionsProvider directions={directions}>
+            <Provider store={store}>
+              <MapPopupContent
+                features={features}
+                popupEvent={e}
+                popup={popup}
+              />
+            </Provider>
+          </DirectionsProvider>
+        </MapProvider>
       </React.StrictMode>
     )
-    // contentElem.appendChild(div)
 
     existingPopup = popup
   }

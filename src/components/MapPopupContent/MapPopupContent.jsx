@@ -1,4 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
+import { useMap } from '/src/providers/MapProvider.jsx'
+import { useDirections } from '/src/providers/DirectionsProvider.jsx'
 import {
   updateHomeLocation,
   selectHomeLocation
@@ -8,14 +10,14 @@ import styles from './MapPopupContent.module.css'
 import { AiFillHome } from 'react-icons/ai'
 
 const MapPopupContent = ({
-  map,
-  directions,
   features,
   popupEvent,
   popup
 }) => {
   const home = useSelector(selectHomeLocation)
   const dispatch = useDispatch()
+  const map = useMap()
+  const directions = useDirections()
 
   const featureNames = getLayerNames(features)
 
