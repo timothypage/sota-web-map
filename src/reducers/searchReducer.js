@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  results: [{name: 'Summit1'}]
+  results: [{name: 'Summit1'}, {name: 'Summit2'}]
 }
 
 export const searchSlice = createSlice({

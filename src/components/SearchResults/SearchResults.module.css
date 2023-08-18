@@ -1,0 +1,21 @@
+.searchResults {
+  background: white;
+  margin-top: 8px;
+
+  border-radius: 7px;
+
+  padding: 0 14px;
+}
+
+.result {
+  padding: 8px 16px;
+  cursor: pointer;
+
+  &:hover {
+    background: hsla(0, 0%, 90%, 1)
+  }
+}
+
+.result:not(:last-of-type) {
+  border-bottom: 1px solid hsla(0, 0%, 90%, 1);
+}
