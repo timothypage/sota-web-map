@@ -6,10 +6,12 @@ import navigationReducer from "/src/reducers/navigationReducer.js";
 import searchReducer from "/src/reducers/searchReducer.js";
 
 import { Provider } from "react-redux";
+import { setRoute } from "/src/reducers/navigationReducer.js";
 
 import MapProvider from "/src/providers/MapProvider.jsx";
 import DirectionsProvider from "/src/providers/DirectionsProvider.jsx";
 
+import OverlayLayout from "/src/components/OverlayLayout";
 import MapPopupContent from "/src/components/MapPopupContent/MapPopupContent";
 
 import maplibregl from "maplibre-gl";
@@ -18,7 +20,7 @@ import * as pmtiles from "pmtiles";
 import MapLibreGlDirections from "@maplibre/maplibre-gl-directions";
 
 import bright from "./map_styles/bright.json"; // reload on change
-import navLayers from "/src/map/nav-layers.js";
+import navLayers from "./map_styles/nav-layers.js";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
@@ -104,12 +106,32 @@ map.on("load", () => {
     sensitiveAltRoutelineLayers: ["maplibre-gl-directions-alt-routeline"],
   });
 
-  directions.on("fetchroutesend", (e) => {
-    if (e.data.code === "Ok") {
-      const distance = `${Math.trunc(e.data.routes[0].distance / 1000)} km`;
-      console.log("distance", distance);
+  ReactDOM.createRoot(document.querySelector("#overlay")).render(
+    <React.StrictMode>
+      <Provider store={store}>
+        <MapProvider map={map}>
+          <DirectionsProvider directions={directions}>
+            <OverlayLayout />
+          </DirectionsProvider>
+        </MapProvider>
+      </Provider>
+    </React.StrictMode>
+  );
 
-      console.log("fetchroutesend data", e.data); // TODO display this in a nice format
+  directions.on("fetchroutesend", (e) => {
+    // console.log("fetchroutesend data", e.data);
+
+    if (e.data.code === "Ok") {
+      const route = e.data.routes[0];
+
+      if (route == null) return;
+
+      store.dispatch(
+        setRoute({
+          duration: route.duration,
+          distance: route.distance,
+        })
+      );
     }
   });
 

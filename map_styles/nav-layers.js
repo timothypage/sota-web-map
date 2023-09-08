@@ -32,6 +32,23 @@ const navLayers = [
   },
 
   {
+    id: "maplibre-gl-directions-routeline-casing",
+    type: "line",
+    source: "maplibre-gl-directions",
+    layout: {
+      "line-cap": "butt",
+      "line-join": "round",
+    },
+    paint: {
+      "line-color": "hsla(213, 96%, 70%, 1)",
+      "line-opacity": 1,
+      "line-width": 12,
+      // "line-offset": 5
+    },
+    filter: ["==", ["get", "route"], "SELECTED"],
+  },
+
+  {
     id: "maplibre-gl-directions-routeline",
     type: "line",
     source: "maplibre-gl-directions",
@@ -40,9 +57,9 @@ const navLayers = [
       "line-join": "round",
     },
     paint: {
-      "line-color": "blue",
+      "line-color": "hsla(213, 96%, 50%, 1)",
       "line-opacity": 1,
-      "line-width": 6,
+      "line-width": 7,
     },
     filter: ["==", ["get", "route"], "SELECTED"],
   },

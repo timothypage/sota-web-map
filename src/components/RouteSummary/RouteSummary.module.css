@@ -1,0 +1,33 @@
+.routeSummary {
+  background: white;
+  padding: 30px 40px;
+
+  width: fit-content;
+
+  position: relative;
+}
+
+.routeLength {
+  display: flex;
+  gap: 12px;
+
+  align-items: center;
+}
+
+.close {
+  position: absolute;
+  top: 5px;
+  right: 0;
+}
+
+.closeButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: transparent;
+  border: none;
+  padding-right: 8px;
+  outline-offset: 4px;
+  cursor: pointer;
+}

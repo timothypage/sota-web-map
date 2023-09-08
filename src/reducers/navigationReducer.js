@@ -11,6 +11,7 @@ try {
 
 const initialState = {
   home,
+  route: null,
 };
 
 export const navigationSlice = createSlice({
@@ -28,11 +29,31 @@ export const navigationSlice = createSlice({
         home: action.payload.location,
       };
     },
+
+    clearRoute: (state) => {
+      return {
+        ...state,
+        route: null,
+      };
+    },
+
+    setRoute: (state, action) => {
+      console.log("setRoute action", action);
+      return {
+        ...state,
+        route: action.payload,
+      };
+    },
   },
 });
 
 export const selectHomeLocation = (state) => state[navigationSlice.name].home;
+export const selectRoute = (state) => state[navigationSlice.name].route;
 
-export const { updateHomeLocation } = navigationSlice.actions;
+export const {
+  updateHomeLocation,
+  clearRoute,
+  setRoute,
+} = navigationSlice.actions;
 
 export default navigationSlice.reducer;

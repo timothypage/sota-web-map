@@ -25,6 +25,8 @@ const MapPopupContent = ({ features, popupEvent, popup }) => {
               home,
               [popupEvent.lngLat.lng, popupEvent.lngLat.lat],
             ]);
+
+            popup.remove();
           }}
         >
           Navigate Here
