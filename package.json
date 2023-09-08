@@ -16,6 +16,7 @@
     "vite": "^4.4.5"
   },
   "dependencies": {
+    "@maplibre/maplibre-gl-directions": "^0.4.3",
     "@reduxjs/toolkit": "^1.9.5",
     "maplibre-gl": "^3.3.0",
     "pmtiles": "^2.10.0",

@@ -1,13 +1,48 @@
-import { AiFillHome } from 'react-icons/ai'
+import { useSelector, useDispatch } from "react-redux";
+import { useMap } from "/src/providers/MapProvider.jsx";
+import { useDirections } from "/src/providers/DirectionsProvider.jsx";
+import {
+  updateHomeLocation,
+  selectHomeLocation,
+} from "/src/reducers/navigationReducer.js";
+
+import { AiFillHome } from "react-icons/ai";
 
 import styles from "./MapPopupContent.module.css";
 
-const MapPopupContent = () => {
+const MapPopupContent = ({ features, popupEvent, popup }) => {
+  const home = useSelector(selectHomeLocation);
+  const dispatch = useDispatch();
+  const directions = useDirections();
+
   return (
     <>
       <div>MapPopupContent</div>
-      <p>I'm rendered by react!</p>
-      <div><AiFillHome /></div>
+      <div className={styles.navButtons}>
+        <button
+          onClick={() => {
+            directions.setWaypoints([
+              home,
+              [popupEvent.lngLat.lng, popupEvent.lngLat.lat],
+            ]);
+          }}
+        >
+          Navigate Here
+        </button>
+        <button
+          onClick={() => {
+            dispatch(
+              updateHomeLocation({
+                location: [popupEvent.lngLat.lng, popupEvent.lngLat.lat],
+              })
+            );
+
+            popup.remove();
+          }}
+        >
+          <AiFillHome />
+        </button>
+      </div>
     </>
   );
 };

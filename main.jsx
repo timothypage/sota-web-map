@@ -1,15 +1,34 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
+import { configureStore } from "@reduxjs/toolkit";
+import navigationReducer from "/src/reducers/navigationReducer.js";
+import searchReducer from "/src/reducers/searchReducer.js";
+
+import { Provider } from "react-redux";
+
+import MapProvider from "/src/providers/MapProvider.jsx";
+import DirectionsProvider from "/src/providers/DirectionsProvider.jsx";
+
 import MapPopupContent from "/src/components/MapPopupContent/MapPopupContent";
 
 import maplibregl from "maplibre-gl";
 import * as pmtiles from "pmtiles";
 
+import MapLibreGlDirections from "@maplibre/maplibre-gl-directions";
+
 import bright from "./map_styles/bright.json"; // reload on change
+import navLayers from "/src/map/nav-layers.js";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
+
+const store = configureStore({
+  reducer: {
+    navigation: navigationReducer,
+    search: searchReducer,
+  },
+});
 
 let protocol = new pmtiles.Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
@@ -75,6 +94,25 @@ map.addControl(
 );
 
 map.on("load", () => {
+  const directions = new MapLibreGlDirections(map, {
+    api: "http://192.168.1.241:5000/route/v1", // routing all of US needs ~32 GB of ram -_-
+    requestOptions: { steps: true, overview: "full" },
+    layers: navLayers,
+    sensitiveWaypointLayers: ["maplibre-gl-directions-waypoint"],
+    sensitiveSnappointLayers: ["maplibre-gl-directions-snappoint"],
+    sensitiveRoutelineLayers: ["maplibre-gl-directions-routeline"],
+    sensitiveAltRoutelineLayers: ["maplibre-gl-directions-alt-routeline"],
+  });
+
+  directions.on("fetchroutesend", (e) => {
+    if (e.data.code === "Ok") {
+      const distance = `${Math.trunc(e.data.routes[0].distance / 1000)} km`;
+      console.log("distance", distance);
+
+      console.log("fetchroutesend data", e.data); // TODO display this in a nice format
+    }
+  });
+
   let existingPopup = null;
 
   function handleClickEvent(e) {
@@ -90,7 +128,17 @@ map.on("load", () => {
     let contentElem = popup.getElement().querySelector(".popup");
     ReactDOM.createRoot(contentElem).render(
       <React.StrictMode>
-        <MapPopupContent features={features} />
+        <Provider store={store}>
+          <MapProvider map={map}>
+            <DirectionsProvider directions={directions}>
+              <MapPopupContent
+                features={features}
+                popupEvent={e}
+                popup={popup}
+              />
+            </DirectionsProvider>
+          </MapProvider>
+        </Provider>
       </React.StrictMode>
     );
 

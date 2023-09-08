@@ -1,1 +1,1 @@
-export { default } from './MapPopupContent'
+export { default } from "./MapPopupContent";
