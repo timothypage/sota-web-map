@@ -10,19 +10,261 @@
   "bearing": 0,
   "pitch": 0,
   "sources": {
+    "usfs_national_forests_and_grasslands": {
+      "type": "vector",
+      "tiles": [
+        "http://localhost:8080/usfs_national_forests_and_grasslands/{z}/{x}/{y}.mvt"
+      ],
+      "minZoom": 0,
+      "maxZoom": 14
+    },
     "openmaptiles": {
       "type": "vector",
-      "url": "pmtiles:///tiles/colorado.pmtiles"
+      "tiles": [
+        "http://localhost:8080/us/{z}/{x}/{y}.mvt"
+      ],
+      "minZoom": 0,
+      "maxZoom": 14
+    },
+    "us_federal_proclaimed_areas": {
+      "type": "vector",
+      "tiles": [
+        "http://localhost:8080/us_federal_proclaimed_areas/{z}/{x}/{y}.mvt"
+      ],
+      "minZoom": 0,
+      "maxZoom": 14
     }
   },
   "sprite": "http://localhost:5173/map_styles/sprite",
-  "glyphs": "/fonts/{fontstack}/{range}.pbf",
+  "glyphs": "http://localhost:5173/fonts/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "background",
       "type": "background",
       "paint": {
         "background-color": "#f8f4f0"
+      }
+    },
+    {
+      "id": "proclaimedareas-dod",
+      "type": "fill",
+      "source": "us_federal_proclaimed_areas",
+      "source-layer": "us_federal_proclaimed_areas",
+      "filter": [
+        "all",
+        [
+          "==",
+          "dept",
+          "DOD"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-antialias": false,
+        "fill-color": "rgba(196, 128, 128, 1)"
+      }
+    },
+    {
+      "id": "proclaimedareas-usfs",
+      "type": "fill",
+      "source": "us_federal_proclaimed_areas",
+      "source-layer": "us_federal_proclaimed_areas",
+      "filter": [
+        "all",
+        [
+          "==",
+          "dept",
+          "USFS"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-antialias": false,
+        "fill-color": "rgba(204, 217, 204, 1)"
+      }
+    },
+    {
+      "id": "proclaimedareas-nps",
+      "type": "fill",
+      "source": "us_federal_proclaimed_areas",
+      "source-layer": "us_federal_proclaimed_areas",
+      "filter": [
+        "all",
+        [
+          "==",
+          "dept",
+          "NPS"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-antialias": false,
+        "fill-color": "rgba(29, 93, 29, 0.66)"
+      }
+    },
+    {
+      "id": "usfs_national_forests_and_grasslands",
+      "type": "fill",
+      "source": "usfs_national_forests_and_grasslands",
+      "source-layer": "usfs_national_forests_and_grasslands",
+      "minzoom": 3,
+      "maxzoom": 8,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "fill-color": "hsla(122, 55%, 33%, 0.08)"
+      }
+    },
+    {
+      "id": "usfs-national-forests-fill",
+      "type": "fill",
+      "source": "usfs_national_forests_and_grasslands",
+      "source-layer": "usfs_national_forests_and_grasslands",
+      "minzoom": 8,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "fill-color": "hsla(122, 55%, 33%, 0.05)"
+      }
+    },
+    {
+      "id": "usfs-national-forests",
+      "type": "line",
+      "source": "usfs_national_forests_and_grasslands",
+      "source-layer": "usfs_national_forests_and_grasslands",
+      "minzoom": 8,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-color": "hsla(122, 55%, 33%, 0.5)",
+        "line-width": 2
+      }
+    },
+    {
+      "id": "usfs-national-forests-label",
+      "type": "symbol",
+      "source": "usfs_national_forests_and_grasslands",
+      "source-layer": "usfs_national_forests_and_grasslands",
+      "layout": {
+        "symbol-placement": "line",
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-field": [
+          "get",
+          "name"
+        ],
+        "text-size": {
+          "stops": [
+            [
+              14,
+              13
+            ],
+            [
+              14.5,
+              22
+            ],
+            [
+              15.1,
+              13
+            ]
+          ]
+        },
+        "text-pitch-alignment": "map",
+        "text-rotation-alignment": "map",
+        "text-offset": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          13.99,
+          [
+            "literal",
+            [
+              0,
+              0.69
+            ]
+          ],
+          16,
+          [
+            "literal",
+            [
+              0,
+              0.75
+            ]
+          ]
+        ],
+        "text-max-angle": 25,
+        "visibility": "none",
+        "text-padding": 0,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.1,
+        "symbol-spacing": 300,
+        "text-line-height": 0.7,
+        "text-allow-overlap": false,
+        "text-ignore-placement": false
+      },
+      "paint": {
+        "text-color": "white",
+        "text-halo-width": 1.8,
+        "text-halo-color": "hsla(122, 70%, 23%, 1)"
+      }
+    },
+    {
+      "id": "usfs-national-forests-casing",
+      "type": "line",
+      "source": "usfs_national_forests_and_grasslands",
+      "source-layer": "usfs_national_forests_and_grasslands",
+      "minzoom": 12,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-color": "hsla(122, 55%, 33%, 0.15)",
+        "line-width": {
+          "stops": [
+            [
+              12,
+              18
+            ],
+            [
+              14,
+              25
+            ],
+            [
+              22,
+              50
+            ]
+          ]
+        },
+        "line-offset": {
+          "stops": [
+            [
+              12,
+              9
+            ],
+            [
+              14,
+              12.5
+            ],
+            [
+              22,
+              25
+            ]
+          ]
+        }
       }
     },
     {
@@ -77,7 +319,7 @@
         ]
       ],
       "layout": {
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "fill-color": {
@@ -234,6 +476,9 @@
         "class",
         "wood"
       ],
+      "layout": {
+        "visibility": "none"
+      },
       "paint": {
         "fill-antialias": {
           "base": 1,
@@ -266,6 +511,9 @@
         "class",
         "public_park"
       ],
+      "layout": {
+        "visibility": "none"
+      },
       "paint": {
         "fill-color": "#d8e8c8",
         "fill-opacity": 0.8
@@ -673,7 +921,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "hsl(210, 67%, 85%)"
+        "fill-color": "rgba(64, 129, 189, 1)"
       }
     },
     {
@@ -712,7 +960,7 @@
         "all"
       ],
       "layout": {
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "fill-pattern": "wave",
@@ -736,7 +984,7 @@
         "ice_shelf"
       ],
       "layout": {
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "fill-color": "#fff",
@@ -772,7 +1020,7 @@
         ]
       ],
       "layout": {
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "fill-color": "rgba(245, 238, 188, 1)",
@@ -5110,7 +5358,7 @@
         "text-size": 10
       },
       "paint": {
-        "text-color": "rgba(0, 0, 0, 1)"
+        "text-color": "rgba(255, 255, 255, 1)"
       }
     },
     {
