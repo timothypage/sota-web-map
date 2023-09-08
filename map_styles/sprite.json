@@ -472,14 +472,14 @@
     "height": 14,
     "pixelRatio": 1,
     "width": 14,
-    "x": 280,
+    "x": 281,
     "y": 21
   },
   "road_2": {
     "height": 14,
     "pixelRatio": 1,
     "width": 20,
-    "x": 294,
+    "x": 295,
     "y": 21
   },
   "road_3": {
@@ -632,7 +632,7 @@
   "us-interstate_3": {
     "height": 17,
     "pixelRatio": 1,
-    "width": 21,
+    "width": 22,
     "x": 208,
     "y": 21
   },
@@ -640,7 +640,7 @@
     "height": 14,
     "pixelRatio": 1,
     "width": 17,
-    "x": 314,
+    "x": 315,
     "y": 21
   },
   "us-state_2": {
@@ -682,14 +682,14 @@
     "height": 17,
     "pixelRatio": 1,
     "width": 17,
-    "x": 229,
+    "x": 230,
     "y": 21
   },
   "volcano_11": {
     "height": 17,
     "pixelRatio": 1,
     "width": 17,
-    "x": 246,
+    "x": 247,
     "y": 21
   },
   "wave": {
@@ -703,7 +703,7 @@
     "height": 17,
     "pixelRatio": 1,
     "width": 17,
-    "x": 263,
+    "x": 264,
     "y": 21
   }
 }
