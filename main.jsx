@@ -62,6 +62,11 @@ const map = new maplibregl.Map({
         type: "vector",
         url: "pmtiles:///tiles/us_federal_proclaimed_areas.pmtiles",
       },
+      padus: {
+        type: "vector",
+        url: "pmtiles:///tiles/padus.pmtiles",
+        minzoom: 8,
+      },
     },
     sprite: "http://localhost:5173/map_styles/sprite",
     glyphs: "/fonts/{fontstack}/{range}.pbf",
@@ -139,6 +144,8 @@ map.on("load", () => {
 
   function handleClickEvent(e) {
     const features = map.queryRenderedFeatures(e.point);
+
+    console.log("features", features);
 
     if (existingPopup) existingPopup.remove();
 
