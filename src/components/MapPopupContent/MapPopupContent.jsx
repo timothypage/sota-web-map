@@ -16,7 +16,7 @@ const MapPopupContent = ({ features, popupEvent, popup }) => {
   const directions = useDirections();
 
   return (
-    <>
+    <div className={styles.mapPopupContent}>
       <LayerInfo features={features} />
       <div className={styles.navButtons}>
         <button
@@ -47,7 +47,7 @@ const MapPopupContent = ({ features, popupEvent, popup }) => {
           <AiFillHome />
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
