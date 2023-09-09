@@ -1,0 +1,23 @@
+.mapPopupContent {
+  padding: 12px 10px;
+}
+
+.navButtons {
+  display: flex;
+  gap: 8px;
+
+  padding: 12px;
+}
+
+.navButton {
+  all: unset;
+
+  background: hsla(277, 100%, 76%, 1);
+  height: 2rem;
+  padding-inline: 12px;
+  cursor: pointer;
+}
+
+.navButton:hover {
+  background: hsla(277, 100%, 80%, 1);
+}

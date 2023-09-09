@@ -2,11 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 import { configureStore } from "@reduxjs/toolkit";
-import navigationReducer from "/src/reducers/navigationReducer.js";
+import navigationReducer, {
+  setRoute,
+} from "/src/reducers/navigationReducer.js";
 import searchReducer from "/src/reducers/searchReducer.js";
 
 import { Provider } from "react-redux";
-import { setRoute } from "/src/reducers/navigationReducer.js";
 
 import MapProvider from "/src/providers/MapProvider.jsx";
 import DirectionsProvider from "/src/providers/DirectionsProvider.jsx";
@@ -22,6 +23,7 @@ import MapLibreGlDirections from "@maplibre/maplibre-gl-directions";
 import bright from "./map_styles/bright.json"; // reload on change
 import navLayers from "./map_styles/nav-layers.js";
 import proclaimedLayers from "./map_styles/proclaimed-layers.js";
+import padusLayers from "./map_styles/padus-layers";
 import summitLayers from "./map_styles/summit-layers.js";
 
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -85,8 +87,9 @@ const map = new maplibregl.Map({
         },
       },
       ...proclaimedLayers,
+      ...padusLayers,
       ...bright.layers,
-      ...summitLayers
+      ...summitLayers,
     ],
   },
 });

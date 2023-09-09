@@ -1,0 +1,12 @@
+.display {
+  line-height: 1.1rem;
+
+  margin-bottom: 0.3rem;
+  padding-bottom: 0.3rem;
+  margin-left: 0.3rem;
+}
+
+.display:not(:last-of-type) {
+  border-bottom: 1px solid hsl(22, 16%, 73%);
+
+}
