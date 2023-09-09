@@ -1,29 +1,5 @@
 import styles from "./LayerInfo.module.css";
 
-const features = [
-  {
-    source: "padus",
-    sourceLayer: "padus",
-    properties: {
-      designation: "NF",
-      manager_type: "FED",
-      manager_name: "USFS",
-      local_name: "Arapaho and Roosevelt National Forests",
-      local_owner: "USDA FOREST SERVICE",
-      public_access: "OA",
-      display_type: "national_forest_or_grassland",
-    },
-  },
-  {
-    source: "us_federal_proclaimed_areas",
-    sourceLayer: "us_federal_proclaimed_areas",
-    properties: {
-      name: "Arapaho National Forest",
-      dept: "USFS",
-    },
-  },
-];
-
 const LayerInfo = ({ features }) => {
   if (features.length === 0) return null;
 
@@ -48,11 +24,68 @@ const OAMap = {
 };
 
 const designationMap = {
-  NF: "National Forest",
-  WA: "Wilderness Area",
   NP: "National Park",
+  NM: "National Monument",
+  NCA: "Conservation Area",
+  NF: "National Forest",
+  NG: "National Grassland",
+  PUB: "National Public Lands",
+  NT: "National Scenic or Historic Trail",
+  NWR: "National Wildlife Refuge",
+  WA: "Wilderness Area",
+  WSR: "Wild and Scenic River",
+  WSA: "Wilderness Study Area",
+  MPA: "Marine Protected Area",
+  NRA: "National Recreation Area",
+  NSBV: "National Scenic, Botanical or Volcanic Area",
+  NLS: "National Lakeshore or Seashore",
+  IRA: "Inventoried Roadless Area",
+  ACEC: "Area of Critical Environmental Concern",
+  RNA: "Research Natural Area",
+  REC: "Recreation Management Area",
+  RMA: "Resource Management Area",
+  WPA: "Watershed Protection Area",
+  REA: "Research or Educational  Area",
+  HCA: "Historic or Cultural Area",
+  MIT: "Mitigation Land or Bank",
+  MIL: "Military Land",
+  ACC: "Access Area",
+  SDA: "Special Designation Area",
+  PROC: "Approved or Proclamation Boundary",
+  FOTH: "Federal Other or Unknown Designation",
+  ND: "Not Designated",
+  TRIBL: "Native American Land Area",
+  OCS: "Outer Continental Shelf Area",
   SP: "State Park",
-  PUB: "Public Land",
+  SW: "State Wilderness",
+  SCA: "State Conservation Area",
+  SREC: "State Recreation Area",
+  SHCA: "State Historic or Cultural Area",
+  SRMA: "State Resource Management Area",
+  SOTH: "State Other or Unknown",
+  LP: "Local Park",
+  LCA: "Local Conservation Area",
+  LREC: "Local Recreation Area",
+  LHCA: "Local Historic or Cultural Area",
+  LRMA: "Local Resource Management Area",
+  LOTH: "Local Other or Unknown",
+  PCON: "Private Conservation",
+  PPRK: "Private Park",
+  PREC: "Private Recreation or Education",
+  PHCA: "Private Historic or Cultural",
+  PAGR: "Private Agricultural ",
+  PRAN: "Private Ranch",
+  PFOR: "Private Forest Stewardship",
+  POTH: "Private Other or Unknown",
+  CONE: "Conservation Easement",
+  RECE: "Recreation or Education Easement",
+  HCAE: "Historic or Cultural Easement",
+  AGRE: "Agricultural Easement",
+  RANE: "Ranch Easement",
+  FORE: "Forest Stewardship Easement",
+  OTHE: "Other Easement",
+  UNKE: "Unknown Easement",
+  UNK: "Unknown",
 };
 
 const PadusDisplay = ({ f }) => {
@@ -60,6 +93,7 @@ const PadusDisplay = ({ f }) => {
     <div className={styles.display}>
       <p>Source: PADUS</p>
       <p>Manager: {f.manager_name}</p>
+      <p>Name: {f.local_name}</p>
       <p>Access: {OAMap[f.public_access] || f.public_access}</p>
       <p>Designation: {designationMap[f.designation] || f.designation}</p>
     </div>
