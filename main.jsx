@@ -21,6 +21,8 @@ import MapLibreGlDirections from "@maplibre/maplibre-gl-directions";
 
 import bright from "./map_styles/bright.json"; // reload on change
 import navLayers from "./map_styles/nav-layers.js";
+import proclaimedLayers from "./map_styles/proclaimed-layers.js";
+import summitLayers from "./map_styles/summit-layers.js";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
@@ -67,10 +69,25 @@ const map = new maplibregl.Map({
         url: "pmtiles:///tiles/padus.pmtiles",
         minzoom: 8,
       },
+      summits: {
+        type: "geojson",
+        data: "/tiles/us_sota_summits.geojson",
+      },
     },
     sprite: "http://localhost:5173/map_styles/sprite",
     glyphs: "/fonts/{fontstack}/{range}.pbf",
-    layers: [...bright.layers],
+    layers: [
+      {
+        id: "background",
+        type: "background",
+        paint: {
+          "background-color": "#f8f4f0",
+        },
+      },
+      ...proclaimedLayers,
+      ...bright.layers,
+      ...summitLayers
+    ],
   },
 });
 
