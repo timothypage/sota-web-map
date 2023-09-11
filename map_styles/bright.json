@@ -5134,7 +5134,7 @@
           "Noto Sans Regular"
         ],
         "text-rotation-alignment": "viewport",
-        "text-size": 10
+        "text-size": 12
       },
       "paint": {
         "text-color": "rgba(255, 255, 255, 1)"
@@ -5188,7 +5188,7 @@
           "Noto Sans Regular"
         ],
         "text-rotation-alignment": "viewport",
-        "text-size": 10
+        "text-size": 12
       },
       "paint": {
         "text-color": "rgba(0, 0, 0, 1)"
