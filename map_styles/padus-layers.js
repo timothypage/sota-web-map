@@ -31,7 +31,7 @@ const padusLayers = [
         "rgba(52, 91, 25, 1)",
         ["private_open_access"],
         "rgba(255, 158, 23, 1)",
-        "#000",
+        "green",
       ],
       "fill-opacity": {
         stops: [

@@ -19,8 +19,8 @@ const LayerInfo = ({ features }) => {
 
 const OAMap = {
   OA: "Open Access",
-  XA: "Restricted Access",
-  NA: "No Access Allowed",
+  RA: "Restricted Access",
+  XA: "No Access",
 };
 
 const designationMap = {
