@@ -88,8 +88,9 @@ const map = new maplibregl.Map({
       },
       ...proclaimedLayers,
       ...padusLayers,
-      ...bright.layers,
+      ...bright.layers.filter(l => !(l.type === "symbol" && l.id.startsWith("place-"))),
       ...summitLayers,
+      ...bright.layers.filter(l => l.type === "symbol" && l.id.startsWith("place-"))
     ],
   },
 });
