@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { renderToString } from "react-dom/server";
 
 import { configureStore } from "@reduxjs/toolkit";
 import navigationReducer, {
@@ -172,38 +171,36 @@ map.on("load", () => {
   function handleClickEvent(e) {
     const features = map.queryRenderedFeatures(e.point);
 
-    console.log("features", features);
+    // console.log("features", features);
 
     if (existingPopup) existingPopup.remove();
 
-    // Render display during initial popup rendering so it avoids display boundary overflow
-    // kinda hacky
-    const ReactPopup = (
-      <React.StrictMode>
-        <Provider store={store}>
-          <MapProvider map={map}>
-            <DirectionsProvider directions={directions}>
-              <MapPopupContent
-                features={features}
-                popupEvent={e}
-                popup={popup}
-              />
-            </DirectionsProvider>
-          </MapProvider>
-        </Provider>
-      </React.StrictMode>
-    );
-
-    const html = renderToString(ReactPopup);
 
     popup = new maplibregl.Popup()
       .setLngLat(e.lngLat)
-      .setHTML('<div class="popup">' + html + "</div>")
+      // render enough height that the popup doesn't render outside the browser view
+      // only happens because the popup is computing where to display before react is adding the content
+      // Maplibregl.Popup#setDOMContent has the same problem
+      .setHTML(`<div class="popup" style="height:${150 * features.length}px"></div>`)
       .addTo(map);
 
     let contentElem = popup.getElement().querySelector(".popup");
-    ReactDOM.createRoot(contentElem).render(ReactPopup);
+    ReactDOM.createRoot(contentElem).render(      
+    <React.StrictMode>
+      <Provider store={store}>
+        <MapProvider map={map}>
+          <DirectionsProvider directions={directions}>
+            <MapPopupContent
+              features={features}
+              popupEvent={e}
+              popup={popup}
+            />
+          </DirectionsProvider>
+        </MapProvider>
+      </Provider>
+    </React.StrictMode>);
 
+    contentElem.style = "";
     existingPopup = popup;
   }
 
