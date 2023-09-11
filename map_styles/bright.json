@@ -649,7 +649,7 @@
         "Polygon"
       ],
       "layout": {
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "fill-color": "#a0c8f0",
