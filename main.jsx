@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { renderToString } from "react-dom/server";
 
 import { configureStore } from "@reduxjs/toolkit";
 import navigationReducer, {
@@ -88,9 +89,13 @@ const map = new maplibregl.Map({
       },
       ...proclaimedLayers,
       ...padusLayers,
-      ...bright.layers.filter(l => !(l.type === "symbol" && l.id.startsWith("place-"))),
+      ...bright.layers.filter(
+        (l) => !(l.type === "symbol" && l.id.startsWith("place-"))
+      ),
       ...summitLayers,
-      ...bright.layers.filter(l => l.type === "symbol" && l.id.startsWith("place-"))
+      ...bright.layers.filter(
+        (l) => l.type === "symbol" && l.id.startsWith("place-")
+      ),
     ],
   },
 });
@@ -162,6 +167,7 @@ map.on("load", () => {
   });
 
   let existingPopup = null;
+  let popup = new maplibregl.Popup();
 
   function handleClickEvent(e) {
     const features = map.queryRenderedFeatures(e.point);
@@ -170,13 +176,9 @@ map.on("load", () => {
 
     if (existingPopup) existingPopup.remove();
 
-    let popup = new maplibregl.Popup()
-      .setLngLat(e.lngLat)
-      .setHTML('<div class="popup"></div>')
-      .addTo(map);
-
-    let contentElem = popup.getElement().querySelector(".popup");
-    ReactDOM.createRoot(contentElem).render(
+    // Render display during initial popup rendering so it avoids display boundary overflow
+    // kinda hacky
+    const ReactPopup = (
       <React.StrictMode>
         <Provider store={store}>
           <MapProvider map={map}>
@@ -191,6 +193,16 @@ map.on("load", () => {
         </Provider>
       </React.StrictMode>
     );
+
+    const html = renderToString(ReactPopup);
+
+    popup = new maplibregl.Popup()
+      .setLngLat(e.lngLat)
+      .setHTML('<div class="popup">' + html + "</div>")
+      .addTo(map);
+
+    let contentElem = popup.getElement().querySelector(".popup");
+    ReactDOM.createRoot(contentElem).render(ReactPopup);
 
     existingPopup = popup;
   }
