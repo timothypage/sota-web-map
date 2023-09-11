@@ -127,7 +127,7 @@ map.addControl(
 
 map.on("load", () => {
   const directions = new MapLibreGlDirections(map, {
-    api: "http://192.168.1.241:5000/route/v1", // routing all of US needs ~32 GB of ram -_-
+    api: "https://desktop-k8ngvmk.tail54c6a.ts.net/route/v1", // routing all of US needs ~32 GB of ram -_-
     requestOptions: { steps: true, overview: "full" },
     layers: navLayers,
     sensitiveWaypointLayers: ["maplibre-gl-directions-waypoint"],
