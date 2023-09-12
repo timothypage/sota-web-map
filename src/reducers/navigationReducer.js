@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 let home = [-104.99168, 39.73882]; // Denver City Hall, default value
 
 try {
-  home = JSON.parse(localStorage.getItem("homeLocation"));
+  home ??= JSON.parse(localStorage.getItem("homeLocation"));
 } catch (e) {
   console.log(e);
   console.log("invalid home location stored in localStorage");
@@ -38,7 +38,6 @@ export const navigationSlice = createSlice({
     },
 
     setRoute: (state, action) => {
-      console.log("setRoute action", action);
       return {
         ...state,
         route: action.payload,

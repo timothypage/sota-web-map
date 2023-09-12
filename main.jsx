@@ -42,9 +42,10 @@ let protocol = new pmtiles.Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
 
 const demSource = new mlcontour.DemSource({
-  url: 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
-  encoding: 'terrarium',
-  worker: true
+  url:
+    "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+  encoding: "terrarium",
+  worker: true,
 });
 
 demSource.setupMaplibre(maplibregl);
@@ -85,35 +86,40 @@ const map = new maplibregl.Map({
         data: "/tiles/us_sota_summits.geojson",
       },
       hillshadeSource: {
-        type: 'raster-dem',
+        type: "raster-dem",
         // share cached raster-dem tiles with the contour source
         tiles: [demSource.sharedDemProtocolUrl],
         tileSize: 512,
-        maxzoom: 12
-    },
-    contourSourceFeet: {
-        type: 'vector',
+        maxzoom: 12,
+      },
+      terrainSource: {
+        type: "raster-dem",
+        tiles: [demSource.sharedDemProtocolUrl],
+        tileSize: 512,
+        maxzoom: 12,
+      },
+      contourSourceFeet: {
+        type: "vector",
         tiles: [
-            demSource.contourProtocolUrl({
+          demSource.contourProtocolUrl({
             // meters to feet
-                multiplier: 3.28084,
-                overzoom: 1,
-                thresholds: {
-                // zoom: [minor, major]
-                    11: [200, 1000],
-                    12: [100, 500],
-                    13: [100, 500],
-                    14: [50, 200],
-                    15: [20, 100]
-                },
-                elevationKey: 'ele',
-                levelKey: 'level',
-                contourLayer: 'contours'
-            })
+            multiplier: 3.28084,
+            overzoom: 1,
+            thresholds: {
+              // zoom: [minor, major]
+              11: [200, 1000],
+              12: [100, 500],
+              13: [100, 500],
+              14: [50, 200],
+              15: [20, 100],
+            },
+            elevationKey: "ele",
+            levelKey: "level",
+            contourLayer: "contours",
+          }),
         ],
-        maxzoom: 15
-    }
-
+        maxzoom: 15,
+      },
     },
     sprite: "http://localhost:5173/map_styles/sprite",
     glyphs: "/fonts/{fontstack}/{range}.pbf",
@@ -135,7 +141,6 @@ const map = new maplibregl.Map({
       ...bright.layers.filter(
         (l) => l.type === "symbol" && l.id.startsWith("place-")
       ),
-
     ],
   },
 });
@@ -166,7 +171,17 @@ map.addControl(
   "bottom-left"
 );
 
-map.on("load", () => {
+map.addControl(
+  new maplibregl.TerrainControl({
+    source: "terrainSource",
+    exaggeration: 0.06,
+  }),
+  "bottom-right"
+);
+
+//demotiles.maplibre.org/terrain-tiles/tiles.json
+
+https: map.on("load", () => {
   const directions = new MapLibreGlDirections(map, {
     api: "https://desktop-k8ngvmk.tail54c6a.ts.net/route/v1", // routing all of US needs ~32 GB of ram -_-
     requestOptions: { steps: true, overview: "full" },
@@ -216,30 +231,32 @@ map.on("load", () => {
 
     if (existingPopup) existingPopup.remove();
 
-
     popup = new maplibregl.Popup()
       .setLngLat(e.lngLat)
       // render enough height that the popup doesn't render outside the browser view
       // only happens because the popup is computing where to display before react is adding the content
       // Maplibregl.Popup#setDOMContent has the same problem
-      .setHTML(`<div class="popup" style="height:${150 * features.length}px"></div>`)
+      .setHTML(
+        `<div class="popup" style="height:${150 * features.length}px"></div>`
+      )
       .addTo(map);
 
     let contentElem = popup.getElement().querySelector(".popup");
-    ReactDOM.createRoot(contentElem).render(      
-    <React.StrictMode>
-      <Provider store={store}>
-        <MapProvider map={map}>
-          <DirectionsProvider directions={directions}>
-            <MapPopupContent
-              features={features}
-              popupEvent={e}
-              popup={popup}
-            />
-          </DirectionsProvider>
-        </MapProvider>
-      </Provider>
-    </React.StrictMode>);
+    ReactDOM.createRoot(contentElem).render(
+      <React.StrictMode>
+        <Provider store={store}>
+          <MapProvider map={map}>
+            <DirectionsProvider directions={directions}>
+              <MapPopupContent
+                features={features}
+                popupEvent={e}
+                popup={popup}
+              />
+            </DirectionsProvider>
+          </MapProvider>
+        </Provider>
+      </React.StrictMode>
+    );
 
     contentElem.style = "";
     existingPopup = popup;
