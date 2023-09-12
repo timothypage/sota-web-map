@@ -19,12 +19,14 @@ import maplibregl from "maplibre-gl";
 import * as pmtiles from "pmtiles";
 
 import MapLibreGlDirections from "@maplibre/maplibre-gl-directions";
+import mlcontour from "maplibre-contour";
 
 import bright from "./map_styles/bright.json"; // reload on change
 import navLayers from "./map_styles/nav-layers.js";
 import proclaimedLayers from "./map_styles/proclaimed-layers.js";
 import padusLayers from "./map_styles/padus-layers";
 import summitLayers from "./map_styles/summit-layers.js";
+import contourLayers from "./map_styles/contour-layers";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
@@ -39,10 +41,17 @@ const store = configureStore({
 let protocol = new pmtiles.Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
 
+const demSource = new mlcontour.DemSource({
+  url: 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
+  encoding: 'terrarium',
+  worker: true
+});
+
+demSource.setupMaplibre(maplibregl);
+
 const map = new maplibregl.Map({
   container: "map",
   hash: true,
-  // style: 'https://demotiles.maplibre.org/style.json', // stylesheet location
   center: [-106, 39], // starting position [lng, lat]
   zoom: 6, // starting zoom
   style: {
@@ -75,6 +84,36 @@ const map = new maplibregl.Map({
         type: "geojson",
         data: "/tiles/us_sota_summits.geojson",
       },
+      hillshadeSource: {
+        type: 'raster-dem',
+        // share cached raster-dem tiles with the contour source
+        tiles: [demSource.sharedDemProtocolUrl],
+        tileSize: 512,
+        maxzoom: 12
+    },
+    contourSourceFeet: {
+        type: 'vector',
+        tiles: [
+            demSource.contourProtocolUrl({
+            // meters to feet
+                multiplier: 3.28084,
+                overzoom: 1,
+                thresholds: {
+                // zoom: [minor, major]
+                    11: [200, 1000],
+                    12: [100, 500],
+                    13: [100, 500],
+                    14: [50, 200],
+                    15: [20, 100]
+                },
+                elevationKey: 'ele',
+                levelKey: 'level',
+                contourLayer: 'contours'
+            })
+        ],
+        maxzoom: 15
+    }
+
     },
     sprite: "http://localhost:5173/map_styles/sprite",
     glyphs: "/fonts/{fontstack}/{range}.pbf",
@@ -88,6 +127,7 @@ const map = new maplibregl.Map({
       },
       ...proclaimedLayers,
       ...padusLayers,
+      ...contourLayers,
       ...bright.layers.filter(
         (l) => !(l.type === "symbol" && l.id.startsWith("place-"))
       ),
@@ -95,6 +135,7 @@ const map = new maplibregl.Map({
       ...bright.layers.filter(
         (l) => l.type === "symbol" && l.id.startsWith("place-")
       ),
+
     ],
   },
 });
