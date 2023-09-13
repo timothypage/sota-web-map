@@ -42,8 +42,7 @@ let protocol = new pmtiles.Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
 
 const demSource = new mlcontour.DemSource({
-  url:
-    "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+  url: "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
   encoding: "terrarium",
   worker: true,
 });
@@ -135,11 +134,11 @@ const map = new maplibregl.Map({
       ...padusLayers,
       ...contourLayers,
       ...bright.layers.filter(
-        (l) => !(l.type === "symbol" && l.id.startsWith("place-"))
+        (l) => !(l.type === "symbol" && l.id.startsWith("place-")),
       ),
       ...summitLayers,
       ...bright.layers.filter(
-        (l) => l.type === "symbol" && l.id.startsWith("place-")
+        (l) => l.type === "symbol" && l.id.startsWith("place-"),
       ),
     ],
   },
@@ -150,7 +149,7 @@ map.addControl(
     showZoom: true,
     showCompass: true,
   }),
-  "bottom-right"
+  "bottom-right",
 );
 
 map.addControl(
@@ -160,7 +159,7 @@ map.addControl(
     },
     trackUserLocation: true,
   }),
-  "bottom-right"
+  "bottom-right",
 );
 
 map.addControl(
@@ -168,7 +167,7 @@ map.addControl(
     maxWidth: 200,
     unit: "imperial",
   }),
-  "bottom-left"
+  "bottom-left",
 );
 
 map.addControl(
@@ -176,7 +175,7 @@ map.addControl(
     source: "terrainSource",
     exaggeration: 0.06,
   }),
-  "bottom-right"
+  "bottom-right",
 );
 
 //demotiles.maplibre.org/terrain-tiles/tiles.json
@@ -201,7 +200,7 @@ https: map.on("load", () => {
           </DirectionsProvider>
         </MapProvider>
       </Provider>
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 
   directions.on("fetchroutesend", (e) => {
@@ -216,7 +215,7 @@ https: map.on("load", () => {
         setRoute({
           duration: route.duration,
           distance: route.distance,
-        })
+        }),
       );
     }
   });
@@ -237,7 +236,7 @@ https: map.on("load", () => {
       // only happens because the popup is computing where to display before react is adding the content
       // Maplibregl.Popup#setDOMContent has the same problem
       .setHTML(
-        `<div class="popup" style="height:${150 * features.length}px"></div>`
+        `<div class="popup" style="height:${150 * features.length}px"></div>`,
       )
       .addTo(map);
 
@@ -255,7 +254,7 @@ https: map.on("load", () => {
             </DirectionsProvider>
           </MapProvider>
         </Provider>
-      </React.StrictMode>
+      </React.StrictMode>,
     );
 
     contentElem.style = "";
