@@ -121,7 +121,7 @@ const map = new maplibregl.Map({
         maxzoom: 15,
       },
     },
-    sprite: "http://tzwolak.com/map_styles/sprite",
+    sprite: "https://tzwolak.com/map_styles/sprite",
     glyphs: "/fonts/{fontstack}/{range}.pbf",
     layers: [
       {
