@@ -7,6 +7,7 @@ for Windows I'd recommend WSL 2, open up cmd.exe and run `wsl --install`. Just a
 ## Requirements
 
 - [Planetiler](https://github.com/onthegomap/planetiler)
+- [tippecanoe (felt version)](https://github.com/felt/tippecanoe)
 - [GDAL](https://gdal.org)
 
 macos (with [Homebrew](https://brew.sh/))
@@ -61,6 +62,8 @@ Download `PADUS3_0Geodatabase.zip` from here https://www.sciencebase.gov/catalog
 export PADUS_QUERY=$(tr "\t" " " < ogr2ogr_summitslist_query.sql | tr -d "\n" | tr -s " ")
 
 ogr2ogr -t_srs EPSG:4326 -f GeoJSON padus.geojson -dialect SQLITE -sql "$PADUS_QUERY" /vsizip/PADUS3_0Geodatabase.zip/PAD_US3_0.gdb
+
+tippecanoe --maximum-zoom=14 --minimum-zoom=8 --drop-densest-as-needed -o padus.pmtiles padus.geojson
 ```
 
 ## Topo
