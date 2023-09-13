@@ -76,7 +76,7 @@ npm run dev
 ```bash
 npm run build && bash deploy.sh
 ```
-note: this does deploy any map tiles in the `tiles/` folder, but does not build them.  Feel free to grab them from `https://tzwolak.com/tiles/<filename>.<ext>` (see main.jsx for a list of map sources in teh MaplibreGL setup).
+note: this does deploy any map tiles in the `tiles/` folder, but does not build them.  Feel free to grab them from `https://tzwolak.com/tiles/<filename>.<ext>` (see main.jsx for a list of map sources in the MaplibreGL setup).
 or see data/README.md for how to build your own set.
 
 this project is designed to run "serverless" on AWS [S3](https://aws.amazon.com/s3/) and [CloudFront](https://aws.amazon.com/cloudfront/).

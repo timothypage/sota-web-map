@@ -6,6 +6,7 @@ for Windows I'd recommend WSL 2, open up cmd.exe and run `wsl --install`. Just a
 
 ## Requirements
 
+- [Planetiler](https://github.com/onthegomap/planetiler)
 - [GDAL](https://gdal.org)
 
 macos (with [Homebrew](https://brew.sh/))
@@ -20,7 +21,6 @@ apt install gdal
 
 windows - see https://gdal.org/download.html#windows
 
-- [Planetiler](https://github.com/onthegomap/planetiler)
 
 ## Streets and Trails
 
@@ -65,7 +65,7 @@ ogr2ogr -t_srs EPSG:4326 -f GeoJSON padus.geojson -dialect SQLITE -sql "$PADUS_Q
 
 ## Topo
 
-Using some open terrarium RGB tiles that are open acces for now
+Using some open terrarium RGB tiles that are open access for now
 
 ```
 sources: {
@@ -83,4 +83,4 @@ sources: {
 
 ```
 
-otherwise, check out https://github.com/nst-guide/terrain
+otherwise, check out https://github.com/nst-guide/terrain and/or https://medium.com/@david.moraisferreira/shaded-relief-maps-using-gdal-a-beginners-guide-6a3fe56c6d
