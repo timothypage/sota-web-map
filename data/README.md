@@ -46,7 +46,10 @@ tail -n +2 summitslist.csv > summitslist2.csv
 
 
 ```
-export SUMMIT_QUERY=$(tr "\t" " " < ogr2ogr_summitslist_query.sql | tr -d "\n" | tr -s " ")
+export TODAYS_DATE=$(date +%Y%m%d)
+
+export SUMMIT_QUERY=$(envsubst < ogr2ogr_summitslist_query.sql | tr "\t" " " | tr -d "\n" | tr -s " ")
+
 ogr2ogr -f GeoJSON us_sota_summits.geojson -nln summits -dialect SQLITE -sql "$SUMMIT_QUERY" -oo X_POSSIBLE_NAMES=Longitude -oo Y_POSSIBLE_NAMES=Latitude summitslist2.csv
 ```
 
@@ -56,6 +59,7 @@ Download `PADUS3_0Geodatabase.zip` from here https://www.sciencebase.gov/catalog
 
 ```
 export PADUS_QUERY=$(tr "\t" " " < ogr2ogr_summitslist_query.sql | tr -d "\n" | tr -s " ")
+
 ogr2ogr -t_srs EPSG:4326 -f GeoJSON padus.geojson -dialect SQLITE -sql "$PADUS_QUERY" /vsizip/PADUS3_0Geodatabase.zip/PAD_US3_0.gdb
 ```
 
