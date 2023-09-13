@@ -26,6 +26,9 @@ where possible we're storing tiles in protomaps files (.pmtiles)
 
 https://protomaps.com/docs
 
+see [data/README.md](data/README.md) for more in-depth information on the below
+
+
 ### SOTA Summits
 
 "Summits on the Air is an award scheme for radio amateurs that encourages portable operation in mountainous areas." - https://www.sota.org.uk/
