@@ -28,7 +28,7 @@ windows - see https://gdal.org/download.html#windows
 this will download an build a pmtiles archive of the United States (takes about an hour)
 
 you can change the area (and probably the output filename too 😉) for a smaller area.  US states work well
-```
+```bash
 wget https://github.com/onthegomap/planetiler/releases/latest/download/planetiler.jar
 
 java -Xmx16g -jar planetiler.jar --download --area=us --transportation_z13_paths=true --output=us.pmtiles
@@ -36,17 +36,17 @@ java -Xmx16g -jar planetiler.jar --download --area=us --transportation_z13_paths
 
 ## SOTA Summits
 
-```
+```bash
 wget https://storage.sota.org.uk/summitslist.csv
 ```
 
 remove first row
-```
+```bash
 tail -n +2 summitslist.csv > summitslist2.csv
 ```
 
 
-```
+```bash
 export TODAYS_DATE=$(date +%Y%m%d)
 
 export SUMMIT_QUERY=$(envsubst < ogr2ogr_summitslist_query.sql | tr "\t" " " | tr -d "\n" | tr -s " ")
@@ -58,7 +58,7 @@ ogr2ogr -f GeoJSON us_sota_summits.geojson -nln summits -dialect SQLITE -sql "$S
 
 Download `PADUS3_0Geodatabase.zip` from here https://www.sciencebase.gov/catalog/item/61794fc2d34ea58c3c6f9f69#attached-files
 
-```
+```bash
 export PADUS_QUERY=$(tr "\t" " " < ogr2ogr_summitslist_query.sql | tr -d "\n" | tr -s " ")
 
 ogr2ogr -t_srs EPSG:4326 -f GeoJSON padus.geojson -dialect SQLITE -sql "$PADUS_QUERY" /vsizip/PADUS3_0Geodatabase.zip/PAD_US3_0.gdb
@@ -66,15 +66,23 @@ ogr2ogr -t_srs EPSG:4326 -f GeoJSON padus.geojson -dialect SQLITE -sql "$PADUS_Q
 tippecanoe --maximum-zoom=14 --minimum-zoom=8 --drop-densest-as-needed -o padus.pmtiles padus.geojson
 ```
 
+### Proclaimed Areas
+
+this seems like a nicer thing to display when zoomed out
+
+```bash
+ogr2ogr -t_srs EPSG:4326 -f GeoJSON us_federal_proclaimed_areas.geojson -sql "SELECT Unit_Nm as name, Mang_Name as dept FROM PADUS3_0Proclamation WHERE Mang_Name IN ('DOD', 'NPS', 'USFS')" /vsizip/PADUS3_0Geodatabase.zip/PAD_US3_0.gdb
+
+tippecanoe -zg --drop-densest-as-needed -o us_federal_proclaimed_areas.pmtiles us_federal_proclaimed_areas.geojson
+```
+
+
 ## Topo
 
 Using some open terrarium RGB tiles that are open access for now
 
-```
+```js
 sources: {
-
-  ...
-
   terrainSource: {
     type: "raster-dem",
     tiles: ["https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"],
@@ -82,8 +90,7 @@ sources: {
     maxzoom: 12,
     encoding: "terrarium"
   }
-,
-
+}
 ```
 
 otherwise, check out https://github.com/nst-guide/terrain and/or https://medium.com/@david.moraisferreira/shaded-relief-maps-using-gdal-a-beginners-guide-6a3fe56c6d
