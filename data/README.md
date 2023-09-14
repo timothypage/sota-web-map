@@ -25,7 +25,7 @@ windows - see https://gdal.org/download.html#windows
 
 ## Streets and Trails
 
-this will download an build a pmtiles archive of the United States (takes about an hour)
+this will download and build a pmtiles archive of the United States (takes about an hour)
 
 you can change the area (and probably the output filename too 😉) for a smaller area.  US states work well
 ```bash
@@ -59,7 +59,7 @@ ogr2ogr -f GeoJSON us_sota_summits.geojson -nln summits -dialect SQLITE -sql "$S
 Download `PADUS3_0Geodatabase.zip` from here https://www.sciencebase.gov/catalog/item/61794fc2d34ea58c3c6f9f69#attached-files
 
 ```bash
-export PADUS_QUERY=$(tr "\t" " " < ogr2ogr_summitslist_query.sql | tr -d "\n" | tr -s " ")
+export PADUS_QUERY=$(tr "\t" " " < ogr2ogr_padus_query.sql | tr -d "\n" | tr -s " ")
 
 ogr2ogr -t_srs EPSG:4326 -f GeoJSON padus.geojson -dialect SQLITE -sql "$PADUS_QUERY" /vsizip/PADUS3_0Geodatabase.zip/PAD_US3_0.gdb
 
