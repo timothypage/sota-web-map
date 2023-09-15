@@ -42,8 +42,10 @@ let protocol = new pmtiles.Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
 
 const demSource = new mlcontour.DemSource({
-  url: "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
-  encoding: "terrarium",
+  // url: "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+  // url: "pmtiles:///tiles/terrain.pmtiles",
+  url: "http://localhost:8080/terrain/{z}/{x}/{y}.webp",
+  encoding: "mapbox",
   worker: true,
 });
 
@@ -173,7 +175,7 @@ map.addControl(
 map.addControl(
   new maplibregl.TerrainControl({
     source: "terrainSource",
-    exaggeration: 0.06,
+    exaggeration: 2,
   }),
   "bottom-right",
 );
@@ -226,7 +228,7 @@ https: map.on("load", () => {
   function handleClickEvent(e) {
     const features = map.queryRenderedFeatures(e.point);
 
-    // console.log("features", features);
+    console.log("features", features);
 
     if (existingPopup) existingPopup.remove();
 

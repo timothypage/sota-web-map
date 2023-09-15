@@ -79,18 +79,29 @@ tippecanoe -zg --drop-densest-as-needed -o us_federal_proclaimed_areas.pmtiles u
 
 ## Topo
 
-Using some open terrarium RGB tiles that are open access for now
+Sign up for a NASA EathData account here https://urs.earthdata.nasa.gov/users/new
 
-```js
-sources: {
-  terrainSource: {
-    type: "raster-dem",
-    tiles: ["https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"],
-    tileSize: 512,
-    maxzoom: 12,
-    encoding: "terrarium"
-  }
-}
+Easily download tiles from here http://dwtkns.com/srtm30m/
+
+
+```bash
+gdalbuildvrt -vrtnodata -9999 dem_hr_9999.vrt *.hgt.zip
+
+gdalwarp -r cubicspline -s_srs EPSG:4326 -t_srs EPSG:3857 -dstnodata None -co COMPRESS=DEFLATE dem_hr_9999.vrt dem_hr_epsg3857.vrt
+
+python3 -m venv venv
+
+source venv/bin/activate
+
+pip install git+https://github.com/timothypage/rio-rgbify.git
+
+rio rgbify -b -10000 -i 0.1 --min-z 6 --max-z 13 --format webp dem_hr_epsg3857.vrt terrain_webp.mbtiles
+
+pmtiles convert terrain_webp.mbtiles terrain.pmtiles
 ```
 
-otherwise, check out https://github.com/nst-guide/terrain and/or https://medium.com/@david.moraisferreira/shaded-relief-maps-using-gdal-a-beginners-guide-6a3fe56c6d
+[maplibre-contour](https://github.com/onthegomap/maplibre-contour) doesn't support pmtiles, so it needs to be served xyz tiles
+
+```bash
+pmtiles serve --cors="*" .
+```
