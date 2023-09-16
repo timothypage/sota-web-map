@@ -9,11 +9,11 @@ const contourLayers = [
       // "hillshade-shadow-color": "hsla(39, 21%, 33%, 1)",
       // "hillshade-highlight-color": "hsla(39, 21%, 83%, 1)",
       // "hillshade-illumination-direction": 315,
-      "hillshade-exaggeration": 1,
+      // "hillshade-exaggeration": 1,
       "hillshade-exaggeration": {
         stops: [
-          [9, 0.3],
-          [14, 0.7],
+          [9, 0.05],
+          [14, 0.6],
         ],
       },
     },

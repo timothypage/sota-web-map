@@ -44,9 +44,11 @@ maplibregl.addProtocol("pmtiles", protocol.tile);
 const demSource = new mlcontour.DemSource({
   // url: "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
   // url: "pmtiles:///tiles/terrain.pmtiles",
-  url: "http://localhost:8080/terrain/{z}/{x}/{y}.webp",
+  url: "https://tzwolak.com/terrain/{z}/{x}/{y}.webp",
   encoding: "mapbox",
   worker: true,
+  minzoom: 8,
+  maxzoom: 16
 });
 
 demSource.setupMaplibre(maplibregl);
@@ -54,14 +56,14 @@ demSource.setupMaplibre(maplibregl);
 const map = new maplibregl.Map({
   container: "map",
   hash: true,
-  center: [-106, 39], // starting position [lng, lat]
-  zoom: 6, // starting zoom
+  center: [-106.1954, 39.757], // starting position [lng, lat]
+  zoom: 10, // starting zoom
   style: {
     version: 8,
     name: "Bright",
     metadata: {},
-    center: [-106, 39],
-    zoom: 6,
+    center: [-106.1954, 39.757], // starting position [lng, lat]
+    zoom: 10,
     bearing: 0,
     pitch: 0,
     sources: {
@@ -91,13 +93,13 @@ const map = new maplibregl.Map({
         // share cached raster-dem tiles with the contour source
         tiles: [demSource.sharedDemProtocolUrl],
         tileSize: 512,
-        maxzoom: 12,
+        maxzoom: 16,
       },
       terrainSource: {
         type: "raster-dem",
         tiles: [demSource.sharedDemProtocolUrl],
         tileSize: 512,
-        maxzoom: 12,
+        maxzoom: 16,
       },
       contourSourceFeet: {
         type: "vector",
@@ -119,7 +121,7 @@ const map = new maplibregl.Map({
             contourLayer: "contours",
           }),
         ],
-        maxzoom: 15,
+        maxzoom: 16,
       },
     },
     sprite: "https://tzwolak.com/map_styles/sprite",
@@ -175,7 +177,7 @@ map.addControl(
 map.addControl(
   new maplibregl.TerrainControl({
     source: "terrainSource",
-    exaggeration: 2,
+    exaggeration: 1,
   }),
   "bottom-right",
 );
