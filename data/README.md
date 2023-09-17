@@ -83,9 +83,37 @@ Sign up for a NASA EathData account here https://urs.earthdata.nasa.gov/users/ne
 
 Easily download tiles from here http://dwtkns.com/srtm30m/
 
+an example URL is https://e4ftl01.cr.usgs.gov/DP133/SRTM/SRTMGL1.003/2000.02.11/N38W107.SRTMGL1.hgt.zip
+
+there's probably a auth cookie or something you can grab off your browser session if you want to automate the download
 
 ```bash
-gdalbuildvrt -vrtnodata -9999 dem_hr_9999.vrt *.hgt.zip
+for n in {37..41}; do for w in {102..110}; do echo "https://e4ftl01.cr.usgs.gov/DP133/SRTM/SRTMGL1.003/2000.02.11/N$n W$w.SRTMGL1.hgt.zip" | \
+  tr -d " "; done; done | \
+  xargs -I "{}" curl {} -O -J \
+  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/118.0' \
+  -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8' \
+  -H 'Accept-Language: en-US,en;q=0.5' -H 'Accept-Encoding: gzip, deflate, br' \
+  -H 'Connection: keep-alive' \
+  -H 'Cookie: <some-cookie>'
+```
+
+OR
+
+You can download more detailed data for the US, up to 1m resolution from https://apps.nationalmap.gov/downloader/
+
+1. click on Data > Elevation Products (3DEP)
+1. unselect everything you don't need
+1. click the "show" link to show coverage available (1/3 arc-second DEM will offer the most coverage, 1 meter DEM is the highest resolution)
+1. click the "extent" or "polygon" button to draw the area you want to download
+1. click "Search Products"
+1. there is a txt link to download a list of all files at the top of the search results, download that "data.txt" file
+1. there's windows newlines in the file, but you can use [tr](https://youtube.com/shorts/SCISgvGBAY0?si=ErWnSrzOZc_nuztY) to handle those `cat data.txt | tr -d "\r" | xargs wget`
+1. process is the same 
+
+
+```bash
+gdalbuildvrt -vrtnodata -9999 dem_hr_9999.vrt *.hgt.zip # or (*.tif)
 
 gdalwarp -r cubicspline -s_srs EPSG:4326 -t_srs EPSG:3857 -dstnodata None -co COMPRESS=DEFLATE dem_hr_9999.vrt dem_hr_epsg3857.vrt
 
@@ -93,15 +121,19 @@ python3 -m venv venv
 
 source venv/bin/activate
 
-pip install git+https://github.com/timothypage/rio-rgbify.git
+pip install git+https://github.com/timothypage/rio-rgbify.git git+https://github.com/mapbox/mbutil.git
 
 rio rgbify -b -10000 -i 0.1 --min-z 6 --max-z 13 --format webp dem_hr_epsg3857.vrt terrain_webp.mbtiles
 
-pmtiles convert terrain_webp.mbtiles terrain.pmtiles
+mb-util --image_format=webp --silent terrain_webp.mbtiles terrain
+
+aws s3 sync terrain/ s3://<bucket-name>/terrain --cache-control "max-age=86400"
 ```
 
 [maplibre-contour](https://github.com/onthegomap/maplibre-contour) doesn't support pmtiles, so it needs to be served xyz tiles
 
+if that ever changes...
+
 ```bash
-pmtiles serve --cors="*" .
+pmtiles convert terrain_webp.mbtiles terrain.pmtiles
 ```
