@@ -28,6 +28,8 @@ import padusLayers from "./map_styles/padus-layers";
 import summitLayers from "./map_styles/summit-layers.js";
 import contourLayers from "./map_styles/contour-layers";
 
+import { loadGPX } from '/src/helpers/load-gpx.js'
+
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 
@@ -262,4 +264,6 @@ map.on("load", () => {
   }
 
   map.on("click", handleClickEvent);
+
+  // loadGPX('/tiles/mt_flora.gpx', map, maplibregl);
 });
