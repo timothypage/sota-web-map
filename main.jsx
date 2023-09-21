@@ -66,6 +66,7 @@ const map = new maplibregl.Map({
       openmaptiles: {
         type: "vector",
         url: "pmtiles:///tiles/us.pmtiles",
+        attribution: '<a href="http://openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a> | <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
       },
       usfs_national_forests_and_grasslands: {
         type: "vector",
@@ -79,6 +80,7 @@ const map = new maplibregl.Map({
         type: "vector",
         url: "pmtiles:///tiles/padus.pmtiles",
         minzoom: 8,
+        attribution: '<a href="https://www.usgs.gov/">USGS</a>'
       },
       summits: {
         type: "geojson",
