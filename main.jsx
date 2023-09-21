@@ -180,9 +180,7 @@ map.addControl(
   "bottom-right",
 );
 
-//demotiles.maplibre.org/terrain-tiles/tiles.json
-
-https: map.on("load", () => {
+map.on("load", () => {
   const directions = new MapLibreGlDirections(map, {
     api: "https://desktop-k8ngvmk.tail54c6a.ts.net/route/v1", // routing all of US needs ~32 GB of ram -_-
     requestOptions: { steps: true, overview: "full" },
