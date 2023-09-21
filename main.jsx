@@ -77,6 +77,7 @@ const map = new maplibregl.Map({
       us_federal_proclaimed_areas: {
         type: "vector",
         url: "pmtiles:///tiles/us_federal_proclaimed_areas.pmtiles",
+        attribution: '<a href="https://www.usgs.gov/">USGS</a>'
       },
       padus: {
         type: "vector",
