@@ -21,7 +21,7 @@ export const navigationSlice = createSlice({
     updateHomeLocation: (state, action) => {
       localStorage.setItem(
         "homeLocation",
-        JSON.stringify(action.payload.location),
+        JSON.stringify(action.payload.location)
       );
 
       return {
@@ -49,7 +49,10 @@ export const navigationSlice = createSlice({
 export const selectHomeLocation = (state) => state[navigationSlice.name].home;
 export const selectRoute = (state) => state[navigationSlice.name].route;
 
-export const { updateHomeLocation, clearRoute, setRoute } =
-  navigationSlice.actions;
+export const {
+  updateHomeLocation,
+  clearRoute,
+  setRoute,
+} = navigationSlice.actions;
 
 export default navigationSlice.reducer;
