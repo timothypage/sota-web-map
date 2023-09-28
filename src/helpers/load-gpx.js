@@ -1,3 +1,5 @@
+import bbox from '@turf/bbox';
+
 export async function loadGPX (url, map, maplibregl) {
   const parser = new DOMParser();
 
@@ -16,20 +18,23 @@ export async function loadGPX (url, map, maplibregl) {
     pts.push(pt);
   }
 
+  const geojson = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        geometry: {
+          type: "LineString",
+          coordinates: pts
+        }
+
+      }
+    ]
+  }
+
   map.addSource("route", {
     type: "geojson",
-    data: {
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          geometry: {
-            type: "LineString",
-            coordinates: pts
-          }
-        }
-      ]
-    }
+    data: geojson
   });
 
   map.addLayer({
@@ -53,6 +58,15 @@ export async function loadGPX (url, map, maplibregl) {
   const stop_marker = new maplibregl.Marker({ color: "#dd0000" })
     .setLngLat(pts.slice(-1)[0])
     .addTo(map); 
+
+
+  const trackBBox = bbox(geojson);
+
+  console.log('trackBBox', trackBBox)
+
+  map.fitBounds(trackBBox, {
+    padding: {top: 150, bottom: 150, left: 100, right: 100}
+  });
 }
 
 

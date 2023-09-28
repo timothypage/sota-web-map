@@ -18,6 +18,7 @@
   "dependencies": {
     "@maplibre/maplibre-gl-directions": "^0.4.3",
     "@reduxjs/toolkit": "^1.9.5",
+    "@turf/bbox": "^6.5.0",
     "maplibre-contour": "^0.0.3",
     "maplibre-gl": "^3.3.1",
     "pmtiles": "^2.10.0",
