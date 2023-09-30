@@ -1,14 +1,17 @@
 .searchResults {
-  background: white;
-  margin-top: 8px;
+  background-color: hsla(0, 0%, 79%, 0.6);;
+  backdrop-filter: blur(10px);
 
-  border-radius: 7px;
+  border-radius: 0px 0px 7px 7px;
 
   padding: 0 14px;
 
   max-width: 300px;
   margin-left: auto;
-  margin-right: 110px;
+  margin-right: 130px;
+
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .result {
@@ -22,6 +25,10 @@
   &:hover {
     background: hsla(0, 0%, 90%, 1)
   }
+}
+
+.result.selected {
+  background: hsla(0, 0%, 90%, 1)
 }
 
 .result:not(:last-of-type) {

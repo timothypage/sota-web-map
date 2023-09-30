@@ -12,8 +12,6 @@ import { Provider } from "react-redux";
 import MapProvider from "/src/providers/MapProvider.jsx";
 import DirectionsProvider from "/src/providers/DirectionsProvider.jsx";
 
-import OverlayLayout from "/src/components/OverlayLayout";
-import OverlayWrapper from "./src/components/OverlayWrapper";
 import MapPopupContent from "/src/components/MapPopupContent/MapPopupContent";
 
 import maplibregl from "maplibre-gl";
@@ -33,6 +31,8 @@ import { loadGPX } from "/src/helpers/load-gpx.js";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
+import TopBar from "/src/components/TopBar";
+import SearchResults from "/src/components/SearchResults";
 
 const store = configureStore({
   reducer: {
@@ -202,8 +202,8 @@ map.on("load", () => {
       <Provider store={store}>
         <MapProvider map={map}>
           <DirectionsProvider directions={directions}>
-            <OverlayWrapper />
-            <OverlayLayout />
+            <TopBar />
+            <SearchResults />
           </DirectionsProvider>
         </MapProvider>
       </Provider>

@@ -11,6 +11,15 @@
   padding: 10px 12px;
 }
 
+.navWrapper {
+  position: relative;
+}
+
+.routeDisplay {
+  position: absolute;
+  top: 46px;
+}
+
 .title {
   color: hsl(0, 0.4%, 50%);
   margin-right: auto;

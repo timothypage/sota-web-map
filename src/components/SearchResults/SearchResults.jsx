@@ -7,6 +7,7 @@ import { BiSolidBuildingHouse } from "react-icons/bi";
 import { GiHouse } from "react-icons/gi";
 
 import styles from "./SearchResults.module.css";
+import classnames from "classnames";
 
 const SearchResults = () => {
   const results = useSelector(selectTopSearchResults);
@@ -26,7 +27,9 @@ const SearchResults = () => {
         return (
           <div
             key={result.refIndex}
-            className={styles.result}
+            className={classnames(styles.result, {
+              [styles.selected]: result._selected,
+            })}
             onClick={() => {
               if (r.point_geometry)
                 map.jumpTo({ center: r.point_geometry, zoom: 13 });
