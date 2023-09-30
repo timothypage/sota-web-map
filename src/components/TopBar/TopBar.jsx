@@ -11,7 +11,7 @@ const TopBar = () => {
       </div>
       <h1 className={styles.title}>SOTA Map</h1>
       <SearchBox />
-      <button>Login</button>
+      {/* <button>Login</button> */}
       <a href="https://github.com/timothypage/sota-web-map" target="_blank">
         <AiFillGithub className={styles.github} size={36} />
       </a>
