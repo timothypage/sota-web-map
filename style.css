@@ -55,12 +55,19 @@ body {
   font-family: sans-serif;
 }
 
-#overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
+#grid {
+  height: 100dvh;
+  display: grid;
+  grid-template-areas: "box";
 }
 
 #map {
-  height: 100dvh;
+  grid-area: box;
+}
+
+#overlay {
+  grid-area: box;
+
+  height: fit-content;
+  position: relative;
 }

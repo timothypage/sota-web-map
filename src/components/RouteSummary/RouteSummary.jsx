@@ -1,4 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
+import classnames from "classnames";
+
 import { useDirections } from "/src/providers/DirectionsProvider.jsx";
 
 import { BsFillCarFrontFill } from "react-icons/bs";
@@ -8,14 +10,14 @@ import { selectRoute, clearRoute } from "/src/reducers/navigationReducer.js";
 
 import styles from "./RouteSummary.module.css";
 
-const RouteSummary = () => {
+const RouteSummary = ({ className }) => {
   const dispatch = useDispatch();
   const directions = useDirections();
   const route = useSelector(selectRoute);
   if (route == null) return null;
 
   return (
-    <div className={styles.routeSummary}>
+    <div className={classnames(className, styles.routeSummary)}>
       <div className={styles.routeLength}>
         <BsFillCarFrontFill />
         <p>{secondsToTime(route.duration)}</p>

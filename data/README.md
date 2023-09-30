@@ -94,3 +94,17 @@ sources: {
 ```
 
 otherwise, check out https://github.com/nst-guide/terrain and/or https://medium.com/@david.moraisferreira/shaded-relief-maps-using-gdal-a-beginners-guide-6a3fe56c6d
+
+## Geocoding
+
+using the `*.osm.pbf` file downloaded from above we can create some simple "geocoding" by calculating a bounding box for things tagged with "city", "town", or "village" in openstreetmap
+
+```bash
+python -m venv venv
+pip install -r requirements.txt
+python extract_large_place_names.py # us-latest.osm.pbf takes about 3 hours on my laptop, it's not super efficient
+
+ls -lah places.json
+```
+
+I'm using [Fuse](https://www.fusejs.io/) to make this searchable in-browser, in the theme of "serverless" for this web map

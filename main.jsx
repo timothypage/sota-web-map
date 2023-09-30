@@ -12,7 +12,6 @@ import { Provider } from "react-redux";
 import MapProvider from "/src/providers/MapProvider.jsx";
 import DirectionsProvider from "/src/providers/DirectionsProvider.jsx";
 
-import OverlayLayout from "/src/components/OverlayLayout";
 import MapPopupContent from "/src/components/MapPopupContent/MapPopupContent";
 
 import maplibregl from "maplibre-gl";
@@ -28,10 +27,12 @@ import padusLayers from "./map_styles/padus-layers";
 import summitLayers from "./map_styles/summit-layers.js";
 import contourLayers from "./map_styles/contour-layers";
 
-import { loadGPX } from '/src/helpers/load-gpx.js'
+import { loadGPX } from "/src/helpers/load-gpx.js";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
+import TopBar from "/src/components/TopBar";
+import SearchResults from "/src/components/SearchResults";
 
 const store = configureStore({
   reducer: {
@@ -44,7 +45,8 @@ let protocol = new pmtiles.Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
 
 const demSource = new mlcontour.DemSource({
-  url: "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+  url:
+    "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
   encoding: "terrarium",
   worker: true,
 });
@@ -68,7 +70,8 @@ const map = new maplibregl.Map({
       openmaptiles: {
         type: "vector",
         url: "pmtiles:///tiles/us.pmtiles",
-        attribution: '<a href="http://openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a> | <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+        attribution:
+          '<a href="http://openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a> | <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
       },
       usfs_national_forests_and_grasslands: {
         type: "vector",
@@ -77,13 +80,13 @@ const map = new maplibregl.Map({
       us_federal_proclaimed_areas: {
         type: "vector",
         url: "pmtiles:///tiles/us_federal_proclaimed_areas.pmtiles",
-        attribution: '<a href="https://www.usgs.gov/">USGS</a>'
+        attribution: '<a href="https://www.usgs.gov/">USGS</a>',
       },
       padus: {
         type: "vector",
         url: "pmtiles:///tiles/padus.pmtiles",
         minzoom: 8,
-        attribution: '<a href="https://www.usgs.gov/">USGS</a>'
+        attribution: '<a href="https://www.usgs.gov/">USGS</a>',
       },
       summits: {
         type: "geojson",
@@ -139,11 +142,11 @@ const map = new maplibregl.Map({
       ...padusLayers,
       ...contourLayers,
       ...bright.layers.filter(
-        (l) => !(l.type === "symbol" && l.id.startsWith("place-")),
+        (l) => !(l.type === "symbol" && l.id.startsWith("place-"))
       ),
       ...summitLayers,
       ...bright.layers.filter(
-        (l) => l.type === "symbol" && l.id.startsWith("place-"),
+        (l) => l.type === "symbol" && l.id.startsWith("place-")
       ),
     ],
   },
@@ -154,7 +157,7 @@ map.addControl(
     showZoom: true,
     showCompass: true,
   }),
-  "bottom-right",
+  "bottom-right"
 );
 
 map.addControl(
@@ -164,7 +167,7 @@ map.addControl(
     },
     trackUserLocation: true,
   }),
-  "bottom-right",
+  "bottom-right"
 );
 
 map.addControl(
@@ -172,7 +175,7 @@ map.addControl(
     maxWidth: 200,
     unit: "imperial",
   }),
-  "bottom-left",
+  "bottom-left"
 );
 
 map.addControl(
@@ -180,7 +183,7 @@ map.addControl(
     source: "terrainSource",
     exaggeration: 0.06,
   }),
-  "bottom-right",
+  "bottom-right"
 );
 
 map.on("load", () => {
@@ -199,11 +202,12 @@ map.on("load", () => {
       <Provider store={store}>
         <MapProvider map={map}>
           <DirectionsProvider directions={directions}>
-            <OverlayLayout />
+            <TopBar />
+            <SearchResults />
           </DirectionsProvider>
         </MapProvider>
       </Provider>
-    </React.StrictMode>,
+    </React.StrictMode>
   );
 
   directions.on("fetchroutesend", (e) => {
@@ -218,7 +222,7 @@ map.on("load", () => {
         setRoute({
           duration: route.duration,
           distance: route.distance,
-        }),
+        })
       );
     }
   });
@@ -239,7 +243,7 @@ map.on("load", () => {
       // only happens because the popup is computing where to display before react is adding the content
       // Maplibregl.Popup#setDOMContent has the same problem
       .setHTML(
-        `<div class="popup" style="height:${150 * features.length}px"></div>`,
+        `<div class="popup" style="height:${150 * features.length}px"></div>`
       )
       .addTo(map);
 
@@ -257,7 +261,7 @@ map.on("load", () => {
             </DirectionsProvider>
           </MapProvider>
         </Provider>
-      </React.StrictMode>,
+      </React.StrictMode>
     );
 
     contentElem.style = "";
@@ -266,5 +270,5 @@ map.on("load", () => {
 
   map.on("click", handleClickEvent);
 
-  // loadGPX('/tiles/mt_flora.gpx', map, maplibregl);
+  // loadGPX('/tiles/mt_flora.gpx', map, maplibregl)
 });

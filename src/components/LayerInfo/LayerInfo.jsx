@@ -11,7 +11,7 @@ const LayerInfo = ({ features }) => {
           <PadusDisplay f={f.properties} key={f.source} />
         ) : f.source === "us_federal_proclaimed_areas" ? (
           <ProclaimedAreasDisplay f={f.properties} key={f.source} />
-        ) : null,
+        ) : null
       )}
     </div>
   );

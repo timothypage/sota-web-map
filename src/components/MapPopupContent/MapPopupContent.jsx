@@ -38,7 +38,7 @@ const MapPopupContent = ({ features, popupEvent, popup }) => {
             dispatch(
               updateHomeLocation({
                 location: [popupEvent.lngLat.lng, popupEvent.lngLat.lat],
-              }),
+              })
             );
 
             popup.remove();
