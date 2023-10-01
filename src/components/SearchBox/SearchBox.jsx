@@ -23,9 +23,63 @@ fetch("/tiles/geocode-0d3ca704.json")
 
 const SearchBox = () => {
   const map = useMap();
-  const searchRef = useRef();
+  const searchInputRef = useRef();
+  const searchResultsRef = useRef();
   const [searched, setSearched] = useState(false);
   const [results, setResults] = useState([]);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+
+  function resetSearch() {
+    setSearched(false);
+    setSelectedIndex(-1);
+  }
+
+  function scrollTo(el, top) {
+    el.scrollTop = top;
+  }
+
+  function focusOption(offset) {
+    setSelectedIndex((state) => {
+      if (state + offset > results.length - 1) return state;
+      if (state + offset < -1) return -1;
+
+      return state + offset;
+    });
+
+    const selectedOption = searchResultsRef.current.querySelector(
+      `.${styles.selected}`
+    );
+
+    if (selectedOption == null) return;
+
+    const searchResultsRect = searchResultsRef.current.getBoundingClientRect();
+    const selectedOptionRect = selectedOption.getBoundingClientRect();
+
+    const overScroll = selectedOption.offsetHeight / 3 + 40;
+
+    if (selectedOptionRect.bottom + overScroll > searchResultsRect.bottom) {
+      scrollTo(
+        searchResultsRef.current,
+        Math.min(
+          selectedOption.offsetTop +
+            selectedOption.clientHeight -
+            searchResultsRef.current.offsetHeight +
+            overScroll,
+          searchResultsRef.current.scrollHeight
+        )
+      );
+    } else if (selectedOptionRect.top - overScroll < searchResultsRect.top) {
+      scrollTo(
+        searchResultsRef.current,
+        Math.max(selectedOption.offsetTop - overScroll, 0)
+      );
+    }
+  }
+
+  function navigateMap(r) {
+    if (r.point_geometry) map.jumpTo({ center: r.point_geometry, zoom: 13 });
+    if (r.bounds) map.fitBounds(r.bounds, { animate: false });
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -34,17 +88,32 @@ const SearchBox = () => {
         onSubmit={(e) => {
           e.preventDefault(); // don't submit the form to the site, handle in React :)
 
-          console.log(`searching ${searchRef.current.value}`);
-
           setSearched(true);
-          setResults(fuse.search(searchRef.current.value).slice(0, 20));
+          setSelectedIndex(-1);
+          setResults(fuse.search(searchInputRef.current.value).slice(0, 20));
         }}
       >
         <input
           className={styles.searchInput}
           type="text"
-          ref={searchRef}
-          onChange={(e) => e.target.value === "" && setSearched(false)}
+          ref={searchInputRef}
+          onChange={(e) => {
+            if (e.target.value === "") {
+              setSearched(false);
+            }
+          }}
+          onKeyDown={(e) => {
+            if (!searched) return;
+            if (e.code === "ArrowUp") focusOption(-1);
+            if (e.code === "ArrowDown") focusOption(1);
+            if (e.code === "Enter" && searched && selectedIndex > -1) {
+              // don't submit the form or search
+              e.preventDefault();
+              e.stopPropagation();
+
+              navigateMap(results[selectedIndex].item);
+            }
+          }}
         />
         {searched ? (
           <button
@@ -52,7 +121,7 @@ const SearchBox = () => {
             onClick={(e) => {
               e.preventDefault(); // don't submit the form
 
-              searchRef.current.value = "";
+              searchInputRef.current.value = "";
               setSearched(false);
               setResults([]);
             }}
@@ -67,8 +136,8 @@ const SearchBox = () => {
       </form>
       {results.length > 0 && (
         <div className={styles.searchResultsWrapper}>
-          <div className={styles.searchResults}>
-            {results.map((result) => {
+          <div className={styles.searchResults} ref={searchResultsRef}>
+            {results.map((result, index) => {
               const r = result.item;
               let ResultIcon = null;
 
@@ -81,13 +150,9 @@ const SearchBox = () => {
                 <div
                   key={result.refIndex}
                   className={classnames(styles.result, {
-                    [styles.selected]: result._selected,
+                    [styles.selected]: index === selectedIndex,
                   })}
-                  onClick={() => {
-                    if (r.point_geometry)
-                      map.jumpTo({ center: r.point_geometry, zoom: 13 });
-                    if (r.bounds) map.fitBounds(r.bounds, { animate: false });
-                  }}
+                  onClick={() => navigateMap(r)}
                 >
                   <ResultIcon size={24} />
                   <p>{r.name}</p>
