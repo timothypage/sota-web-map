@@ -34,7 +34,7 @@ const contourLayers = [
       "line-color": "rgb(166, 116, 66)",
 
       // "major" contours have level=1, "minor" have level=0
-      "line-width": 0.6,
+      "line-width": 1,
     },
   },
   {
