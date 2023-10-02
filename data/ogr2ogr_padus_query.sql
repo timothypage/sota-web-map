@@ -13,10 +13,13 @@ SELECT
     WHEN Des_Tp IN ('SP', 'SW', 'SCA', 'SREC', 'SOTH', 'SHCA', 'SRMA') AND Pub_Access = 'OA' THEN 'state_parks_or_conservation_area' 
     WHEN Des_Tp IN ('LP', 'LREC', 'LOTH', 'LHCA', 'LCA', 'CONE') AND Pub_Access = 'OA' THEN 'local_park' 
     WHEN Des_Tp = 'WA' AND Mang_Name != 'NPS' THEN 'wilderness_area' 
+    WHEN Des_Tp IN ('REA', 'RNA', 'SDA', 'FOTH') AND Pub_Access = 'RA' THEN 'research__or_other_restricted_area' 
     WHEN Mang_Type IN ('PVT', 'NGO') AND Pub_Access = 'OA' THEN 'private_open_access' 
     WHEN Mang_Type IN ('STAT', 'JNT') AND Pub_Access = 'OA' THEN 'other_state_or_regional' 
     WHEN Mang_Name = 'FED' OR Mang_Type IN ('FED', 'TRIB') AND Pub_Access = 'OA' THEN 'other_federal'
-    WHEN Mang_Type = 'LOC'AND "Pub_Access" = 'OA' THEN 'other_local' 
+    WHEN Mang_Type = 'LOC'AND Pub_Access = 'OA' THEN 'other_local' 
+    WHEN Pub_Access = 'RA' THEN 'restricted_access'
+    WHEN Pub_Access = 'XA' THEN 'no_access'
     ELSE 'unknown' 
   END display_type,
   SHAPE 
