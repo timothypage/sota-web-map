@@ -8,9 +8,9 @@ const LayerInfo = ({ features }) => {
       <h2>Layer Info</h2>
       {features.map((f) =>
         f.source === "padus" ? (
-          <PadusDisplay f={f.properties} key={f.source} />
+          <PadusDisplay f={f.properties} key={f.id} />
         ) : f.source === "us_federal_proclaimed_areas" ? (
-          <ProclaimedAreasDisplay f={f.properties} key={f.source} />
+          <ProclaimedAreasDisplay f={f.properties} key={f.id} />
         ) : null
       )}
     </div>
