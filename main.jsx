@@ -34,6 +34,11 @@ import "./style.css";
 import TopBar from "/src/components/TopBar";
 import SearchResults from "/src/components/SearchResults";
 
+const padusSrcFilename =
+  document.querySelector("#padus")?.innerText ?? "padus.pmtiles";
+const summitsSrcFilename =
+  document.querySelector("#summits")?.innerText ?? "us_sota_summits.geojson";
+
 const store = configureStore({
   reducer: {
     navigation: navigationReducer,
@@ -84,13 +89,13 @@ const map = new maplibregl.Map({
       },
       padus: {
         type: "vector",
-        url: "pmtiles:///tiles/padus.pmtiles",
+        url: `pmtiles:///tiles/${padusSrcFilename}`,
         minzoom: 8,
         attribution: '<a href="https://www.usgs.gov/">USGS</a>',
       },
       summits: {
         type: "geojson",
-        data: "/tiles/us_sota_summits.geojson",
+        data: `/tiles/${summitsSrcFilename}`,
       },
       hillshadeSource: {
         type: "raster-dem",
@@ -128,7 +133,9 @@ const map = new maplibregl.Map({
         maxzoom: 15,
       },
     },
-    sprite: "https://tzwolak.com/map_styles/sprite",
+    sprite: import.meta.env.PROD
+      ? "https://tzwolak.com/map_styles/sprite"
+      : "http://localhost:5173/map_styles/sprite",
     glyphs: "/fonts/{fontstack}/{range}.pbf",
     layers: [
       {
@@ -233,7 +240,7 @@ map.on("load", () => {
   function handleClickEvent(e) {
     const features = map.queryRenderedFeatures(e.point);
 
-    // console.log("features", features);
+    console.log("features", features);
 
     if (existingPopup) existingPopup.remove();
 
