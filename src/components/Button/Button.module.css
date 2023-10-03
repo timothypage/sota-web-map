@@ -1,0 +1,12 @@
+.button {
+  all: unset;
+  background: hsla(277, 20%, 60%, 1);
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background: hsla(277, 20%, 65%, 1);
+
+  }
+}

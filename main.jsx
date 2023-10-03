@@ -31,8 +31,10 @@ import { loadGPX } from "/src/helpers/load-gpx.js";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
+
 import TopBar from "/src/components/TopBar";
 import SearchResults from "/src/components/SearchResults";
+import { AuthProvider } from "react-oidc-context";
 
 const padusSrcFilename =
   document.querySelector("#padus")?.innerText ?? "padus.pmtiles";
@@ -45,6 +47,18 @@ const store = configureStore({
     search: searchReducer,
   },
 });
+
+const oidcConfig = {
+  authority: "https://auth.tzwolak.com/realms/sota",
+  client_id: "test-python",
+  redirect_uri: import.meta.env.PROD
+    ? "https://tzwolak.com/map.html"
+    : "http://localhost:5173/",
+  onSigninCallback: () => {
+    window.history.replaceState({}, document.title, window.location.pathname);
+  },
+  // ...
+};
 
 let protocol = new pmtiles.Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
@@ -205,7 +219,7 @@ map.on("load", () => {
   });
 
   ReactDOM.createRoot(document.querySelector("#overlay")).render(
-    <React.StrictMode>
+    <AuthProvider {...oidcConfig}>
       <Provider store={store}>
         <MapProvider map={map}>
           <DirectionsProvider directions={directions}>
@@ -214,7 +228,7 @@ map.on("load", () => {
           </DirectionsProvider>
         </MapProvider>
       </Provider>
-    </React.StrictMode>
+    </AuthProvider>
   );
 
   directions.on("fetchroutesend", (e) => {
