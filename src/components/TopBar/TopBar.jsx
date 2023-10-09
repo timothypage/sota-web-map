@@ -37,6 +37,7 @@ const TopBar = () => {
           <Dropdown.Item>Something else</Dropdown.Item>
           <div className={styles.divider} role="separator" />
           <Dropdown.Item onClick={() => auth.signoutRedirect({post_logout_redirect_uri: window.location.href})}>Logout</Dropdown.Item>
+          {auth.user?.profile?.name?.toLowerCase()?.includes("aaron") && <Dropdown.Item onClick={() => auth.signoutRedirect({post_logout_redirect_uri: "https://en.wikipedia.org/wiki/Special:Random"})}>Logout (Aaron's Version)</Dropdown.Item>}
         </Dropdown.Menu>
       </Dropdown>
     );

@@ -57,7 +57,7 @@
   visibility: hidden;
 
   background: hsl(0, 0.4%, 25%);
-  a {
+  :is(a) {
     color: hsl(0, 0.4%, 85%);
 
     text-decoration: none;
