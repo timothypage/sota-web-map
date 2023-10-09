@@ -28,3 +28,52 @@
 .github {
   color: hsl(0, 0.4%, 25%); 
 }
+
+.dropdownToggle {
+  all: unset;
+
+  background: hsla(277, 20%, 60%, 1);
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &:hover {
+    background: hsla(277, 20%, 65%, 1);
+  }
+
+  :last-child {
+    margin-left: 0.5rem;
+  }
+}
+
+.dropdownMenu {
+  display: flex;
+  flex-direction: column;
+
+  visibility: hidden;
+
+  background: hsl(0, 0.4%, 25%);
+  a {
+    color: hsl(0, 0.4%, 85%);
+
+    text-decoration: none;
+    padding: 4px 7px;
+
+    &:hover {
+      background: hsl(0, 0.4%, 55%);
+    }
+  }
+}
+
+.divider {
+  margin-top: 3px;
+  margin-bottom: 5px;
+  background: hsla(277, 1%, 45%, 1);
+  position: relative;
+  border-top: 1px solid hsla(277, 1%, 75%, 1);
+  height: 2px;
+}

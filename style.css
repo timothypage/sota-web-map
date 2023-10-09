@@ -24,6 +24,7 @@ html, body {
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  font-family: sans-serif;
 }
 /*
   6. Improve media defaults
@@ -51,10 +52,6 @@ p, h1, h2, h3, h4, h5, h6 {
   isolation: isolate;
 }
 
-body {
-  font-family: sans-serif;
-}
-
 #grid {
   height: 100dvh;
   display: grid;
@@ -70,4 +67,15 @@ body {
 
   height: fit-content;
   position: relative;
+}
+
+.show {
+  .show {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.show {
+  visibility: visible !important;
 }
