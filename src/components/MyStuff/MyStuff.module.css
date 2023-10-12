@@ -1,0 +1,72 @@
+.myStuff {
+  width: 20px;
+  
+  position: absolute;
+  top: 40dvh;
+  left: 0;
+
+  background: white;
+  box-shadow: 3px 3px 17px 1px rgba(0,0,0,0.25);
+}
+
+.myStuff.expanded {
+  width: max-content;
+}
+
+.expandedContent {
+  display: flex;
+  align-items: stretch;
+  gap: 7px;
+}
+
+.gpxInfo {
+  cursor: pointer;
+
+  &:hover {
+    background: hsla(0, 10%, 90%, 1)
+  }
+}
+
+.exandedStuff {
+  padding: 7px 14px;
+}
+
+.filesList {
+  margin-bottom: 8px;
+}
+
+.collapseMe {
+  width: 20px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  &:hover {
+    background: hsla(0, 0%, 90%, 1);
+  }
+}
+
+.expandMe {
+  height: 60px;
+  cursor: pointer;
+
+  display: grid;
+  place-items: center;
+  color: black;
+
+  &:hover {
+    background: hsla(0, 0%, 90%, 1);
+  }
+}
+
+.upload {
+  display: grid;
+  place-items: center;
+
+  border-radius: 8px;
+  border: 3px dashed hsla(20, 40%, 50%, 1);
+
+  height: 60px;
+  background: rgb(223, 201, 187);
+
+  cursor: pointer;
+}

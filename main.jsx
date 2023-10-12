@@ -27,13 +27,11 @@ import padusLayers from "./map_styles/padus-layers";
 import summitLayers from "./map_styles/summit-layers.js";
 import contourLayers from "./map_styles/contour-layers";
 
-import { loadGPX } from "/src/helpers/load-gpx.js";
-
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 
 import TopBar from "/src/components/TopBar";
-import SearchResults from "/src/components/SearchResults";
+import MyStuff from "/src/components/MyStuff";
 import { AuthProvider } from "react-oidc-context";
 
 const padusSrcFilename =
@@ -224,7 +222,7 @@ map.on("load", () => {
         <MapProvider map={map}>
           <DirectionsProvider directions={directions}>
             <TopBar />
-            <SearchResults />
+            <MyStuff />
           </DirectionsProvider>
         </MapProvider>
       </Provider>
@@ -290,6 +288,4 @@ map.on("load", () => {
   }
 
   map.on("click", handleClickEvent);
-
-  // loadGPX('/tiles/mt_flora.gpx', map, maplibregl)
 });
