@@ -1,0 +1,31 @@
+.gpxSummary {
+  cursor: pointer;
+  user-select: none;
+
+  border: 1px solid brown;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  padding: 6px;
+
+  &:hover {
+    background: hsla(0, 10%, 90%, 1)
+  }
+}
+
+.fileDetails {
+  display: flex;
+  gap: 14px;
+}
+
+.fileDetails > * {
+  display: flex;
+  align-items: center;
+}
+
+.up {
+  color: hsl(120, 27%, 59%);
+}
+
+.down {
+  color: hsl(10.8, 65.2%, 54.9%)
+}

@@ -2,7 +2,7 @@
   width: 20px;
   
   position: absolute;
-  top: 40dvh;
+  top: 20dvh;
   left: 0;
 
   background: white;
@@ -19,20 +19,15 @@
   gap: 7px;
 }
 
-.gpxInfo {
-  cursor: pointer;
-
-  &:hover {
-    background: hsla(0, 10%, 90%, 1)
-  }
-}
-
 .exandedStuff {
   padding: 7px 14px;
 }
 
 .filesList {
   margin-bottom: 8px;
+
+  max-height: 60svh;
+  overflow-y: scroll;
 }
 
 .collapseMe {

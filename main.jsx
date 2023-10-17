@@ -30,6 +30,7 @@ import contourLayers from "./map_styles/contour-layers";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 
+import Authenticated from "/src/components/Authenticated";
 import TopBar from "/src/components/TopBar";
 import MyStuff from "/src/components/MyStuff";
 import { AuthProvider } from "react-oidc-context";
@@ -222,7 +223,9 @@ map.on("load", () => {
         <MapProvider map={map}>
           <DirectionsProvider directions={directions}>
             <TopBar />
-            <MyStuff />
+            <Authenticated>
+              <MyStuff />
+            </Authenticated>
           </DirectionsProvider>
         </MapProvider>
       </Provider>

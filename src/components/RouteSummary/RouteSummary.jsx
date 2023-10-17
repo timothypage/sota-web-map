@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import classnames from "classnames";
+import { secondsToTime } from "/src/helpers/time.js";
 
 import { useDirections } from "/src/providers/DirectionsProvider.jsx";
 
@@ -45,21 +46,6 @@ const metersToMiles = (meters) => {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
   }).format(miles);
-};
-
-// "| 0" force integer math so we don't get floats
-const secondsToTime = (seconds) => {
-  const roundSeconds = Math.ceil(seconds);
-  const minutes = (roundSeconds / 60) | 0;
-  const hours = (minutes / 60) | 0;
-  const remainderMinutes = minutes % 60 | 0;
-
-  let summary = "";
-  if (hours > 0) summary += `${hours}h `;
-
-  if (remainderMinutes > 0) summary += `${remainderMinutes}m`;
-
-  return summary;
 };
 
 export default RouteSummary;
