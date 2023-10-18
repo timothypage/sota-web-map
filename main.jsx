@@ -206,8 +206,25 @@ map.addControl(
   "bottom-right"
 );
 
+let directions;
+
+ReactDOM.createRoot(document.querySelector("#overlay")).render(
+  <AuthProvider {...oidcConfig}>
+    <Provider store={store}>
+      <MapProvider map={map}>
+        <DirectionsProvider directions={directions}>
+          <TopBar />
+          <Authenticated>
+            <MyStuff />
+          </Authenticated>
+        </DirectionsProvider>
+      </MapProvider>
+    </Provider>
+  </AuthProvider>
+);
+
 map.on("load", () => {
-  const directions = new MapLibreGlDirections(map, {
+  directions = new MapLibreGlDirections(map, {
     api: "https://desktop-k8ngvmk.tail54c6a.ts.net/route/v1", // routing all of US needs ~32 GB of ram -_-
     requestOptions: { steps: true, overview: "full" },
     layers: navLayers,
@@ -217,24 +234,7 @@ map.on("load", () => {
     sensitiveAltRoutelineLayers: ["maplibre-gl-directions-alt-routeline"],
   });
 
-  ReactDOM.createRoot(document.querySelector("#overlay")).render(
-    <AuthProvider {...oidcConfig}>
-      <Provider store={store}>
-        <MapProvider map={map}>
-          <DirectionsProvider directions={directions}>
-            <TopBar />
-            <Authenticated>
-              <MyStuff />
-            </Authenticated>
-          </DirectionsProvider>
-        </MapProvider>
-      </Provider>
-    </AuthProvider>
-  );
-
   directions.on("fetchroutesend", (e) => {
-    // console.log("fetchroutesend data", e.data);
-
     if (e.data.code === "Ok") {
       const route = e.data.routes[0];
 
