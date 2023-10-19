@@ -35,6 +35,9 @@ import TopBar from "/src/components/TopBar";
 import MyStuff from "/src/components/MyStuff";
 import { AuthProvider } from "react-oidc-context";
 
+import styles from "./main.module.css";
+import RouteSummary from "/src/components/RouteSummary";
+
 const padusSrcFilename =
   document.querySelector("#padus")?.innerText ?? "padus.pmtiles";
 const summitsSrcFilename =
@@ -208,21 +211,6 @@ map.addControl(
 
 let directions;
 
-ReactDOM.createRoot(document.querySelector("#overlay")).render(
-  <AuthProvider {...oidcConfig}>
-    <Provider store={store}>
-      <MapProvider map={map}>
-        <DirectionsProvider directions={directions}>
-          <TopBar />
-          <Authenticated>
-            <MyStuff />
-          </Authenticated>
-        </DirectionsProvider>
-      </MapProvider>
-    </Provider>
-  </AuthProvider>
-);
-
 map.on("load", () => {
   directions = new MapLibreGlDirections(map, {
     api: "https://desktop-k8ngvmk.tail54c6a.ts.net/route/v1", // routing all of US needs ~32 GB of ram -_-
@@ -233,6 +221,28 @@ map.on("load", () => {
     sensitiveRoutelineLayers: ["maplibre-gl-directions-routeline"],
     sensitiveAltRoutelineLayers: ["maplibre-gl-directions-alt-routeline"],
   });
+
+  ReactDOM.createRoot(document.querySelector("#overlay")).render(
+    <AuthProvider {...oidcConfig}>
+      <Provider store={store}>
+        <MapProvider map={map}>
+          <DirectionsProvider directions={directions}>
+            <TopBar />
+            <div className={styles.grid}>
+              <div className={styles.navSummaryArea}>
+                <RouteSummary className={styles.routeSummary} />
+              </div>
+              <div className={styles.myStuffArea}>
+                <Authenticated>
+                  <MyStuff className={styles.myStuff} />
+                </Authenticated>
+              </div>
+            </div>
+          </DirectionsProvider>
+        </MapProvider>
+      </Provider>
+    </AuthProvider>
+  );
 
   directions.on("fetchroutesend", (e) => {
     if (e.data.code === "Ok") {

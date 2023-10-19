@@ -11,7 +11,7 @@ import GpxSummary from "/src/components/GpxSummary";
 
 import styles from "./MyStuff.module.css";
 
-const MyStuff = () => {
+const MyStuff = ({ className }) => {
   const auth = useAuth();
   const [files, setFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -87,7 +87,9 @@ const MyStuff = () => {
 
   return (
     <div
-      className={classnames(styles.myStuff, { [styles.expanded]: expanded })}
+      className={classnames(className, styles.myStuff, {
+        [styles.expanded]: expanded,
+      })}
     >
       {expanded ? (
         <div className={styles.expandedContent}>

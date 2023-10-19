@@ -1,0 +1,52 @@
+.grid {
+  width: 100%;
+  height: 85svh;
+  pointer-events: none;
+
+  display: grid;
+  margin-top: 12px;
+  gap: 12px;
+  grid-template-rows: 1fr 4fr 1fr 15px;
+  grid-template-columns: 1fr 4fr 1fr;
+  grid-template-areas: 
+    'nav center right'
+    'stuff center right'
+    'bottom-left layer-details bottom-right'
+    'map-stuff map-stuff map-stuff';
+}
+
+.layerDetails {
+  background: white;
+  padding: 18px 24px;
+  display: grid;
+  place-items: center;
+
+  pointer-events: all;
+}
+
+.navSummaryArea {
+  grid-area: nav;
+
+  display: grid;
+  place-items: center;
+}
+
+.routeSummary {
+  pointer-events: all;
+}
+
+.myStuffArea {
+  grid-area: stuff;
+
+  display: grid;
+  justify-items: start;
+  align-items: center;
+}
+
+.myStuff {
+  pointer-events: all;
+}
+
+.layerDetails {
+  grid-area: layer-details;
+}

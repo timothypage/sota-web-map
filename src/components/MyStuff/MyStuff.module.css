@@ -1,12 +1,12 @@
 .myStuff {
-  width: 20px;
+  width: 30px;
   
-  position: absolute;
-  top: 20dvh;
-  left: 0;
-
   background: white;
   box-shadow: 3px 3px 17px 1px rgba(0,0,0,0.25);
+
+  border-radius: 0 8px 8px 0;
+
+  overflow: hidden;
 }
 
 .myStuff.expanded {
@@ -31,7 +31,7 @@
 }
 
 .collapseMe {
-  width: 20px;
+  width: 30px;
   display: grid;
   place-items: center;
   cursor: pointer;
@@ -41,7 +41,7 @@
 }
 
 .expandMe {
-  height: 60px;
+  height: 160px;
   cursor: pointer;
 
   display: grid;

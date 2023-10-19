@@ -64,9 +64,6 @@ const TopBar = () => {
 
   return (
     <div className={styles.topBar}>
-      <div className={styles.navWrapper}>
-        <RouteSummary className={styles.routeDisplay} />
-      </div>
       <h1 className={styles.title}>SOTA Map</h1>
       <SearchBox />
       {LoginButton}

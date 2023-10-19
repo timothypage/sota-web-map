@@ -9,15 +9,12 @@
   gap: 15px;
 
   padding: 10px 12px;
+
+  pointer-events: all;
 }
 
 .navWrapper {
   position: relative;
-}
-
-.routeDisplay {
-  position: absolute;
-  top: 46px;
 }
 
 .title {
