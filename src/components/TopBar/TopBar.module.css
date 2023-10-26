@@ -8,7 +8,10 @@
   align-items: center;
   gap: 15px;
 
-  padding: 10px 12px;
+  padding: 0px 12px;
+  @media (min-width: 34.375rem) {
+    padding: 10px 12px;
+  } 
 
   pointer-events: all;
 }

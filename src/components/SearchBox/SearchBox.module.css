@@ -1,5 +1,10 @@
 .wrapper {
   position: relative;
+  display: none;
+
+  @media (min-width: 34.375rem) {
+    display: block;
+  }
 }
 
 .searchResultsWrapper {
@@ -49,7 +54,7 @@
 }
 
 .searchResults {
-  background-color: hsla(0, 0%, 79%, 0.6);;
+  background-color: hsla(0, 0%, 79%, 0.6);
   backdrop-filter: blur(10px);
 
   border-radius: 0px 0px 7px 7px;
