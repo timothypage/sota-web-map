@@ -1,15 +1,18 @@
 import maplibregl from "maplibre-gl";
 import { useCallback } from "react";
-import { loadGPX } from "/src/helpers/load-gpx.js";
+import { loadGPX, measureGPX } from "/src/helpers/load-gpx.js";
 import { BsCaretDownFill, BsCaretUpFill } from "react-icons/bs";
 import { useAuth } from "react-oidc-context";
 import { useMap } from "/src/providers/MapProvider.jsx";
+import { useDispatch } from "react-redux";
+import { updateGpxElevationData } from "/src/reducers/gpxStore.js";
 
 import styles from "./GpxSummary.module.css";
 
 const GpxSummary = ({ file }) => {
   const auth = useAuth();
   const map = useMap();
+  const dispatch = useDispatch();
 
   const load = useCallback(async () => {
     const { url } = await fetch(
@@ -22,7 +25,9 @@ const GpxSummary = ({ file }) => {
       }
     ).then((r) => r.json());
 
-    loadGPX(url, map, maplibregl);
+    const gpx = await loadGPX(url, map, maplibregl);
+    const { elevation_chart_data } = measureGPX(gpx);
+    dispatch(updateGpxElevationData({ elevation_chart_data }));
   }, [auth, map]);
 
   return (

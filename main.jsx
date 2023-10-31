@@ -6,6 +6,7 @@ import navigationReducer, {
   setRoute,
 } from "/src/reducers/navigationReducer.js";
 import searchReducer from "/src/reducers/searchReducer.js";
+import gpxStore from "/src/reducers/gpxStore.js";
 
 import { Provider } from "react-redux";
 
@@ -33,6 +34,7 @@ import "./style.css";
 import Authenticated from "/src/components/Authenticated";
 import TopBar from "/src/components/TopBar";
 import MyStuff from "/src/components/MyStuff";
+import LayerDetails from "/src/components/LayerDetails";
 import { AuthProvider } from "react-oidc-context";
 
 import styles from "./main.module.css";
@@ -47,6 +49,7 @@ const store = configureStore({
   reducer: {
     navigation: navigationReducer,
     search: searchReducer,
+    gpx: gpxStore,
   },
 });
 
@@ -236,6 +239,9 @@ map.on("load", () => {
                 <Authenticated>
                   <MyStuff className={styles.myStuff} />
                 </Authenticated>
+              </div>
+              <div className={styles.layerDetails}>
+                <LayerDetails />
               </div>
             </div>
           </DirectionsProvider>

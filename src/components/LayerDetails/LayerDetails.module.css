@@ -1,0 +1,9 @@
+.layerDetails {
+  height: 100%;
+  min-width: 0px;
+
+  padding: 4px 8px;
+  
+  background: white;
+  pointer-events: auto;
+}

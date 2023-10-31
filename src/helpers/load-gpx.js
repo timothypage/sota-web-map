@@ -1,3 +1,4 @@
+import { current } from "@reduxjs/toolkit";
 import * as turf from "@turf/turf";
 
 let start_marker = null;
@@ -76,6 +77,8 @@ export async function loadGPX(url, map, maplibregl) {
   map.fitBounds(trackBBox, {
     padding: { top: 150, bottom: 150, left: 100, right: 100 },
   });
+
+  return gpx;
 }
 
 export function clearGPX() {
@@ -122,6 +125,8 @@ export function measureGPX(gpx) {
   let total_gained = 0;
   let total_lost = 0;
   let pts = [];
+  let elevation_chart_data = [];
+
   for (let trkpt of trkpts) {
     let pt = [
       parseFloat(trkpt.getAttribute("lon")),
@@ -148,6 +153,13 @@ export function measureGPX(gpx) {
     previous_elevation = current_elevation;
 
     pts.push(pt);
+    if (pts.length < 2) continue;
+
+    const current_distance = turf.length(
+      turf.lineString(pts), { units: "feet" }
+    );
+
+    elevation_chart_data.push({elevation: Math.floor(current_elevation * 3.28084), distance: Math.floor(current_distance)})
   }
 
   let distance_ft = null;
@@ -167,5 +179,6 @@ export function measureGPX(gpx) {
     distance_ft,
     gained_elevation_ft,
     lost_elevation_ft,
+    elevation_chart_data
   };
 }
