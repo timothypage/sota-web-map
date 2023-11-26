@@ -301,4 +301,19 @@ map.on("load", () => {
   }
 
   map.on("click", handleClickEvent);
+
+  let params = new URLSearchParams(document.location.search);
+
+  if (params.get("sharedpoint")) {
+    console.log("sharedpoint", params.get("sharedpoint"));
+
+    const [lat, lng] = params.get("sharedpoint").split(",").map(parseFloat)
+
+    console.log("[lat, lon]", [lat, lng]);
+
+    let sharedMarker = new maplibregl.Marker({ color: "#77f"})
+      .setLngLat([lng, lat])
+      .addTo(map);
+
+  }
 });

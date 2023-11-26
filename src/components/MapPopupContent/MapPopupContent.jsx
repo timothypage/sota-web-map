@@ -15,6 +15,14 @@ const MapPopupContent = ({ features, popupEvent, popup }) => {
   const dispatch = useDispatch();
   const directions = useDirections();
 
+  const shareLink = new URL(window.location);
+  let search = new URLSearchParams({
+    sharedpoint: `${popupEvent.lngLat.lat},${popupEvent.lngLat.lng}`
+  });
+
+  shareLink.search = search;
+
+
   return (
     <div className={styles.mapPopupContent}>
       <LayerInfo features={features} />
@@ -46,6 +54,10 @@ const MapPopupContent = ({ features, popupEvent, popup }) => {
         >
           <AiFillHome />
         </button>
+      </div>
+      <div>
+        <p>share</p>
+        <p>{shareLink.toString()}</p>
       </div>
     </div>
   );
