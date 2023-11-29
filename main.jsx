@@ -74,6 +74,51 @@ const demSource = new mlcontour.DemSource({
 
 demSource.setupMaplibre(maplibregl);
 
+const satelliteLayerSet = [
+  {
+    id: "background",
+    type: "background",
+    paint: {
+      "background-color": "#f8f4f0",
+    },
+  },
+  {
+    id: "naip-raster-tiles",
+    type: "raster",
+    source: "naipRasterTiles",
+    minzoom: 8,
+    maxzoom: 22
+  },
+  ...bright.layers.filter(
+    (l) => !(l.type === "symbol" && l.id.startsWith("place-"))
+  ),
+  ...summitLayers,
+  ...bright.layers.filter(
+    (l) => l.type === "symbol" && l.id.startsWith("place-")
+  ),
+];
+
+const vectorLayerSet = [
+  {
+    id: "background",
+    type: "background",
+    paint: {
+      "background-color": "#f8f4f0",
+    },
+  },
+  ...proclaimedLayers,
+  ...padusLayers,
+  ...contourLayers,
+  ...bright.layers.filter(
+    (l) => !(l.type === "symbol" && l.id.startsWith("place-"))
+  ),
+  ...summitLayers,
+  ...bright.layers.filter(
+    (l) => l.type === "symbol" && l.id.startsWith("place-")
+  ),
+]
+
+
 
 const map = new maplibregl.Map({
   container: "map",
@@ -152,10 +197,12 @@ const map = new maplibregl.Map({
 
       naipRasterTiles: {
         type: "raster",
-        tiles: ["https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer/tile/{z}/{y}/{x}"],
+        // tiles: ["https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer/tile/{z}/{y}/{x}"],
+        tiles: ["https://worker-long-block-5560.timothypage.workers.dev/tile/{z}/{y}/{x}"],
+        // tiles: ["https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=QnjKTufcyG1I2YSod1bHu"],
         tileSize: 256,
         attribution: 'USDA',
-        maxzoom: 19
+        maxzoom: 18
       }
     },
 
@@ -163,34 +210,57 @@ const map = new maplibregl.Map({
       ? "https://tzwolak.com/map_styles/sprite"
       : "http://localhost:5173/map_styles/sprite",
     glyphs: "/fonts/{fontstack}/{range}.pbf",
-    layers: [
-      {
-        id: "background",
-        type: "background",
-        paint: {
-          "background-color": "#f8f4f0",
-        },
-      },
-      {
-        id: "naip-raster-tiles",
-        type: "raster",
-        source: "naipRasterTiles",
-        minzoom: 8,
-        maxzoom: 22
-      },
-      // ...proclaimedLayers,
-      // ...padusLayers,
-      // ...contourLayers,
-      ...bright.layers.filter(
-        (l) => !(l.type === "symbol" && l.id.startsWith("place-"))
-      ),
-      ...summitLayers,
-      ...bright.layers.filter(
-        (l) => l.type === "symbol" && l.id.startsWith("place-")
-      ),
-    ],
+    layers: vectorLayerSet
   },
 });
+
+class LayerControl {
+  currentLayerSet = "vector";
+  vectorLayerIds = vectorLayerSet.map(l => l.id);
+  satelliteLayerIds = satelliteLayerSet.map(l => l.id);
+
+  constructor(options) {
+    this.options = options;
+  }
+
+  onAdd(map) {
+    this.map = map;
+    this._container = document.createElement("div");
+    this._container.className = "maplibregl-ctrl maplibregl-ctrl-group";
+    this._layerButton = document.createElement("button");
+    this._layerButton.type = "button";
+    this._layerButton.innerText = "Sat.";
+    this._layerButton.addEventListener('click', this.toggleLayers.bind(this));
+
+    this._container.appendChild(this._layerButton);
+
+    return this._container;
+  }
+
+  onRemove() {
+    console.log('onRemove');
+    document.removeElement(this._container);
+    this._map = undefined;
+  }
+
+  toggleLayers() {
+    console.log('LayerControl instance', this);
+    if (this.currentLayerSet === "vector") {
+
+      this.vectorLayerIds.forEach(l => this.map.removeLayer(l));
+      satelliteLayerSet.forEach(l => this.map.addLayer(l));
+
+      this._layerButton.innerText = "Vec.";
+      this.currentLayerSet = "satellite";
+    } else {
+      this.satelliteLayerIds.forEach(l => this.map.removeLayer(l));
+      vectorLayerSet.forEach(l => this.map.addLayer(l));
+
+      this._layerButton.innerText = "Sat.";
+      this.currentLayerSet = "vector";
+    }
+  }
+}
 
 
 map.addControl(
@@ -225,6 +295,10 @@ map.addControl(
     exaggeration: 0.06,
   }),
   "bottom-right"
+);
+
+map.addControl(
+  new LayerControl(), "bottom-right"
 );
 
 let directions;
