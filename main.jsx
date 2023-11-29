@@ -74,6 +74,7 @@ const demSource = new mlcontour.DemSource({
 
 demSource.setupMaplibre(maplibregl);
 
+
 const map = new maplibregl.Map({
   container: "map",
   hash: true,
@@ -148,7 +149,16 @@ const map = new maplibregl.Map({
         ],
         maxzoom: 15,
       },
+
+      naipRasterTiles: {
+        type: "raster",
+        tiles: ["https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer/tile/{z}/{y}/{x}"],
+        tileSize: 256,
+        attribution: 'USDA',
+        maxzoom: 19
+      }
     },
+
     sprite: import.meta.env.PROD
       ? "https://tzwolak.com/map_styles/sprite"
       : "http://localhost:5173/map_styles/sprite",
@@ -161,9 +171,16 @@ const map = new maplibregl.Map({
           "background-color": "#f8f4f0",
         },
       },
-      ...proclaimedLayers,
-      ...padusLayers,
-      ...contourLayers,
+      {
+        id: "naip-raster-tiles",
+        type: "raster",
+        source: "naipRasterTiles",
+        minzoom: 8,
+        maxzoom: 22
+      },
+      // ...proclaimedLayers,
+      // ...padusLayers,
+      // ...contourLayers,
       ...bright.layers.filter(
         (l) => !(l.type === "symbol" && l.id.startsWith("place-"))
       ),
@@ -174,6 +191,7 @@ const map = new maplibregl.Map({
     ],
   },
 });
+
 
 map.addControl(
   new maplibregl.NavigationControl({
