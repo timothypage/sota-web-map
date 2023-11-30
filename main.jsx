@@ -86,8 +86,8 @@ const satelliteLayerSet = [
     id: "naip-raster-tiles",
     type: "raster",
     source: "naipRasterTiles",
-    minzoom: 8,
-    maxzoom: 22
+    minzoom: 6,
+    maxzoom: 22,
   },
   ...bright.layers.filter(
     (l) => !(l.type === "symbol" && l.id.startsWith("place-"))
@@ -96,7 +96,17 @@ const satelliteLayerSet = [
   ...bright.layers.filter(
     (l) => l.type === "symbol" && l.id.startsWith("place-")
   ),
-];
+].filter(
+  (layer) =>
+    ![
+      "building-top",
+      "building",
+      "landuse-school",
+      "landuse-hospital",
+      "landuse-cemetery",
+      "water",
+    ].includes(layer.id)
+);
 
 const vectorLayerSet = [
   {
@@ -116,9 +126,7 @@ const vectorLayerSet = [
   ...bright.layers.filter(
     (l) => l.type === "symbol" && l.id.startsWith("place-")
   ),
-]
-
-
+];
 
 const map = new maplibregl.Map({
   container: "map",
@@ -198,26 +206,29 @@ const map = new maplibregl.Map({
       naipRasterTiles: {
         type: "raster",
         // tiles: ["https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer/tile/{z}/{y}/{x}"],
-        tiles: ["https://worker-long-block-5560.timothypage.workers.dev/tile/{z}/{y}/{x}"],
+        tiles: [
+          "https://worker-long-block-5560.timothypage.workers.dev/tile/{z}/{y}/{x}",
+        ],
         // tiles: ["https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=QnjKTufcyG1I2YSod1bHu"],
         tileSize: 256,
-        attribution: 'USDA',
-        maxzoom: 18
-      }
+        attribution:
+          '<a href="https://naip-usdaonline.hub.arcgis.com/">USDA</a>',
+        maxzoom: 18,
+      },
     },
 
     sprite: import.meta.env.PROD
       ? "https://tzwolak.com/map_styles/sprite"
       : "http://localhost:5173/map_styles/sprite",
     glyphs: "/fonts/{fontstack}/{range}.pbf",
-    layers: vectorLayerSet
+    layers: vectorLayerSet,
   },
 });
 
 class LayerControl {
   currentLayerSet = "vector";
-  vectorLayerIds = vectorLayerSet.map(l => l.id);
-  satelliteLayerIds = satelliteLayerSet.map(l => l.id);
+  vectorLayerIds = vectorLayerSet.map((l) => l.id);
+  satelliteLayerIds = satelliteLayerSet.map((l) => l.id);
 
   constructor(options) {
     this.options = options;
@@ -230,7 +241,7 @@ class LayerControl {
     this._layerButton = document.createElement("button");
     this._layerButton.type = "button";
     this._layerButton.innerText = "Sat.";
-    this._layerButton.addEventListener('click', this.toggleLayers.bind(this));
+    this._layerButton.addEventListener("click", this.toggleLayers.bind(this));
 
     this._container.appendChild(this._layerButton);
 
@@ -238,30 +249,28 @@ class LayerControl {
   }
 
   onRemove() {
-    console.log('onRemove');
+    console.log("onRemove");
     document.removeElement(this._container);
     this._map = undefined;
   }
 
   toggleLayers() {
-    console.log('LayerControl instance', this);
+    console.log("LayerControl instance", this);
     if (this.currentLayerSet === "vector") {
-
-      this.vectorLayerIds.forEach(l => this.map.removeLayer(l));
-      satelliteLayerSet.forEach(l => this.map.addLayer(l));
+      this.vectorLayerIds.forEach((l) => this.map.removeLayer(l));
+      satelliteLayerSet.forEach((l) => this.map.addLayer(l));
 
       this._layerButton.innerText = "Vec.";
       this.currentLayerSet = "satellite";
     } else {
-      this.satelliteLayerIds.forEach(l => this.map.removeLayer(l));
-      vectorLayerSet.forEach(l => this.map.addLayer(l));
+      this.satelliteLayerIds.forEach((l) => this.map.removeLayer(l));
+      vectorLayerSet.forEach((l) => this.map.addLayer(l));
 
       this._layerButton.innerText = "Sat.";
       this.currentLayerSet = "vector";
     }
   }
 }
-
 
 map.addControl(
   new maplibregl.NavigationControl({
@@ -297,9 +306,7 @@ map.addControl(
   "bottom-right"
 );
 
-map.addControl(
-  new LayerControl(), "bottom-right"
-);
+map.addControl(new LayerControl(), "bottom-right");
 
 let directions;
 
