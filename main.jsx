@@ -209,7 +209,6 @@ const map = new maplibregl.Map({
         tiles: [
           "https://worker-long-block-5560.timothypage.workers.dev/tile/{z}/{y}/{x}",
         ],
-        // tiles: ["https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=QnjKTufcyG1I2YSod1bHu"],
         tileSize: 256,
         attribution:
           '<a href="https://naip-usdaonline.hub.arcgis.com/">USDA</a>',

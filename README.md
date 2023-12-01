@@ -49,9 +49,17 @@ Download from here https://www.sciencebase.gov/catalog/item/61794fc2d34ea58c3c6f
 More info on how we're processing this dataset available in data/README.md
 
 
+### "Satellite" view
+
+From the [National Agriculture Imagery Program (NAIP)](https://naip-usdaonline.hub.arcgis.com/)
+
+Actually aerial photography, only the Continental US, and refreshed state by state every three years or so.
+
+Being cached via Cloudflare Workers and R2 data storage
+
 ### Roads and Trails
 
-from openstreetmap
+from [OpenStreetMap](https://www.openstreetmap.org/)
 
 Downloaded from here https://download.geofabrik.de/north-america/us.html
 
