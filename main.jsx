@@ -366,6 +366,14 @@ map.on("load", () => {
 
     console.log("features", features);
 
+    // if you click on a summit, open that summit in sotl.as
+    const summit = features.find(f => f.layer.id === "summits-circle");
+    if (summit) {
+      const url = "https://sotl.as/summits/" + summit.properties.code;
+      window.open(url, 'sotlas_summit_page').focus();
+      return;
+    }
+
     if (existingPopup) existingPopup.remove();
 
     popup = new maplibregl.Popup()
@@ -398,6 +406,14 @@ map.on("load", () => {
     contentElem.style = "";
     existingPopup = popup;
   }
+
+  map.on("mouseenter", "summits-circle", () => {
+    map.getCanvas().style.cursor = "pointer";
+  });
+
+  map.on("mouseleave", "summits-circle", () => {
+    map.getCanvas().style.cursor = "default";
+  });
 
   map.on("click", handleClickEvent);
 });
