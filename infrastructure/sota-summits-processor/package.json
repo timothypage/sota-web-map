@@ -1,0 +1,20 @@
+{
+  "name": "sota-summits-processor",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.535.0",
+    "csv-parse": "^5.5.5",
+    "date-fns": "^3.5.0",
+    "geojson": "^0.5.0",
+    "node-html-parser": "^6.1.12",
+    "object-hash": "^3.0.0"
+  }
+}
