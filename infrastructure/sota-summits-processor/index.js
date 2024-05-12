@@ -13,7 +13,12 @@ const Bucket = "tzwolak.com";
 const s3 = new S3Client({});
 
 async function main() {
-  const buf = fs.readFileSync("./summitslist.csv");
+  
+}
+
+async function getAndWriteSummits() {
+  const buf = await fetch("https://storage.sota.org.uk/summitslist.csv").then(res => res.text())
+  // const buf = fs.readFileSync("./summitslist.csv");
   const summits = parseBufferToUsaSummits(buf);
   const geojson = GeoJSON.parse(summits, {Point: ['lat', 'lon']});
 
@@ -25,24 +30,9 @@ async function main() {
     Bucket,
     Key: `tiles/${filename}`,
     Body: JSON.stringify(geojson)
-  }))
-
-  console.log('filename', filename);
-
-  let response = await s3.send(new GetObjectCommand({
-    Bucket,
-    Key: "map.html"
-  }))
-
-  const str = await response.Body.transformToString();
-  const html = parseHTML(str);
-  html.querySelector("#summits").set_content(filename);
-
-  let response = await s3.send(new PutObjectCommand({
-    Bucket,
-    Key: "map.html",
-    Body: html.toString()
   }));
+
+  return filename;
 }
 
 export function parseBufferToUsaSummits(buf) {
@@ -81,4 +71,27 @@ export function parseBufferToUsaSummits(buf) {
   return summits;
 }
 
-main();
+async function updateMapHtmlSummitsReference(filename) {
+  let response = await s3.send(new GetObjectCommand({
+    Bucket,
+    Key: "map.html"
+  }))
+
+  const str = await response.Body.transformToString();
+  const html = parseHTML(str);
+  html.querySelector("#summits").set_content(filename);
+
+  response = await s3.send(new PutObjectCommand({
+    Bucket,
+    Key: "map.html",
+    Body: html.toString(),
+    CacheControl: "max-age=0",
+    ContentType: "text/html"
+  }));
+}
+
+export async function handler(_event, _context) {
+  const summits_filename = await getAndWriteSummits();
+  await updateMapHtmlSummitsReference(summits_filename);
+  return "success"
+}
