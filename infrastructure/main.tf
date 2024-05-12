@@ -65,7 +65,7 @@ resource "aws_lambda_function" "sota-summits-processor" {
 
   runtime = "nodejs18.x"
 
-  timeout = 120
+  timeout     = 120
   memory_size = 2048
 
   environment {
@@ -73,4 +73,23 @@ resource "aws_lambda_function" "sota-summits-processor" {
       foo = "bar"
     }
   }
+}
+
+resource "aws_cloudwatch_event_rule" "update_summits" {
+  name                = "update_summits"
+  description         = "update summits geojson nightly"
+  # schedule_expression = "cron(26 8 * * * *)"
+  schedule_expression = "cron(26 8 * * ? *)"
+}
+resource "aws_cloudwatch_event_target" "update_summits" {
+  rule      = aws_cloudwatch_event_rule.update_summits.name
+  target_id = "lambda"
+  arn       = aws_lambda_function.sota-summits-processor.arn
+}
+resource "aws_lambda_permission" "cw_call_update_summits" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.sota-summits-processor.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.update_summits.arn
 }

@@ -12,10 +12,6 @@ const Bucket = "tzwolak.com";
 
 const s3 = new S3Client({});
 
-async function main() {
-  
-}
-
 async function getAndWriteSummits() {
   const buf = await fetch("https://storage.sota.org.uk/summitslist.csv").then(res => res.text())
   // const buf = fs.readFileSync("./summitslist.csv");
