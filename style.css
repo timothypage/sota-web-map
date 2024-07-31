@@ -73,3 +73,39 @@ p, h1, h2, h3, h4, h5, h6 {
 .show {
   visibility: visible !important;
 }
+
+.zoom-14 {
+  transform: scale(5%);
+  transform-origin: 'bottom';
+}
+
+.zoom-15 {
+  transform: scale(10%);}
+
+.zoom-16 {
+  transform: scale(20%);
+}
+
+.zoom-17 {
+  transform: scale(25%);
+}
+
+.zoom-18 {
+  transform: scale(30%);
+}
+
+.zoom-19 {
+  transform: scale(50%);
+}
+
+.zoom-20 {
+  transform: scale(70%);
+}
+
+.zoom-21 {
+  transform: scale(90%);
+}
+
+.zoom-22 {
+  transform: scale(100%);
+}

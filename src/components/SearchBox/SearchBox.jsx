@@ -11,16 +11,6 @@ import { AiOutlineSearch, AiOutlineClose } from "react-icons/ai";
 
 import styles from "./SearchBox.module.css";
 
-// TODO move geocoding to backend service...go with the client solution for now
-let fuse = new Fuse([], {
-  keys: ["name", "code"],
-  threshold: 0.4,
-});
-
-fetch("/tiles/geocode-0d3ca704.json")
-  .then((response) => response.json())
-  .then((data) => fuse.setCollection(data));
-
 const SearchBox = () => {
   const map = useMap();
   const searchInputRef = useRef();

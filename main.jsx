@@ -33,10 +33,13 @@ import "./style.css";
 import Authenticated from "/src/components/Authenticated";
 import TopBar from "/src/components/TopBar";
 import MyStuff from "/src/components/MyStuff";
+import OfferPopupContent from "/src/components/OfferPopupContent"
 import { AuthProvider } from "react-oidc-context";
 
 import styles from "./main.module.css";
 import RouteSummary from "/src/components/RouteSummary";
+
+import * as turf from "@turf/turf";
 
 const padusSrcFilename =
   document.querySelector("#padus")?.innerText ?? "padus.pmtiles";
@@ -116,23 +119,59 @@ const vectorLayerSet = [
       "background-color": "#f8f4f0",
     },
   },
-  ...proclaimedLayers,
-  ...padusLayers,
-  ...contourLayers,
-  ...bright.layers.filter(
-    (l) => !(l.type === "symbol" && l.id.startsWith("place-"))
-  ),
-  ...summitLayers,
-  ...bright.layers.filter(
-    (l) => l.type === "symbol" && l.id.startsWith("place-")
-  ),
+  ...bright.layers,
+  {
+    id: "aisles",
+    type: "fill",
+    source: "aisles",
+    minzoom: 16,
+    paint: {
+      "fill-color": "hsla(206, 100%, 50%, 1)"
+    }
+  },
+  {
+    id: "aisle-labels",
+    type: "symbol",
+    source: "aisles",
+    minzoom: 17,
+    layout: {
+      visibility: "visible",
+      "text-field": "{aisle_id}",
+      "text-size": {
+        stops: [
+          [18, 10],
+         [26, 52]
+        ]
+      },
+      "text-font": ["Noto Sans Italic"],
+      "text-anchor": "center",
+      // "text-offset": {
+      //   stops: [
+      //     [10, [0, 0]],
+      //     [20, [0, 0.8]],
+      //   ],
+      // },
+    }
+  }
+
+
+  // ...proclaimedLayers,
+  // ...padusLayers,
+  // ...contourLayers,
+  // ...bright.layers.filter(
+  //   (l) => !(l.type === "symbol" && l.id.startsWith("place-"))
+  // ),
+  // ...summitLayers,
+  // ...bright.layers.filter(
+  //   (l) => l.type === "symbol" && l.id.startsWith("place-")
+  // ),
 ];
 
 const map = new maplibregl.Map({
   container: "map",
   hash: true,
-  center: [-106, 39], // starting position [lng, lat]
-  zoom: 6, // starting zoom
+  center: [-104.9899692, 39.6123901], // starting position [lng, lat]
+  zoom: 8, // starting zoom
   style: {
     version: 8,
     name: "Bright",
@@ -148,72 +187,76 @@ const map = new maplibregl.Map({
         attribution:
           '<a href="http://openmaptiles.org/" target="_blank">&copy; OpenMapTiles</a> | <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
       },
-      usfs_national_forests_and_grasslands: {
-        type: "vector",
-        url: "pmtiles:///tiles/usfs_national_forests_and_grasslands.pmtiles",
-      },
-      us_federal_proclaimed_areas: {
-        type: "vector",
-        url: "pmtiles:///tiles/us_federal_proclaimed_areas.pmtiles",
-        attribution: '<a href="https://www.usgs.gov/">USGS</a>',
-      },
-      padus: {
-        type: "vector",
-        url: `pmtiles:///tiles/${padusSrcFilename}`,
-        minzoom: 8,
-        attribution: '<a href="https://www.usgs.gov/">USGS</a>',
-      },
-      summits: {
+      // usfs_national_forests_and_grasslands: {
+      //   type: "vector",
+      //   url: "pmtiles:///tiles/usfs_national_forests_and_grasslands.pmtiles",
+      // },
+      // us_federal_proclaimed_areas: {
+      //   type: "vector",
+      //   url: "pmtiles:///tiles/us_federal_proclaimed_areas.pmtiles",
+      //   attribution: '<a href="https://www.usgs.gov/">USGS</a>',
+      // },
+      // padus: {
+      //   type: "vector",
+      //   url: `pmtiles:///tiles/${padusSrcFilename}`,
+      //   minzoom: 8,
+      //   attribution: '<a href="https://www.usgs.gov/">USGS</a>',
+      // },
+      // summits: {
+      //   type: "geojson",
+      //   data: `/tiles/${summitsSrcFilename}`,
+      // },
+      aisles: {
         type: "geojson",
-        data: `/tiles/${summitsSrcFilename}`,
+        data: "/tiles/62000131-store-layout.geojson"
       },
-      hillshadeSource: {
-        type: "raster-dem",
-        // share cached raster-dem tiles with the contour source
-        tiles: [demSource.sharedDemProtocolUrl],
-        tileSize: 512,
-        maxzoom: 12,
-      },
-      terrainSource: {
-        type: "raster-dem",
-        tiles: [demSource.sharedDemProtocolUrl],
-        tileSize: 512,
-        maxzoom: 12,
-      },
-      contourSourceFeet: {
-        type: "vector",
-        tiles: [
-          demSource.contourProtocolUrl({
-            // meters to feet
-            multiplier: 3.28084,
-            overzoom: 1,
-            thresholds: {
-              // zoom: [minor, major]
-              11: [200, 1000],
-              12: [100, 500],
-              13: [100, 500],
-              14: [50, 200],
-              15: [20, 100],
-            },
-            elevationKey: "ele",
-            levelKey: "level",
-            contourLayer: "contours",
-          }),
-        ],
-        maxzoom: 15,
-      },
+      // hillshadeSource: {
+      //   type: "raster-dem",
+      //   // share cached raster-dem tiles with the contour source
+      //   tiles: [demSource.sharedDemProtocolUrl],
+      //   tileSize: 512,
+      //   maxzoom: 12,
+      // },
+      // terrainSource: {
+      //   type: "raster-dem",
+      //   tiles: [demSource.sharedDemProtocolUrl],
+      //   tileSize: 512,
+      //   maxzoom: 12,
+      // },
+      // contourSourceFeet: {
+      //   type: "vector",
+      //   tiles: [
+      //     demSource.contourProtocolUrl({
+      //       // meters to feet
+      //       multiplier: 3.28084,
+      //       overzoom: 1,
+      //       thresholds: {
+      //         // zoom: [minor, major]
+      //         11: [200, 1000],
+      //         12: [100, 500],
+      //         13: [100, 500],
+      //         14: [50, 200],
+      //         15: [20, 100],
+      //       },
+      //       elevationKey: "ele",
+      //       levelKey: "level",
+      //       contourLayer: "contours",
+      //     }),
+      //   ],
+      //   maxzoom: 15,
+      // },
 
-      naipRasterTiles: {
-        type: "raster",
-        // tiles: ["https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer/tile/{z}/{y}/{x}"],
-        tiles: [
-          "https://worker-long-block-5560.timothypage.workers.dev/tile/{z}/{y}/{x}",
-        ],
-        tileSize: 256,
-        attribution:
-          '<a href="https://naip-usdaonline.hub.arcgis.com/">USDA</a>',
-        maxzoom: 18,
-      },
+      // naipRasterTiles: {
+      //   type: "raster",
+      //   // tiles: ["https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer/tile/{z}/{y}/{x}"],
+      //   tiles: [
+      //     "https://worker-long-block-5560.timothypage.workers.dev/tile/{z}/{y}/{x}",
+      //   ],
+      //   tileSize: 256,
+      //   attribution:
+      //     '<a href="https://naip-usdaonline.hub.arcgis.com/">USDA</a>',
+      //   maxzoom: 18,
+      // },
     },
 
     sprite: import.meta.env.PROD
@@ -297,122 +340,188 @@ map.addControl(
   "bottom-left"
 );
 
-map.addControl(
-  new maplibregl.TerrainControl({
-    source: "terrainSource",
-    exaggeration: 0.06,
-  }),
-  "bottom-right"
-);
+// map.addControl(
+//   new maplibregl.TerrainControl({
+//     source: "terrainSource",
+//     exaggeration: 0.06,
+//   }),
+//   "bottom-right"
+// );
 
-map.addControl(new LayerControl(), "bottom-right");
+// map.addControl(new LayerControl(), "bottom-right");
 
 let directions;
 
 map.on("load", () => {
-  directions = new MapLibreGlDirections(map, {
-    api: "https://desktop-k8ngvmk.tail54c6a.ts.net/route/v1", // routing all of US needs ~32 GB of ram -_-
-    requestOptions: { steps: true, overview: "full" },
-    layers: navLayers,
-    sensitiveWaypointLayers: ["maplibre-gl-directions-waypoint"],
-    sensitiveSnappointLayers: ["maplibre-gl-directions-snappoint"],
-    sensitiveRoutelineLayers: ["maplibre-gl-directions-routeline"],
-    sensitiveAltRoutelineLayers: ["maplibre-gl-directions-alt-routeline"],
-  });
 
-  ReactDOM.createRoot(document.querySelector("#overlay")).render(
-    <AuthProvider {...oidcConfig}>
-      <Provider store={store}>
-        <MapProvider map={map}>
-          <DirectionsProvider directions={directions}>
-            <TopBar />
-            <div className={styles.grid}>
-              <div className={styles.navSummaryArea}>
-                <RouteSummary className={styles.routeSummary} />
-              </div>
-              <div className={styles.myStuffArea}>
-                <Authenticated>
-                  <MyStuff className={styles.myStuff} />
-                </Authenticated>
-              </div>
-            </div>
-          </DirectionsProvider>
-        </MapProvider>
-      </Provider>
-    </AuthProvider>
-  );
+  let offers = [
+    {
+      image: "https://images.ipn-assets.com/069UO00000813VWYAY_tmnVw4-v1.png",
+      name: "Pillsbury™ Grands!™ Flaky Layers",
+      details: "Offer valid on Pillsbury™ Grands!™ Flaky Layers for any variety, 5ct only. This purchase cannot be combined with coupons for the same product",
+      share_url: "https://ibotta.com/rebates/1602544/pillsbury-grands-flaky-layers",
+      aisle_id: "Aisle 1",
+      cash_back: "0.50",
+      bayNumber: 6
+    },
+    {
+      image: "https://images.ipn-assets.com/54006_BC4eAG-v1.png",
+      name: "Nestle® Toll House® Frozen Dairy Dessert Sandwiches",
+      details: "Offer valid on Nestle® Toll House® Frozen Dairy Dessert Sandwiches for select varieties, select sizes. Offer includes the following varieties: • Nestle® Toll House® Vanilla Chocolate Chip Cookie Sandwiches, 7 ct • Nestle® Toll House® MINI Vanilla Chocolate Chip Cookie Sandwiches, 12 ct This purchase cannot be combined with coupons for the same product.",
+      share_url: "https://ibotta.com/rebates/1581077/nestle-toll-house-frozen-dairy-dessert-sandwiches",
+      aisle_id: "Aisle 4",
+      cash_back: "0.50",
+      bayNumber: 1
+    }
+  ]
 
-  directions.on("fetchroutesend", (e) => {
-    if (e.data.code === "Ok") {
-      const route = e.data.routes[0];
+  let markerElements = [];
 
-      if (route == null) return;
+  fetch('/tiles/62000131-store-layout.geojson')
+  .then(async res => {
+      const geojson = await res.json();
 
-      store.dispatch(
-        setRoute({
-          duration: route.duration,
-          distance: route.distance,
+      const aisleSlotsByID = {}
+      geojson.features.forEach(feature => {
+        const bbox = turf.bbox(feature);
+        const pointGrid = turf.pointGrid(bbox, 25, {units: "feet"});
+
+        // [{lng:, lat}]
+        const slots = pointGrid.features.map(p => {
+          const lng = p.geometry.coordinates[0];
+          const lat = p.geometry.coordinates[1];
+          return {lng, lat, taken: false}
         })
-      );
+
+        aisleSlotsByID[ feature.properties.aisle_id ] = slots;
+      });
+
+      for (const offer of offers) {
+        const slots = aisleSlotsByID[offer.aisle_id];
+        if (slots == null) {
+          console.log(`couldn't find slot for aisle_id: ${offer.aisle_id}`);
+          continue;
+        }
+
+        // const availableSlot = slots.find(s => s.taken === false);
+        const availableSlot = findNearestAvailableSlot(slots, offer.bayNumber);
+
+        if (availableSlot) {
+          availableSlot.taken = true;
+
+          const el = document.createElement('div');
+          el.classList.add('marker');
+
+          markerElements.push(el);
+
+          let marker = new maplibregl.Marker({element: el})
+            .setLngLat(availableSlot);
+
+          ReactDOM.createRoot(el).render(
+            <React.StrictMode>
+              <Provider store={store}>
+                <OfferPopupContent offer={offer} />
+              </Provider>
+            </React.StrictMode>
+          )
+
+          if (map.getZoom() > 14) {
+            marker.addTo(map);
+            marker.addClassName('added');
+          }
+        }
+
+      }
+
+      // visualize slots
+      // for (const [key, slots] of Object.entries(aisleSlotsByID)) {
+      //   console.log('key', key);
+      //   console.log('slots', slots);
+
+      //   for (const slot of slots) {
+      //     new maplibregl.Marker()
+      //       .setLngLat(slot)
+      //       .addTo(map)
+      //   }
+      // }
+
+      // for (const p of pointGrid.features) {
+      //   const lng = p.geometry.coordinates[0];
+      //   const lat = p.geometry.coordinates[1];
+      //   new maplibregl.Marker()
+      //   .setLngLat({lng, lat})
+      //   .addTo(map)
+      // }
+    });
+
+  function findNearestAvailableSlot(slots, bayNumber) {
+    const assumedMaxTotalBayNumber = 15;
+    
+
+    let slotIndex = Math.floor((slots.length / assumedMaxTotalBayNumber) * ( bayNumber - 1));
+
+    console.log('slotIndex', slotIndex);
+
+    if (slots[slotIndex].taken === false) return slots[slotIndex];
+
+    for (let i = 0; i < slots.length; i++) {
+      const lesserSlot = slots[slotIndex - i];
+      const greaterSlot = slots[slotIndex + i];
+
+      if (lesserSlot?.taken === false) return lesserSlot;
+      if (greaterSlot?.taken === false) return greaterSlot;
     }
-  });
 
-  let existingPopup = null;
-  let popup = new maplibregl.Popup();
-
-  function handleClickEvent(e) {
-    const features = map.queryRenderedFeatures(e.point);
-
-    console.log("features", features);
-
-    // if you click on a summit, open that summit in sotl.as
-    const summit = features.find(f => f.layer.id === "summits-circle");
-    if (summit) {
-      const url = "https://sotl.as/summits/" + summit.properties.code;
-      window.open(url, 'sotlas_summit_page').focus();
-      return;
-    }
-
-    if (existingPopup) existingPopup.remove();
-
-    popup = new maplibregl.Popup()
-      .setLngLat(e.lngLat)
-      // render enough height that the popup doesn't render outside the browser view
-      // only happens because the popup is computing where to display before react is adding the content
-      // Maplibregl.Popup#setDOMContent has the same problem
-      .setHTML(
-        `<div class="popup" style="height:${150 * features.length}px"></div>`
-      )
-      .addTo(map);
-
-    let contentElem = popup.getElement().querySelector(".popup");
-    ReactDOM.createRoot(contentElem).render(
-      <React.StrictMode>
-        <Provider store={store}>
-          <MapProvider map={map}>
-            <DirectionsProvider directions={directions}>
-              <MapPopupContent
-                features={features}
-                popupEvent={e}
-                popup={popup}
-              />
-            </DirectionsProvider>
-          </MapProvider>
-        </Provider>
-      </React.StrictMode>
-    );
-
-    contentElem.style = "";
-    existingPopup = popup;
+    return null; 
   }
 
-  map.on("mouseenter", "summits-circle", () => {
-    map.getCanvas().style.cursor = "pointer";
-  });
 
-  map.on("mouseleave", "summits-circle", () => {
-    map.getCanvas().style.cursor = "default";
-  });
+  // const el = document.createElement('div');
+  // el.classList.add('marker')
+  // // el.style.width = "1px";
+  // // el.style.height = "1px";
+  // const elements = [el];
+
+  // let marker = new maplibregl.Marker({element: el})
+  // .setLngLat({lng: -104.99007764549899, lat: 39.61251148838437})
+  // // .addTo(map);
+
+  // if (map.getZoom() > 14) {
+  //   marker.addTo(map);
+  //   marker.addClassName('added');
+  // }
+
+  // // ReactDOM.createRoot(contentElem).render(
+  // ReactDOM.createRoot(el).render(
+  //   <React.StrictMode>
+  //     <Provider store={store}>
+  //       <OfferPopupContent offer={offer} />
+  //     </Provider>
+  //   </React.StrictMode>
+  // )
+
+  map.on('zoom', () => {
+    const zoom = map.getZoom();
+
+    for (let elem of markerElements) {
+      elem = elem.children[0];
+      if (zoom < 14 && elem && elem.style) { elem.style.display = 'none' } else { elem.style.display = 'grid' }
+      if (zoom <= 14) { elem.classList.remove('zoom-14'); } else { elem.classList.add('zoom-14'); }
+      if (zoom <= 15) { elem.classList.remove('zoom-15'); } else { elem.classList.add('zoom-15'); }
+      if (zoom <= 16) { elem.classList.remove('zoom-16'); } else { elem.classList.add('zoom-16'); }
+      if (zoom <= 17) { elem.classList.remove('zoom-17'); } else { elem.classList.add('zoom-17'); }
+      if (zoom <= 18) { elem.classList.remove('zoom-18'); } else { elem.classList.add('zoom-18'); }
+      if (zoom <= 19) { elem.classList.remove('zoom-19'); } else { elem.classList.add('zoom-19'); }
+      if (zoom <= 20) { elem.classList.remove('zoom-20'); } else { elem.classList.add('zoom-20'); }
+      if (zoom <= 21) { elem.classList.remove('zoom-21'); } else { elem.classList.add('zoom-21'); }
+      if (zoom <= 22) { elem.classList.remove('zoom-22'); } else { elem.classList.add('zoom-22'); }
+    }
+  })
+
+
+
+  function handleClickEvent(e) {
+  }
 
   map.on("click", handleClickEvent);
 });
