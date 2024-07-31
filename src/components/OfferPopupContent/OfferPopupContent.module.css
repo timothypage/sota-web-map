@@ -41,6 +41,7 @@
 .title {
   grid-area: title;
   font-weight: 900;
+  font-size: 14px;
   /* margin-bottom: 06rem; */
 }
 
@@ -55,4 +56,31 @@
                               lines you want to be 
                               displayed */
     -webkit-box-orient: vertical;
+}
+
+.selectedOffer {
+  background: #0a7986;;
+  outline: 4px solid rgba(128, 128, 128, 0.2);
+
+  height: 30px;
+  width: 30px;
+
+  position: absolute;
+  bottom: 11px;
+  right: 11px;
+
+  border-radius: 10000px;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  /* padding: 53px; */
+
+  svg {
+    height: 13px;
+    width: 13px;
+  }
+
+  svg > path {
+    fill: white;
+  }
 }

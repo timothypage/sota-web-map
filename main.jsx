@@ -53,6 +53,13 @@ const store = configureStore({
   },
 });
 
+// window.navigator.geolocation.getCurrentPosition = function(callback) {
+//   callback(
+
+// {"timestamp": +new Date(),"coords":{"accuracy":65.588,"latitude":39.6122792,"longitude":-104.9894357,"altitude":null,"altitudeAccuracy":null,"heading":null,"speed":null}}
+//   )
+// }
+
 const oidcConfig = {
   authority: "https://auth.tzwolak.com/realms/sota",
   client_id: "test-python",
